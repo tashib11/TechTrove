@@ -4,7 +4,9 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\TokenAuthenticate;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +37,10 @@ Route::get('/ProductPolicy/{type}',[PolicyController::class,'PolicyByType']);
 
 // User Auth
 Route::get('/userLogin/{UserEmail}',[UserController::class,'UserLogin']);
-Route::get('/verifyLogin/{UserEmail}/{otp}',[UserController::class,'VerifyLogin']);
+Route::get('/verifyLogin/{UserEmail}/{OTP}',[UserController::class,'VerifyLogin']);
 Route::get('/logout',[UserController::class,'UserLogout']);
+
+
+//user Profile
+Route::post('/createProfile',[ProfileController::class,'CreateProfile'])->middleware( 'token.auth');
+Route::get('/readProfile',[ProfileController::class,'ReadProfile'])->middleware( 'token.auth');
