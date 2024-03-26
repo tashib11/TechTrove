@@ -42,5 +42,5 @@ Route::get('/logout',[UserController::class,'UserLogout']);
 
 
 //user Profile
-Route::post('/createProfile',[ProfileController::class,'CreateProfile'])->middleware( 'token.auth');
-Route::get('/readProfile',[ProfileController::class,'ReadProfile'])->middleware( 'token.auth');
+Route::post('/createProfile',[ProfileController::class,'CreateProfile'])->middleware([TokenAuthenticate::class]);
+Route::get('/readProfile',[ProfileController::class,'ReadProfile'])->middleware([TokenAuthenticate::class]);

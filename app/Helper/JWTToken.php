@@ -16,7 +16,7 @@ class JWTToken{
     ];
     return JWT::encode($payload,$key,'HS256');
     }
-    
+
     public static function ReadToken($token):string|object{
         try{
         if($token==null){
