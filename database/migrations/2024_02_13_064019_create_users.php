@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email',50)->unique();
             $table->string('otp',10);
             $table->timestamps(); // This will automatically add 'created_at' and 'updated_at'
+           
         });
     }
 

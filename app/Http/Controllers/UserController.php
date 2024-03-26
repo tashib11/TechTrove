@@ -20,11 +20,19 @@ class UserController extends Controller
             $UserEmail=$request->UserEmail;
             $OTP=rand(100000,999999);
             $details=['code'=>$OTP];//associative array used a pair(strinf,value)
+            try{
             Mail::to($UserEmail)->send(new OTPMail($details));
-            User::updateOrCreate(['email'=> $UserEmail],['email'=>$UserEmail,'otp'=>$OTP]);//built-in function
+            }catch(Exception $e){
+                return ResponseHelper::Out('otp fail',$e,401);
+            }
+            try{
+            User::updateOrCreate(['email'=> $UserEmail],['email'=>$UserEmail,'otp'=>$OTP]);//built-in function for insert and update
+            }catch(Exception $e){
+                return ResponseHelper::Out('otp update fail',$e,401);
+            }
     return ResponseHelper::Out('success',"A 6 digit OTP has been sent to your email address",200);
         }catch(Exception $e){
-                      return ResponseHelper::Out('fail',$e,200);
+                      return ResponseHelper::Out('fail',$e,401);
         }
     }
 

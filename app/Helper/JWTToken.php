@@ -10,12 +10,13 @@ class JWTToken{
        $payload = [
         'iss' => 'laravel-token',
         'iat' => time(),
-        'exp'=> time()+60+60,
+        'exp'=> time()+60*60,
         'userEmail'=>$userEmail,
         'userID'=>$userID
     ];
     return JWT::encode($payload,$key,'HS256');
     }
+    
     public static function ReadToken($token):string|object{
         try{
         if($token==null){
