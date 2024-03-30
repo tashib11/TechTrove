@@ -9,15 +9,15 @@ class Invoice extends Model
 {
  protected $fillable=[
     'total',
+    'discount',
         'vat',
             'payable',
             'cus_details',//customer_profile theke just niye ashbo
             'ship_details',
             'shipping-method',
             'tran_id',
-            'val_id',
             'delivery_status',
-            'payment_stat',
+            'payment_status',
 
             'user_id'
  ];
