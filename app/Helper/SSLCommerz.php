@@ -21,7 +21,7 @@ try{
         "total_amount"=>$payable,
         "currency"=>$ssl->currency,
         "tran_id"=>$tran_id,
-        "success_url"=>"$ssl->success_url ?tran_id=$tran_id" ,
+        "success_url"=>"$ssl->success_url?tran_id=$tran_id",
         "fail_url"=>"$ssl->fail_url?tran_id=$tran_id",
         "cancel_url"=>"$ssl->cancel_url?tran_id=$tran_id",
         "ipn_url"=>$ssl->ipn_url ,
@@ -58,22 +58,22 @@ try{
 }
 
  static function InitiateSuccess($tran_id):int{
-    Invoice::where(['tran_id'=>$tran_id,'val_id'=>0])->update(['payment_status'=>'Success']);
+    Invoice::where(['tran_id'=>$tran_id,'val_id'=>'0'])->update(['payment_status'=>'success']);
     return 1;
  }
 
  static function InitiateCancel($tran_id):int{
-    Invoice::where(['tran_id'=>$tran_id,'val_id'=>0])->update(['payment_status'=>'Cancel']);
+   Invoice::where(['tran_id'=>$tran_id,'val_id'=>'0'])->update(['payment_status'=>'cancel']);
     return 1;
  }
 
  static function InitiateFail($tran_id):int{
-    Invoice::where(['tran_id'=>$tran_id,'val_id'=>0])->update(['payment_status'=>'Fail']);
+    Invoice::where(['tran_id'=>$tran_id,'val_id'=>'0'])->update(['payment_status'=>'Fail']);
     return 1;
  }
 
  static function InitiateIPN($tran_id,$status, $val_id):int{
-    Invoice::where(['tran_id'=>$tran_id,'val_id'=>0])->update(['payment_status'=>$status,'val_id'=>$val_id ]);
+    Invoice::where(['tran_id'=>$tran_id,'val_id'=>'0'])->update(['payment_status'=>$status,'val_id'=>$val_id ]);
     return 1;
  }
 
