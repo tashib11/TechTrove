@@ -67,6 +67,6 @@ Route::get('/invoiceList',[InvoiceController::class,'InvoiceList'])->middleware(
 Route::get('/invoiceProductList/{invoice_id}',[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
 
 //payment
-Route::post('/paymentSuccess',[InvoiceController::class,'PaymentSuccess']);
-Route::post('/paymentFail',[InvoiceController::class,'PaymentFail']);
-Route::post('/paymentCancel',[InvoiceController::class,'PaymentCancel']);
+Route::post('/PaymentSuccess',[InvoiceController::class,'PaymentSuccess']);
+Route::post('/PaymentFail',[InvoiceController::class,'PaymentFail']);
+Route::post('/PaymentCancel',[InvoiceController::class,'PaymentCancel']);
