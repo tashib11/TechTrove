@@ -12,13 +12,13 @@ use Illuminate\Queue\SerializesModels;
 class OTPMail extends Mailable
 {
     use Queueable, SerializesModels;
-         public $details;
+    public $details;
     /**
      * Create a new message instance.
      */
     public function __construct($details)
     {
-        $this->details=$details;
+        $this->details = $details;
     }
 
     /**
@@ -27,7 +27,7 @@ class OTPMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'TechTrove OTP Mail',
+            subject: 'Apple Shop OTP Mail',
         );
     }
 
