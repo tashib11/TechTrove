@@ -5,7 +5,8 @@
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="widget">
                         <div class="footer_logo">
-                            <a href="#"><img src="assets/images/logo_light.png" alt="logo"/></a>
+                            {{-- <a href="#"><img src="assets/images/logo_light.png" alt="logo"/></a> --}}
+                            <h2>TechTrove</h2>
                         </div>
                         <p>If you are going to use of Lorem Ipsum need to be sure there isn't hidden of text</p>
                     </div>
@@ -56,11 +57,11 @@
                         <ul class="contact_info contact_info_light">
                             <li>
                                 <i class="ti-location-pin"></i>
-                                <p>123 Street, Old Trafford, New South London , UK</p>
+                                <p>Bonani, Dhaka, BD</p>
                             </li>
                             <li>
                                 <i class="ti-email"></i>
-                                <a href="mailto:info@sitename.com">info@apple.com</a>
+                                <a href="mailto:info@sitename.com">info@TechTrove.com</a>
                             </li>
                             <li>
                                 <i class="ti-mobile"></i>
