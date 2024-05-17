@@ -89,5 +89,9 @@ Route::post("/PaymentSuccess",[InvoiceController::class,'PaymentSuccess']);
 Route::post("/PaymentCancel",[InvoiceController::class,'PaymentCancel']);
 Route::post("/PaymentFail",[InvoiceController::class,'PaymentFail']);
 
+//dashboard
+
+Route::get("/Dashboard",[DashboardController::class,'dashboardPage']);
+Route::get("/Dashboard/ProductCreate",[ProductController::class,'create']);
 
 
