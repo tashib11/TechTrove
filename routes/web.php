@@ -9,6 +9,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenAuthenticate;
 
 
@@ -87,6 +88,7 @@ Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'Invoice
 Route::post("/PaymentSuccess",[InvoiceController::class,'PaymentSuccess']);
 Route::post("/PaymentCancel",[InvoiceController::class,'PaymentCancel']);
 Route::post("/PaymentFail",[InvoiceController::class,'PaymentFail']);
+
 
 
 
