@@ -23,7 +23,7 @@ class ProductController extends Controller
 
     public function CartListPage()
     {
-        
+
         return view('pages.cart-list-page');
     }
 
