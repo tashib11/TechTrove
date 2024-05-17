@@ -57,7 +57,7 @@
                         <ul class="contact_info contact_info_light">
                             <li>
                                 <i class="ti-location-pin"></i>
-                                <p>Bonani, Dhaka, BD</p>
+                                <p>Teligati, Khulna, BD</p>
                             </li>
                             <li>
                                 <i class="ti-email"></i>
@@ -77,7 +77,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-md-0 text-center text-md-start">© 2020 All Rights Reserved by Apple Shop</p>
+                    <p class="mb-md-0 text-center text-md-start">© 2024 All Rights Reserved by TechTrove</p>
                 </div>
                 <div class="col-md-6">
                     <ul class="footer_payment text-center text-lg-end">
