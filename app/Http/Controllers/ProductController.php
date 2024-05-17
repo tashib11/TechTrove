@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 use App\Helper\ResponseHelper;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\CustomerProfile;
 use App\Models\Product;
 use App\Models\ProductCart;
@@ -13,6 +15,15 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function create() {
+        $data = [];
+        $categories= Category::orderBy('categoryName','ASC')->get();
+        $brands= Brand::orderBy('brandName','ASC')->get();
+        $data['categories']=$categories;
+        $data['brands']=$brands;
+        return view('admin.products.create', $data);
+    }
 
 
     public function WishList()
