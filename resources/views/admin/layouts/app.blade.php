@@ -149,9 +149,23 @@
 		<script src="{{  asset('admin-assets/js/demo.js') }}"></script>
 
 
+<script  type="text/javascript">
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
+    $(document).ready(function() {
+        $('.summernote').summernote({
+        height: 200
+        });
+    });
+
+
+</script>
 
 	</body>
-    
+
 </html>
 
