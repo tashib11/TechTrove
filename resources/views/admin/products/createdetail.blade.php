@@ -5,7 +5,7 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Product</h1>
+                <h1>Make Details of Product</h1>
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ asset ('/') }}" class="btn btn-primary">Back</a>
