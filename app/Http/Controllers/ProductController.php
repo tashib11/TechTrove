@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
 {
 
+
+    public function index() {
+        $data = [];
+        $products = Product::latest('id')->paginate();
+    $data['products'] = $products;
+        return view('admin.products.list', $data);
+    }
+
     public function create() {
         $data = [];
         $categories= Category::orderBy('categoryName','ASC')->get();
@@ -30,7 +38,7 @@ class ProductController extends Controller
          $product = Product::create($request->all());
         // return $request->all();
         if($product) {
-            return redirect()->route('product.create')->with('success', 'Product created successfully');
+            return redirect()->route('product.list')->with('success', 'Product created successfully');
         }else {
             return redirect()->route('product.create')->with('error', 'Product creation failed');
         }
