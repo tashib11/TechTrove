@@ -97,6 +97,9 @@ Route::post("/ProductStore",[ProductController::class,'store'])->name('product.s
 Route::get("/Dashboard/DetailsCreate",[ProductController::class,'detailCreate'])->name('product.detail.create');
 Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->name('product.detail.store');
 
+Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
+
+
 
 
 
