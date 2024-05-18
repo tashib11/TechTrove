@@ -36,6 +36,27 @@ class ProductController extends Controller
         }
     }
 
+    public function detailCreate(){
+
+        $data = [];
+        $products= Product::orderBy('title','ASC')->get();
+
+        $data['products']=$products;
+
+        return view('admin.products.createdetail', $data);
+    }
+
+
+    public function detailstore(Request $request) {
+        $product = ProductDetails::create($request->all());
+        // return $request->all();
+        if($product) {
+            return redirect()->route('product.detail.create')->with('success', 'Product Details created successfully');
+        }else {
+            return redirect()->route('product.detail.create')->with('error', 'Product Details creation failed');
+        }
+    }
+
     public function WishList()
     {
         return view('pages.wish-list-page');
