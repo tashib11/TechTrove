@@ -12,6 +12,7 @@ use App\Models\ProductSlider;
 use App\Models\ProductWish;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -25,6 +26,15 @@ class ProductController extends Controller
         return view('admin.products.create', $data);
     }
 
+    public function store(Request $request) {
+         $product = Product::create($request->all());
+        // return $request->all();
+        if($product) {
+            return redirect()->route('product.create')->with('success', 'Product created successfully');
+        }else {
+            return redirect()->route('product.create')->with('error', 'Product creation failed');
+        }
+    }
 
     public function WishList()
     {
