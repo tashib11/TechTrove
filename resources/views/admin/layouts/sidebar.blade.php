@@ -66,6 +66,12 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ asset('/') }}" class="nav-link">
+                        <i class="nav-icon  fas fa-home"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
