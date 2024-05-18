@@ -53,14 +53,14 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="orders.html" class="nav-link">
+                    <a href="{{ asset('/Dashboard/InvoiceList') }}" class="nav-link">
                         <i class="nav-icon fas fa-shopping-bag"></i>
-                        <p>Orders</p>
+                        <p>Invoices</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="users.html" class="nav-link">
+                    <a href="{{ asset('/Dashboard/UserList') }}" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>
                         <p>Users</p>
                     </a>

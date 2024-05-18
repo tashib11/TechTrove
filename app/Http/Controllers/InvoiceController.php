@@ -108,4 +108,12 @@ class InvoiceController extends Controller
         return SSLCommerz::InitiateIPN($request->input('tran_id'),$request->input('status'),$request->input('val_id'));
     }
 
+
+
+    public function index() {
+        $data = [];
+        $invs = Invoice::latest('id')->paginate();
+    $data['invs'] = $invs;
+        return view('admin.products.invoicelist', $data);
+    }
 }

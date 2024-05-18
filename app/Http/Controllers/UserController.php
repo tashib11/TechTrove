@@ -60,5 +60,12 @@ class UserController extends Controller
     function UserLogout(){
         return redirect('/')->cookie('token','',-1);
     }
+
+    public function index() {
+        $data = [];
+        $users = User::latest('id')->paginate();
+    $data['users'] = $users;
+        return view('admin.layouts.userlist', $data);
+    }
 }
 
