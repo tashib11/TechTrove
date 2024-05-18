@@ -94,7 +94,9 @@ Route::post("/PaymentFail",[InvoiceController::class,'PaymentFail']);
 Route::get("/Dashboard",[DashboardController::class,'dashboardPage']);
 Route::get("/Dashboard/ProductCreate",[ProductController::class,'create'])->name('product.create');
 Route::post("/ProductStore",[ProductController::class,'store'])->name('product.store');
-Route::get("/Dashboard/DetailsCreate",[ProductController::class,'create'])->name('product.create');
+Route::get("/Dashboard/DetailsCreate",[ProductController::class,'detailCreate'])->name('product.detail.create');
+Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->name('product.detail.store');
+
 
 
 
