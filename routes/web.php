@@ -11,8 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenAuthenticate;
-
-
+use App\Models\Category;
 
 // Home Page
 Route::get('/', [HomeController::class, 'HomePage']);
@@ -103,6 +102,14 @@ Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('p
 Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])->name('product.edit');
 Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
 Route::get('/Dashboard/ProductDelete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+
+Route::get("/Dashboard/brand",[BrandController::class,'create'])->name('brand.create');
+Route::post("/BrandStore",[BrandController::class,'store'])->name('brand.store');
+
+Route::get("/Dashboard/category",[CategoryController::class,'create'])->name('category.create');
+Route::post("/CategoryStore",[CategoryController::class,'store'])->name('category.store');
+
+
 
 
 
