@@ -213,5 +213,25 @@ class ProductController extends Controller
         return ResponseHelper::Out('success',$data,200);
     }
 
+    public function edit($id, Request $request){
+        $data = [];
+        $product= Product::find($id);
+        $data['product']=$product;
+        $categories= Category::orderBy('categoryName','ASC')->get();
+        $brands= Brand::orderBy('brandName','ASC')->get();
+        $data['categories']=$categories;
+        $data['brands']=$brands;
+        return view('admin.products.edit', $data);
+    }
+
+     public function update($id, Request $request){
+        $product = Product::find($id);
+        $product->update($request->all());
+        if($product) {
+            return redirect()->route('product.list')->with('success', 'Product updated successfully');
+        }else {
+            return redirect()->route('product.edit')->with('error', 'Product update failed');
+        }
+     }
 
 }

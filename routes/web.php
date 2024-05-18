@@ -99,6 +99,10 @@ Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->nam
 
 Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 
+Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
+Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])->name('product.edit');
+Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
+
 
 
 
