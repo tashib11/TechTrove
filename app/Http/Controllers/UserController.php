@@ -46,8 +46,10 @@ class UserController extends Controller
             $verification= User::where('email',$UserEmail)->where('otp',$OTP)->first();
 
             if($verification){
-                User::where('email',$UserEmail)->where('otp',$OTP)->update(['otp'=>'0']);
-                $token=JWTToken::CreateToken($UserEmail,$verification->id);
+                  User::where('email',$UserEmail)->where('otp',$OTP)->update(['otp'=>'0']);
+                  $user = User::where('email', $UserEmail)->first();
+                $userRole = $user->role;
+                $token=JWTToken::CreateToken($UserEmail,$verification->id, $userRole);
                 return  ResponseHelper::Out('success',"",200)->cookie('token',$token,60*24*30);
             }
             else{

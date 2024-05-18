@@ -10,6 +10,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Product extends Model
 {
+    protected $fillable = [
+        'title',
+        'short_des',
+        'discount_price',
+        'discount',
+        'price',
+        'image',
+        'brand_id',
+        'category_id',
+        'remark',
+        'stock',
+        'star'
+    ];
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);

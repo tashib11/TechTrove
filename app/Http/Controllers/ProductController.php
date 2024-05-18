@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 use App\Helper\ResponseHelper;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\CustomerProfile;
 use App\Models\Product;
 use App\Models\ProductCart;
@@ -10,10 +12,29 @@ use App\Models\ProductSlider;
 use App\Models\ProductWish;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
 
+    public function create() {
+        $data = [];
+        $categories= Category::orderBy('categoryName','ASC')->get();
+        $brands= Brand::orderBy('brandName','ASC')->get();
+        $data['categories']=$categories;
+        $data['brands']=$brands;
+        return view('admin.products.create', $data);
+    }
+
+    public function store(Request $request) {
+         $product = Product::create($request->all());
+        // return $request->all();
+        if($product) {
+            return redirect()->route('product.create')->with('success', 'Product created successfully');
+        }else {
+            return redirect()->route('product.create')->with('error', 'Product creation failed');
+        }
+    }
 
     public function WishList()
     {
