@@ -17,7 +17,8 @@
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
-    <form action="" method="POST" name="productForm" id="productForm">
+    <form action="{{ route('product.store') }}" method="POST" name="productForm" id="productForm">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
@@ -28,12 +29,13 @@
                                 <div class="mb-3">
                                     <label for="title">Title</label>
                                     <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+                                    <p class="error"></p>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="description">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="Description"></textarea>
+                                    <textarea name="short_des" id="description" cols="30" rows="10" class="summernote" placeholder="Description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +46,8 @@
                         <h2 class="h4 mb-3">Media</h2>
                         <div id="image" class="dropzone dz-clickable">
                             <div class="dz-message needsclick">
-                                <br>Drop files here or click to upload.<br><br>
+                                <br> <label for="image">image</label>
+                                <input type="text" name="image" id="image" class="form-control" placeholder="image"><br><br>
                             </div>
                         </div>
                     </div>
@@ -57,15 +60,23 @@
                                 <div class="mb-3">
                                     <label for="price">Price</label>
                                     <input type="text" name="price" id="price" class="form-control" placeholder="Price">
+                                    <p class="error"> </p>
                                 </div>
                             </div>
+
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="compare_price">Compare at Price</label>
-                                    <input type="text" name="compare_price" id="compare_price" class="form-control" placeholder="Compare Price">
-                                    <p class="text-muted mt-3">
-                                        To show a reduced price, move the product’s original price into Compare at price. Enter a lower value into Price.
-                                    </p>
+                                    <label for="discount">Discount </label>
+                                    <input type="boolean" name="discount" id="discount" class="form-control" placeholder="Discount available(0/1)">
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="discount_price">Discount Price</label>
+                                    <input type="text" name="discount_price" id="discount_price" class="form-control" placeholder="Discount Price">
+
                                 </div>
                             </div>
                         </div>
@@ -73,29 +84,33 @@
                 </div>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h2 class="h4 mb-3">Inventory</h2>
+                        <h2 class="h4 mb-3">Info</h2>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="sku">SKU (Stock Keeping Unit)</label>
-                                    <input type="text" name="sku" id="sku" class="form-control" placeholder="sku">
+                                    <label for="stock">Stock </label>
+                                    <input type="boolean" name="stock" id="stock" class="form-control" placeholder="stock(1/0)">
+                                    <p class="error" ></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="barcode">Barcode</label>
-                                    <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode">
+                                    <label for="star">Star</label>
+                                    <input type="float" name="star" id="star" class="form-control" placeholder="Star">
+                                    <p class="error"> </p>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Product remark</h2>
                                 <div class="mb-3">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" id="track_qty" name="track_qty" checked>
-                                        <label for="track_qty" class="custom-control-label">Track Quantity</label>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty">
+                                    <select name="remark" id="remark" class="form-control">
+                                        <option value="popular">popular</option>
+                                        <option value=new">new</option>
+                                        <option value="top">top</option>
+                                        <option value="specail">specail</option>
+                                        <option value="trending">trending</option>
+                                        <option value="regular">regular</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -103,23 +118,13 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="h4 mb-3">Product status</h2>
-                        <div class="mb-3">
-                            <select name="status" id="status" class="form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Block</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <h2 class="h4  mb-3">Product category</h2>
                         <div class="mb-3">
                             <label for="category">Category</label>
-                            <select name="category" id="category" class="form-control">
+                            <select name="category_id" id="category" class="form-control">
                                 <option value="">Select a Category</option>
 
                                 @if ($categories->isnotEmpty())
@@ -129,22 +134,16 @@
                                 @endif
 
                             </select>
+                            <p class="error"> </p>
                         </div>
-                        <div class="mb-3">
-                            <label for="category">Sub category</label>
-                            <select name="sub_category" id="sub_category" class="form-control">
-                                <option value="">Mobile</option>
-                                <option value="">Home Theater</option>
-                                <option value="">Headphones</option>
-                            </select>
-                        </div>
+
                     </div>
                 </div>
                 <div class="card mb-3">
                     <div class="card-body">
                         <h2 class="h4 mb-3">Product brand</h2>
                         <div class="mb-3">
-                            <select name="status" id="status" class="form-control">
+                            <select name="brand_id" id="brand" class="form-control">
                                 <option value="">Select a Brand</option>
 
                                 @if ($brands->isnotEmpty())
@@ -154,25 +153,16 @@
                                 @endif
 
                             </select>
+                            <p class="error" ></p>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h2 class="h4 mb-3">Featured product</h2>
-                        <div class="mb-3">
-                            <select name="status" id="status" class="form-control">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
         <div class="pb-5 pt-3">
-            <button class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Create</button>
             <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
     </div>
@@ -188,20 +178,40 @@
 
 $("#productForm").submit(function(event){
     event.preventDefault();
-
+       var formArray = $(this).serializeArray();
     $.ajax({
-        url:'',
+        url:'{{ route("product.store") }}',
         type:'post',
-        data:{},
+        data:formArray,
         dataType: 'json',
         success:function(response){
+            if(response['status']== true){
+            console.log(response);
+            }else{
 
+                var error = response['errors'];
+
+            //  if(error['title']){
+            //         $('#title').addClass('is-invalid').siblings('p').
+            //         addClass('invalid-feedback').html(error['title']);
+            //     }else{
+            //         $('#title').removeClass('is-invalid').siblings('p').
+            //         removeClass('invalid-feedback').html("");;
+            //     }
+            $(".error").removeClass('is-invalid').html("");
+            $("input[type=text],select").removeClass('is-invalid');
+            $.each(error,function(key,value){
+                $('#'+key).addClass('is-invalid').siblings('p').
+                addClass('invalid-feedback').html(value);
+            });
+
+            }
         },
         error:function(){
             console.log("something went wrong");
         }
     });
-})
+});
 
 
 </script>
