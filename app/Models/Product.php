@@ -23,6 +23,8 @@ class Product extends Model
         'stock',
         'star'
     ];
+
+
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
