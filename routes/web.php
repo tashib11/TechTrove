@@ -92,6 +92,7 @@ Route::post("/PaymentFail",[InvoiceController::class,'PaymentFail']);
 //dashboard
 
 Route::get("/Dashboard",[DashboardController::class,'dashboardPage']);
-Route::get("/Dashboard/ProductCreate",[ProductController::class,'create']);
+Route::get("/Dashboard/ProductCreate",[ProductController::class,'create'])->name('product.create');
+Route::post("/ProductStore",[ProductController::class,'store'])->name('product.store');
 
 
