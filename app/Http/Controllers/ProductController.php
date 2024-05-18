@@ -4,6 +4,7 @@ use App\Helper\ResponseHelper;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CustomerProfile;
+use App\Models\InvoiceProduct;
 use App\Models\Product;
 use App\Models\ProductCart;
 use App\Models\ProductDetails;
@@ -233,5 +234,29 @@ class ProductController extends Controller
             return redirect()->route('product.edit')->with('error', 'Product update failed');
         }
      }
+
+     public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        $productInInvoice = InvoiceProduct::where('product_id', $product->id)->exists();
+
+        if ($productInInvoice) {
+            return response()->json(['status' => false, 'message' => 'This product cannot be deleted as it is in an invoice'], 400);
+        }
+
+        ProductDetails::where('product_id', $product->id)->delete();
+        ProductCart::where('product_id', $product->id)->delete();
+        ProductSlider::where('product_id', $product->id)->delete();
+        ProductReview::where('product_id', $product->id)->delete();
+        ProductWish::where('product_id', $product->id)->delete();
+
+        $product->delete();
+        if($product) {
+            return redirect()->route('product.list')->with('success', 'Product deleted successfully');
+        }else {
+            return redirect()->route('product.list')->with('error', 'Product delete failed');
+        }
+    }
 
 }

@@ -24,6 +24,7 @@ class Product extends Model
         'star'
     ];
 
+ 
 
     public function brand(): BelongsTo
     {
