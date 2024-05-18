@@ -107,7 +107,7 @@
                                         <option {{ ($product->remark=='popular') ? 'selected' : '' }} value="popular">popular</option>
                                         <option {{ ($product->remark=='new') ? 'selected ' : '' }} value="new">new</option>
                                         <option {{ ($product->remark=='top') ? 'selected ' : '' }} value="top">top</option>
-                                        <option {{ ($product->remark=='specail') ? ' selected' : '' }} value="specail">specail</option>
+                                        <option {{ ($product->remark=='specail') ? 'selected' : '' }} value="special">special</option>
                                         <option {{ ($product->remark=='trending') ? 'selected ' : '' }} value="trending">trending</option>
                                         <option {{ ($product->remark=='regular') ? 'selected ' : '' }} value="regular">regular</option>
                                     </select>
