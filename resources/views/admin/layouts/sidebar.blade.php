@@ -12,7 +12,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="dashboard.html" class="nav-link">
+                    <a href="{{ asset('/Dashboard') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
@@ -23,12 +23,7 @@
                         <p>Category</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="subcategory.html" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>Sub Category</p>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="brands.html" class="nav-link">
                         <svg class="h-6 nav-icon w-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -38,43 +33,32 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="products.html" class="nav-link">
+                    <a href="{{ asset('/Dashboard/ProductCreate') }}" class="nav-link">
                         <i class="nav-icon fas fa-tag"></i>
                         <p>Products</p>
                     </a>
                 </li>
-
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <!-- <i class="nav-icon fas fa-tag"></i> -->
-                        <i class="fas fa-truck nav-icon"></i>
-                        <p>Shipping</p>
+                    <a href="{{ asset('/Dashboard/DetailsCreate') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>Products details</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="orders.html" class="nav-link">
                         <i class="nav-icon fas fa-shopping-bag"></i>
                         <p>Orders</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="discount.html" class="nav-link">
-                        <i class="nav-icon  fa fa-percent" aria-hidden="true"></i>
-                        <p>Discount</p>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="users.html" class="nav-link">
                         <i class="nav-icon  fas fa-users"></i>
                         <p>Users</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="pages.html" class="nav-link">
-                        <i class="nav-icon  far fa-file-alt"></i>
-                        <p>Pages</p>
-                    </a>
-                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

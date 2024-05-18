@@ -8,7 +8,7 @@
                 <h1>Create Product</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="products.html" class="btn btn-primary">Back</a>
+                <a href="{{ asset ('/') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -43,11 +43,11 @@
                 </div>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h2 class="h4 mb-3">Media</h2>
-                        <div id="image" class="dropzone dz-clickable">
-                            <div class="dz-message needsclick">
-                                <br> <label for="image">image</label>
-                                <input type="text" name="image" id="image" class="form-control" placeholder="image"><br><br>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="image">Image </label>
+                                <input type="text" name="image" id="image" class="form-control" placeholder="image link">
+                                <p class="error"></p>
                             </div>
                         </div>
                     </div>
