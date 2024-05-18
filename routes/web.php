@@ -98,7 +98,6 @@ Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->nam
 
 Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 
-Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])->name('product.edit');
 Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
 Route::get('/Dashboard/ProductDelete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
@@ -108,6 +107,10 @@ Route::post("/BrandStore",[BrandController::class,'store'])->name('brand.store')
 
 Route::get("/Dashboard/category",[CategoryController::class,'create'])->name('category.create');
 Route::post("/CategoryStore",[CategoryController::class,'store'])->name('category.store');
+
+Route::get("/Dashboard/InvoiceList",[InvoiceController::class,'index'])->name('invoice.list');
+
+Route::get("/Dashboard/UserList",[UserController::class,'index'])->name('user.list');
 
 
 
