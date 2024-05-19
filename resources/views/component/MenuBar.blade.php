@@ -24,7 +24,7 @@
                                 <li><a href="{{ url('/profile') }}"> <i class="linearicons-user"></i> Account</a></li>
                                 <li><a class="btn btn-danger btn-sm" href="{{ url('/logout') }}"> Logout</a></li>
                                 @if ($user->role === 'admin')
-                                    <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard/ProductCreate') }}"> Dashboard</a>
+                                    <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a>
                                     </li>
                                 @endif
                             @else
@@ -55,7 +55,7 @@
                     <ul class="navbar-nav">
                         <li><a class="nav-link nav_item" href="{{ url('/') }}">Home</a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Products</a>
+                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Categories</a>
                             <div class="dropdown-menu">
                                 <ul id="CategoryItem">
 
