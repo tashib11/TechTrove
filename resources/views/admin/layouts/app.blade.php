@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
+
 		<!-- Site wrapper -->
 		<div class="wrapper">
 			<!-- Navbar -->
@@ -43,14 +44,9 @@
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
 							<h4 class="h4 mb-0"><strong>Admin</strong></h4>
 							<div class="mb-3">tashib91221@gmail.com</div>
+
 							<div class="dropdown-divider"></div>
-							<a href="{{url("/logout")}}" class="dropdown-item">
-								<i class="fas fa-user-cog mr-2"></i> Settings
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-lock mr-2"></i> Change Password
-							</a>
+
 							<div class="dropdown-divider"></div>
 							<a href="{{url("/logout")}}" class="dropdown-item text-danger">
 								<i class="fas fa-sign-out-alt mr-2"></i> Logout
@@ -60,9 +56,18 @@
 				</ul>
 			</nav>
 			<!-- /.navbar -->
+            <div class="preloader">
+                <div class="lds-ellipsis">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
 			<!-- Main Sidebar Container -->
 		  @include('admin.layouts.sidebar')
 			<!-- Content Wrapper. Contains page content -->
+
 			<div class="content-wrapper">
 				<!-- Content Header (Page header) -->
 				{{-- <section class="content-header">
@@ -136,6 +141,7 @@
 			</footer>
 
 		</div>
+
 		<!-- ./wrapper -->
 		<!-- jQuery -->
 		<script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
@@ -165,6 +171,7 @@
 
 
 </script>
+
 
 	</body>
 
