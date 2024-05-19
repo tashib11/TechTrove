@@ -8,7 +8,7 @@
                 <h1>Create Product</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Back</a>
+                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
             </div>
         </div>
     </div>
@@ -105,11 +105,11 @@
                                 <div class="mb-3">
                                     <select name="remark" id="remark" class="form-control">
                                         <option {{ ($product->remark=='popular') ? 'selected' : '' }} value="popular">popular</option>
-                                        <option {{ ($product->remark=='new') ? 'selected ' : '' }} value="new">new</option>
-                                        <option {{ ($product->remark=='top') ? 'selected ' : '' }} value="top">top</option>
-                                        <option {{ ($product->remark=='specail') ? 'selected' : '' }} value="special">special</option>
-                                        <option {{ ($product->remark=='trending') ? 'selected ' : '' }} value="trending">trending</option>
-                                        <option {{ ($product->remark=='regular') ? 'selected ' : '' }} value="regular">regular</option>
+                                        <option {{ ($product->remark=='new') ? 'selected' : '' }} value="new">new</option>
+                                        <option {{ ($product->remark=='top') ? 'selected' : '' }} value="top">top</option>
+                                        <option {{ ($product->remark=='specail') ? 'selected' : '' }} value="specail">specail</option>
+                                        <option {{ ($product->remark=='trending') ? 'selected' : '' }} value="trending">trending</option>
+                                        <option {{ ($product->remark=='regular') ? 'selected' : '' }} value="regular">regular</option>
                                     </select>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
 
                                 @if ($categories->isnotEmpty())
                                       @foreach ($categories as $category )
-                                      <option  {{ ($product->category_id== $category->id) ? 'selected ' : '' }}  value="{{  $category->id}}">{{  $category->categoryName}}</option>
+                                      <option  {{ ($product->category_id== $category->id) ? 'selected' : '' }}  value="{{  $category->id}}">{{  $category->categoryName}}</option>
                                       @endforeach
                                 @endif
 
@@ -148,7 +148,7 @@
 
                                 @if ($brands->isnotEmpty())
                                       @foreach ($brands as $brand )
-                                      <option  {{ ($product->brand_id== $brand->id) ? 'selected ' : '' }}  value="{{  $brand->id}}">{{  $brand->brandName}}</option>
+                                      <option  {{ ($product->brand_id== $brand->id) ? 'selected' : '' }}  value="{{  $brand->id}}">{{  $brand->brandName}}</option>
                                       @endforeach
                                 @endif
 
