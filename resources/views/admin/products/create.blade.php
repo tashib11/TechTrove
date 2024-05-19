@@ -5,10 +5,10 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Product</h1>
+                <h1>Add Product</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Back</a>
+                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
                                 <div class="mb-3">
                                     <select name="remark" id="remark" class="form-control">
                                         <option value="popular">popular</option>
-                                        <option value=new">new</option>
+                                        <option value="new">new</option>
                                         <option value="top">top</option>
                                         <option value="specail">specail</option>
                                         <option value="trending">trending</option>

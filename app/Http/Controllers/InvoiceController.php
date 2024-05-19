@@ -116,4 +116,6 @@ class InvoiceController extends Controller
     $data['invs'] = $invs;
         return view('admin.products.invoicelist', $data);
     }
+
+  
 }
