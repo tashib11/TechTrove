@@ -17,7 +17,7 @@
         </div>
 
         <div class="col-md-3 p-2">
-            <label class="form-label">Customer State</label>
+            <label class="form-label">Customer Division</label>
             <input type="text" id="cus_state" class="form-control form-control-sm"/>
         </div>
 
@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-md-3 p-2">
-            <label class="form-label">Customer Fax</label>
+            <label class="form-label">Alter Phone</label>
             <input type="text" id="cus_fax" class="form-control form-control-sm"/>
         </div>
 
@@ -63,7 +63,7 @@
         </div>
 
         <div class="col-md-3 p-2">
-            <label class="form-label">Shipping State</label>
+            <label class="form-label">Shipping Division</label>
             <input type="text" id="ship_state" class="form-control form-control-sm"/>
         </div>
 
