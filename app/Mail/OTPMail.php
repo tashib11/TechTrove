@@ -27,7 +27,7 @@ class OTPMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Apple Shop OTP Mail',
+            subject: 'TechTrove OTP Mail',
         );
     }
 
