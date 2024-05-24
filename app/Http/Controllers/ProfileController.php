@@ -32,4 +32,18 @@ class ProfileController extends Controller
         return ResponseHelper::Out('success',$data,200);
     }
 
+
+    public function CheckProfile(Request $request): JsonResponse
+    {
+        try {
+            $user_id = $request->header('id');
+            $profileExists = CustomerProfile::where('user_id', $user_id)->exists();
+
+            return ResponseHelper::Out('success', ['profile_exists' => $profileExists], 200);
+        } catch (\Exception $e) {
+            return ResponseHelper::Out('fail', $e->getMessage(), 500);
+        }
+    }
+    
+
 }

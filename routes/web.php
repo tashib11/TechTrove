@@ -55,6 +55,7 @@ Route::get('/logout',[UserController::class,'UserLogout']);
 // User Profile
 Route::post('/CreateProfile', [ProfileController::class, 'CreateProfile'])->middleware([TokenAuthenticate::class]);
 Route::get('/ReadProfile', [ProfileController::class, 'ReadProfile'])->middleware([TokenAuthenticate::class]);
+Route::get('/CheckProfile', [ProfileController::class, 'CheckProfile'])->middleware([TokenAuthenticate::class]);
 
 
 // Product Review
