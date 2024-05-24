@@ -23,7 +23,7 @@
                             @if ($token !== null)
                                 <li><a href="{{ url('/profile') }}"> <i class="linearicons-user"></i> Account</a></li>
                                 <li><a class="btn btn-danger btn-sm" href="{{ url('/logout') }}"> Logout</a></li>
-                                @if ($user->role === 'admin')
+                                @if ($user->role === "admin")
                                     <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a>
                                     </li>
                                 @endif
