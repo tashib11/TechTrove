@@ -10,14 +10,17 @@ class TokenAuthenticate
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $token=$request->cookie('token');
-        $result=JWTToken::ReadToken($token);
-        if($result=="unauthorized"){
-            return ResponseHelper::Out('unauthorized',null,401);
-        }
-        else{
-            $request->headers->set('email',$result->userEmail);
-            $request->headers->set('id',$result->userID);
+        $token = $request->cookie('token');
+        $result = JWTToken::ReadToken($token);
+
+        if ($result === null) {
+            return ResponseHelper::Out('unauthorized', null, 401);
+        } else {
+            $request->headers->set('email', $result->userEmail);
+            $request->headers->set('id', $result->userID);
+            if (isset($result->role)) {
+                $request->headers->set('role', $result->role);
+            }
             return $next($request);
         }
     }

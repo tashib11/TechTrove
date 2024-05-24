@@ -21,19 +21,18 @@ class JWTToken
         return JWT::encode($payload,$key,'HS256');
     }
 
-    public static function ReadToken($token): string|object
+    public static function ReadToken($token): ?object
     {
         try {
-            if($token==null){
-                return 'unauthorized';
+            if ($token == null) {
+                return null;
+            } else {
+                $key = env('JWT_KEY');
+                return JWT::decode($token, new Key($key, 'HS256'));
             }
-            else{
-                $key =env('JWT_KEY');
-                return JWT::decode($token,new Key($key,'HS256'));
-            }
-        }
-        catch (Exception $e){
-            return 'unauthorized';
+        } catch (Exception $e) {
+            return null;
         }
     }
+
 }
