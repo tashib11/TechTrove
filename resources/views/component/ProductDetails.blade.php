@@ -27,78 +27,104 @@
                 <div class="pr_detail">
                     <div class="product_description">
                         <h4 id="p_title" class="product_title"></h4>
-                        <h1 id="p_price"  class="price"></h1>
+                        <h1 id="p_price" class="price"></h1>
+                        <h2 id="p_discount_price" class="price text-danger"></h2>
                     </div>
                     <div>
                         <p id="p_des"></p>
                     </div>
-                    </div>
-
-
-                    <label class="form-label">Size</label>
-                    <select id="p_size" class="form-select">
-                    </select>
-
-                    <label class="form-label">Color</label>
-                    <select id="p_color" class="form-select">
-
-                    </select>
-
-                    <hr />
-                    <div class="cart_extra">
-                        <div class="cart-product-quantity">
-                            <div class="quantity">
-                                <input type="button" value="-" class="minus">
-                                <input id="p_qty" type="text" name="quantity" value="1" title="Qty" class="qty" size="4">
-                                <input type="button" value="+" class="plus">
-                            </div>
-                        </div>
-                        <div class="cart_btn">
-                            <button onclick="AddToCart()" class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
-                            <a class="add_wishlist" onclick="AddToWishList()" href="#"><i class="icon-heart"></i></a>
-                        </div>
-                    </div>
-                    <hr />
                 </div>
+
+                <label class="form-label">Size</label>
+                <select id="p_size" class="form-select"></select>
+
+                <label class="form-label">Color</label>
+                <select id="p_color" class="form-select"></select>
+
+                <hr />
+                <div class="cart_extra">
+                    <div class="cart-product-quantity">
+                        <div class="quantity">
+                            <input type="button" value="-" class="minus">
+                            <input id="p_qty" type="text" name="quantity" value="1" title="Qty" class="qty" size="4">
+                            <input type="button" value="+" class="plus">
+                        </div>
+                    </div>
+                    <div class="cart_btn">
+                        <button onclick="AddToCart()" class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
+                        <a class="add_wishlist" onclick="AddToWishList()" href="#"><i class="icon-heart"></i></a>
+                    </div>
+                </div>
+                <hr />
             </div>
         </div>
+    </div>
 </div>
 
-
-
+<style>
+    .price {
+        font-size: 1.5rem;
+    }
+    .price-discount {
+        text-decoration: line-through;
+        color: gray;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .price-discount + .price {
+        color: red;
+    }
+    .no-discount {
+        text-decoration: line-through;
+        color: gray;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+</style>
 
 <script>
-
+    $(document).ready(function() {
+        productDetails();
+        productReview();
+    });
 
     $('.plus').on('click', function() {
         if ($(this).prev().val()) {
             $(this).prev().val(+$(this).prev().val() + 1);
         }
     });
+
     $('.minus').on('click', function() {
         if ($(this).next().val() > 1) {
-            if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+            $(this).next().val(+$(this).next().val() - 1);
         }
     });
 
     let searchParams = new URLSearchParams(window.location.search);
     let id = searchParams.get('id');
 
-
     async function productDetails() {
-        let res = await axios.get("/ProductDetailsById/"+id);
-        let Details=await res.data['data'];
+        let res = await axios.get("/ProductDetailsById/" + id);
+        let Details = await res.data['data'];
 
-        document.getElementById('product_img1').src=Details[0]['img1'];
-        document.getElementById('img1').src=Details[0]['img1'];
-        document.getElementById('img2').src=Details[0]['img2'];
-        document.getElementById('img3').src=Details[0]['img3'];
-        document.getElementById('img4').src=Details[0]['img4'];
+        document.getElementById('product_img1').src = Details[0]['img1'];
+        document.getElementById('img1').src = Details[0]['img1'];
+        document.getElementById('img2').src = Details[0]['img2'];
+        document.getElementById('img3').src = Details[0]['img3'];
+        document.getElementById('img4').src = Details[0]['img4'];
 
-        document.getElementById('p_title').innerText=Details[0]['product']['title'];
-        document.getElementById('p_price').innerText=`$ ${Details[0]['product']['price']}`;
-        document.getElementById('p_des').innerText=Details[0]['product']['short_des'];
-        document.getElementById('p_details').innerHTML=Details[0]['des'];
+        document.getElementById('p_title').innerText = Details[0]['product']['title'];
+
+        if (Details[0]['product']['discount']) {
+            document.getElementById('p_price').innerText = Details[0]['product']['price'];
+            document.getElementById('p_price').classList.add('price-discount');
+            document.getElementById('p_discount_price').innerText = "Discount Price: " + Details[0]['product']['discount_price'];
+        } else {
+            document.getElementById('p_price').innerText = Details[0]['product']['price'];
+            document.getElementById('p_discount_price').innerText = "No Discount Available";
+            document.getElementById('p_discount_price').classList.add('no-discount');
+        }
+
+        document.getElementById('p_des').innerText = Details[0]['product']['short_des'];
+        document.getElementById('p_details').innerHTML = Details[0]['des'];
 
         // Product Size & Color
         let size= Details[0]['size'].split(',');
