@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('cus_details',500);//customer_profile theke just niye ashbo
             $table->string('ship_details',500);
             $table->string('tran_id',100);
-            $table->string('val_id',100);
+            $table->string('val_id',100)->default(0);
             $table->enum('delivery_status',['Pending','Processing','Completed']);
             $table->string('payment_status');
 
