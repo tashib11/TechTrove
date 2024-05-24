@@ -42,6 +42,64 @@
         color: gray;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     }
+    .stock-status {
+        color: green;
+        font-weight: bold;
+        display: block;
+    }
+    .out-of-stock {
+        color: red;
+        font-weight: bold;
+        display: block;
+    }
+    .product_img {
+        position: relative;
+    }
+    .product_img img {
+        width: 100%;
+    }
+    .product_action_box {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none;
+    }
+    .product:hover .product_action_box {
+        display: block;
+    }
+    .product_action_box ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .product_action_box ul li {
+        margin: 5px 0;
+    }
+    .product_info {
+        padding: 10px;
+        text-align: center;
+    }
+    .product_title {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    .rating_wrap {
+        margin: 10px 0;
+    }
+    .product_rate {
+        background: gold;
+        height: 10px;
+        display: inline-block;
+    }
+    .remove {
+        margin-top: 10px;
+        display: inline-block;
+        padding: 5px 10px;
+        background: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
 </style>
 
 <script>
@@ -66,6 +124,13 @@
                     </div>`;
             }
 
+            // Debugging: log the product's stock status
+            console.log('Product ID:', product['id'], 'In Stock:', product['in_stock']);
+
+            let stockStatus = product['stock'] == 1 ?
+                '<div class="stock-status">In Stock</div>' :
+                '<div class="out-of-stock">Out of Stock</div>';
+
             let EachItem = `<div class="col-lg-3 col-md-4 col-6">
                                 <div class="product">
                                     <div class="product_img">
@@ -81,6 +146,7 @@
                                     <div class="product_info">
                                         <h6 class="product_title"><a href="/details?id=${product['id']}">${product['title']}</a></h6>
                                         ${discountSection}
+                                        ${stockStatus}
                                         <div class="rating_wrap">
                                             <div class="rating">
                                                 <div class="product_rate" style="width:${product['star']}%"></div>

@@ -22,13 +22,13 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6 col-md-6">
                 <div class="pr_detail">
                     <div class="product_description">
                         <h4 id="p_title" class="product_title"></h4>
                         <h1 id="p_price" class="price"></h1>
                         <h2 id="p_discount_price" class="price text-danger"></h2>
+                        <p id="p_stock" class="stock-status"></p>
                     </div>
                     <div>
                         <p id="p_des"></p>
@@ -78,6 +78,16 @@
         color: gray;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     }
+    .stock-status {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .stock-status.in-stock {
+        color: green;
+    }
+    .stock-status.out-of-stock {
+        color: red;
+    }
 </style>
 
 <script>
@@ -124,7 +134,15 @@
         }
 
         document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
-        document.getElementById('p_details').innerHTML = Details[0]['des'];
+
+        // Check stock status
+        if (Details[0]['product']['stock']) {
+            document.getElementById('p_stock').innerText = "In Stock";
+            document.getElementById('p_stock').classList.add('in-stock');
+        } else {
+            document.getElementById('p_stock').innerText = "Out of Stock";
+            document.getElementById('p_stock').classList.add('out-of-stock');
+        }
 
  // Clear previous options
         $("#p_size").empty();
