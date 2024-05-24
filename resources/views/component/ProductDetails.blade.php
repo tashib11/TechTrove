@@ -126,6 +126,9 @@
         document.getElementById('p_des').innerText = Details[0]['product']['short_des'];
         document.getElementById('p_details').innerHTML = Details[0]['des'];
 
+ // Clear previous options
+        $("#p_size").empty();
+        $("#p_color").empty();
         // Product Size & Color
         let size= Details[0]['size'].split(',');
         let color=Details[0]['color'].split(',');

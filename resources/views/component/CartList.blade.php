@@ -112,18 +112,18 @@
     async function CheckOut() {
     $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
 
-    // Check if user has created profile
+  
     let hasProfile = await CheckProfile();
 
     $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
     if(hasProfile) {
         try {
-            // Proceed to checkout
+
             let res = await axios.get("/InvoiceCreate");
 
             if(res.status === 200) {
-                // Show payment methods modal
+
                 $("#paymentMethodModal").modal('show');
 
                 // Display payment methods
@@ -144,7 +144,7 @@
             alert("An error occurred while processing your request.");
         }
     } else {
-        // Alert user to fill up profile info
+
         alert("Set profile info in Account");
     }
 }
@@ -152,16 +152,15 @@
 
 async function CheckProfile() {
     try {
-        let res = await axios.get("/CheckProfile");  // Use GET instead of POST as per your routes
-
+        let res = await axios.get("/CheckProfile");
         if (res.status === 200 && res.data.data.profile_exists) {
-            return true;  // Profile exists
+            return true;
         } else {
-            return false;  // Profile does not exist
+            return false;
         }
     } catch (error) {
         console.error("Error checking profile:", error);
-        return false;  // Return false in case of error
+        return false;
     }
 }
 
