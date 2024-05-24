@@ -17,8 +17,6 @@
     </div><!-- END CONTAINER-->
 </div>
 
-
-
 <div class="mt-5">
     <div class="container my-5">
         <div id="byList" class="row">
@@ -26,62 +24,93 @@
     </div>
 </div>
 
-
+<style>
+    .price {
+        font-size: 1.5rem;
+    }
+    .price-discount {
+        text-decoration: line-through;
+        color: gray;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .discount-price {
+        color: blue;
+        font-weight: bold;
+        display: block;
+    }
+    .no-discount {
+        color: gray;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+</style>
 
 <script>
     async function WishList(){
-        let res=await axios.get(`/ProductWishList`);
+        let res = await axios.get(`/ProductWishList`);
         $("#byList").empty();
-        res.data['data'].forEach((item,i)=>{
-            let EachItem=`<div class="col-lg-3 col-md-4 col-6">
+        res.data['data'].forEach((item, i) => {
+            let product = item['product'];
+            let discountSection = '';
+
+            if (product['discount']) {
+                discountSection = `
+                    <div class="product_price">
+                        <span class="price price-discount">$${product['price']}</span>
+                        <span class="price discount-price">$${product['discount_price']}</span>
+                    </div>`;
+            } else {
+                discountSection = `
+                    <div class="product_price">
+                        <span class="price">$${product['price']}</span>
+                        <div class="no-discount">Regular</div>
+                    </div>`;
+            }
+
+            let EachItem = `<div class="col-lg-3 col-md-4 col-6">
                                 <div class="product">
                                     <div class="product_img">
                                         <a href="#">
-                                            <img src="${item['product']['image']}" alt="product_img9">
+                                            <img src="${product['image']}" alt="product_img9">
                                         </a>
                                         <div class="product_action_box">
                                             <ul class="list_none pr_action_btn">
-                                                <li><a href="/details?id=${item['product']['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                                                <li><a href="/details?id=${product['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product_info">
-                                        <h6 class="product_title"><a href="/details?id=${item['product']['id']}">${item['product']['title']}</a></h6>
-                                        <div class="product_price">
-                                            <span class="price">$ ${item['product']['price']}</span>
-                                        </div>
+                                        <h6 class="product_title"><a href="/details?id=${product['id']}">${product['title']}</a></h6>
+                                        ${discountSection}
                                         <div class="rating_wrap">
                                             <div class="rating">
-                                                <div class="product_rate" style="width:${item['product']['star']}%"></div>
+                                                <div class="product_rate" style="width:${product['star']}%"></div>
                                             </div>
                                         </div>
-                                        <button class="btn remove btn-sm my-2 btn-danger" data-id="${item['product']['id']}">Remove</button>
-
+                                        <button class="btn remove btn-sm my-2 btn-danger" data-id="${product['id']}">Remove</button>
                                     </div>
                                 </div>
-                            </div>`
+                            </div>`;
             $("#byList").append(EachItem);
-        })
+        });
 
-
-        $(".remove").on('click',function () {
-            let id= $(this).data('id');
+        $(".remove").on('click', function () {
+            let id = $(this).data('id');
             RemoveWishList(id);
-        })
-
-
+        });
     }
 
-  async function RemoveWishList(id){
-      $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.get("/RemoveWishList/"+id);
-      $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-        if(res.status===200) {
+    async function RemoveWishList(id) {
+        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
+        let res = await axios.get("/RemoveWishList/" + id);
+        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+        if (res.status === 200) {
             await WishList();
-        }
-        else{
-            alert("Request Fail")
+        } else {
+            alert("Request Fail");
         }
     }
 
+    $(document).ready(function() {
+        WishList();
+    });
 </script>
