@@ -109,36 +109,61 @@
     }
 
 
-    async function CheckOut(){
-        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
+    async function CheckOut() {
+    $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
 
-        $("#paymentList").empty();
+    // Check if user has created profile
+    let hasProfile = await CheckProfile();
 
-        let res=await axios.get("/InvoiceCreate");
+    $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
-        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+    if(hasProfile) {
+        try {
+            // Proceed to checkout
+            let res = await axios.get("/InvoiceCreate");
 
+            if(res.status === 200) {
+                // Show payment methods modal
+                $("#paymentMethodModal").modal('show');
 
-        if(res.status===200) {
-
-            $("#paymentMethodModal").modal('show');
-
-            res.data['data'][0]['paymentMethod'].forEach((item,i)=>{
-                let EachItem=`<tr>
-                                <td><img class="w-50" src=${item['logo']} alt="product"></td>
-                                <td><p>${item['name']}</p></td>
-                                <td><a class="btn btn-danger btn-sm" href="${item['redirectGatewayURL']}">Pay</a></td>
-                            </tr>`
-                $("#paymentList").append(EachItem);
-            })
-
+                // Display payment methods
+                $("#paymentList").empty();
+                res.data['data'][0]['paymentMethod'].forEach((item, i) => {
+                    let EachItem = `<tr>
+                                    <td><img class="w-50" src=${item['logo']} alt="product"></td>
+                                    <td><p>${item['name']}</p></td>
+                                    <td><a class="btn btn-danger btn-sm" href="${item['redirectGatewayURL']}">Pay</a></td>
+                                </tr>`;
+                    $("#paymentList").append(EachItem);
+                });
+            } else {
+                alert("Failed to fetch payment methods");
+            }
+        } catch(error) {
+            console.error("Error:", error);
+            alert("An error occurred while processing your request.");
         }
-        else{
-            alert("Request Fail");
-        }
-
+    } else {
+        // Alert user to fill up profile info
+        alert("Set profile info in Account");
     }
+}
 
+
+async function CheckProfile() {
+    try {
+        let res = await axios.get("/CheckProfile");  // Use GET instead of POST as per your routes
+
+        if (res.status === 200 && res.data.data.profile_exists) {
+            return true;  // Profile exists
+        } else {
+            return false;  // Profile does not exist
+        }
+    } catch (error) {
+        console.error("Error checking profile:", error);
+        return false;  // Return false in case of error
+    }
+}
 
 
 
