@@ -123,7 +123,7 @@
             document.getElementById('p_discount_price').classList.add('no-discount');
         }
 
-        document.getElementById('p_des').innerText = Details[0]['product']['short_des'];
+        document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
         document.getElementById('p_details').innerHTML = Details[0]['des'];
 
  // Clear previous options
