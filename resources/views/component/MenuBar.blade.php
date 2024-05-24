@@ -20,19 +20,15 @@
                         <ul class="header_list">
                             <li><a href="/policy?type=about">About</a></li>
 
-                            @if ($token !== null)
+                            @if ($token !== null && $user !== null)
                                 <li><a href="{{ url('/profile') }}"> <i class="linearicons-user"></i> Account</a></li>
                                 <li><a class="btn btn-danger btn-sm" href="{{ url('/logout') }}"> Logout</a></li>
-                                @if ($user->role === "admin")
-                                    <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a>
-                                    </li>
+                                @if (isset($user->role) && $user->role === 'admin')
+                                    <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a></li>
                                 @endif
                             @else
                                 <li><a class="btn btn-danger btn-sm" href="{{ url('/login') }}">Login</a></li>
-
                             @endif
-
-
                         </ul>
                     </div>
                 </div>
@@ -58,22 +54,18 @@
                             <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Categories</a>
                             <div class="dropdown-menu">
                                 <ul id="CategoryItem">
-
+                                    <!-- Categories will be populated here -->
                                 </ul>
                             </div>
                         </li>
-                        <li><a class="nav-link nav_item" href="{{ url('/wish') }}"><i class="ti-heart"></i> Wish</a>
-                        </li>
-                        <li><a class="nav-link nav_item" href="{{ url('/cart') }}"><i class="linearicons-cart"></i>
-                                Cart </a></li>
-                        <li><a href="javascript:void(0);" class="nav-link search_trigger"><i
-                                    class="linearicons-magnifier"></i> Search</a>
+                        <li><a class="nav-link nav_item" href="{{ url('/wish') }}"><i class="ti-heart"></i> Wish</a></li>
+                        <li><a class="nav-link nav_item" href="{{ url('/cart') }}"><i class="linearicons-cart"></i> Cart</a></li>
+                        <li><a href="javascript:void(0);" class="nav-link search_trigger"><i class="linearicons-magnifier"></i> Search</a>
                             <div class="search_wrap">
                                 <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                                 <form>
                                     <input type="text" placeholder="Search" class="form-control" id="search_input">
-                                    <button type="submit" class="search_icon"><i
-                                            class="ion-ios-search-strong"></i></button>
+                                    <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
                                 </form>
                             </div>
                             <div class="search_overlay"></div>
@@ -86,13 +78,16 @@
 </header>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Category();
+    });
+
     async function Category() {
         let res = await axios.get("/CategoryList");
-        $("#CategoryItem").empty()
+        $("#CategoryItem").empty();
         res.data['data'].forEach((item, i) => {
-            let EachItem =
-                ` <li><a class="dropdown-item nav-link nav_item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`
+            let EachItem = `<li><a class="dropdown-item nav-link nav_item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`;
             $("#CategoryItem").append(EachItem);
-        })
+        });
     }
 </script>
