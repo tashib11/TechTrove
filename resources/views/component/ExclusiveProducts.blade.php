@@ -49,54 +49,58 @@
 </div>
 
 <script>
-    async function renderProducts(containerId, endpoint) {
-        let res = await axios.get(endpoint);
-        $(containerId).empty();
-        res.data['data'].forEach((item, i) => {
-            let discountPrice = item['discount'] ? `<span class="discount_price" style="color: blue; font-weight: bold;">$ ${item['discount_price']}</span>` : '';
-            let regularPrice = `<span class="price">${discountPrice ? '<del>$ ' + item['price'] + '</del>' : '$ ' + item['price']}</span>`;
-            let regularLine = discountPrice ? '' : '<div class="regular">Regular</div>';
-            let EachItem = `<div class="col-lg-3 col-md-4 col-6">
-                <div class="product">
-                    <div class="product_img">
-                        <a href="#">
-                            <img src="${item['image']}" alt="product_img9">
-                        </a>
-                        <div class="product_action_box">
-                            <ul class="list_none pr_action_btn">
-                                <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="product_info">
-                        <h6 class="product_title"><a  href="/details?id=${item['id']}">${item['title']}</a></h6>
-                        <div class="product_price">
-                            ${regularPrice}
-                            ${regularLine}
-                        </div>
-                        ${discountPrice}
-                        <div class="rating_wrap">
-                            <div class="rating">
-                                <div class="product_rate" style="width:${item['star']}%"></div>
-                            </div>
-                        </div>
+  async function renderProducts(containerId, endpoint) {
+    let res = await axios.get(endpoint);
+    $(containerId).empty();
+    res.data['data'].forEach((item, i) => {
+        let discountPrice = item['discount'] ? `<span class="discount_price" style="color: blue; font-weight: bold;">$ ${item['discount_price']}</span>` : '';
+        let regularPrice = `<span class="price">${discountPrice ? '<del>$ ' + item['price'] + '</del>' : '$ ' + item['price']}</span>`;
+        let regularLine = discountPrice ? '' : '<div class="regular">Regular</div>';
+        let stockStatus = item['stock'] ? '<span class="stock-status" style="font-size: small;">In Stock</span>' : '<span class="stock-status" style="font-size: small;">Out of Stock</span>';
+
+        let EachItem = `<div class="col-lg-3 col-md-4 col-6">
+            <div class="product">
+                <div class="product_img">
+                    <a href="#">
+                        <img src="${item['image']}" alt="product_img9">
+                    </a>
+                    <div class="product_action_box">
+                        <ul class="list_none pr_action_btn">
+                            <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>`;
-            $(containerId).append(EachItem);
-        });
-    }
-
-    async function loadProducts() {
-        await renderProducts("#PopularItem", "/ListProductByRemark/popular");
-        await renderProducts("#NewItem", "/ListProductByRemark/new");
-        await renderProducts("#TopItem", "/ListProductByRemark/top");
-        await renderProducts("#SpecialItem", "/ListProductByRemark/special");
-        await renderProducts("#TrendingItem", "/ListProductByRemark/trending");
-    }
-
-    // Call loadProducts when the page loads
-    $(document).ready(function () {
-        loadProducts();
+                <div class="product_info">
+                    <h6 class="product_title"><a  href="/details?id=${item['id']}">${item['title']}</a></h6>
+                    <div class="product_price">
+                        ${regularPrice}
+                        ${regularLine}
+                    </div>
+                    ${discountPrice}
+                    <div class="rating_wrap" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="rating">
+                            <div class="product_rate" style="width:${item['star']}%"></div>
+                        </div>
+                        ${stockStatus}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        $(containerId).append(EachItem);
     });
+}
+
+async function loadProducts() {
+    await renderProducts("#PopularItem", "/ListProductByRemark/popular");
+    await renderProducts("#NewItem", "/ListProductByRemark/new");
+    await renderProducts("#TopItem", "/ListProductByRemark/top");
+    await renderProducts("#SpecialItem", "/ListProductByRemark/special");
+    await renderProducts("#TrendingItem", "/ListProductByRemark/trending");
+}
+
+// Call loadProducts when the page loads
+$(document).ready(function () {
+    loadProducts();
+});
+
 </script>
