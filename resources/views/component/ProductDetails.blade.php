@@ -114,15 +114,12 @@
     async function productDetails() {
         let res = await axios.get("/ProductDetailsById/" + id);
         let Details = await res.data['data'];
-
         document.getElementById('product_img1').src = Details[0]['img1'];
         document.getElementById('img1').src = Details[0]['img1'];
         document.getElementById('img2').src = Details[0]['img2'];
         document.getElementById('img3').src = Details[0]['img3'];
         document.getElementById('img4').src = Details[0]['img4'];
-
         document.getElementById('p_title').innerText = Details[0]['product']['title'];
-
         if (Details[0]['product']['discount']) {
             document.getElementById('p_price').innerText = Details[0]['product']['price'];
             document.getElementById('p_price').classList.add('price-discount');
@@ -132,10 +129,8 @@
             document.getElementById('p_discount_price').innerText = "No Discount Available";
             document.getElementById('p_discount_price').classList.add('no-discount');
         }
-
         document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
-
-        // Check stock status
+        document.getElementById('p_details').innerHTML = Details[0]['des']; 
         if (Details[0]['product']['stock']) {
             document.getElementById('p_stock').innerText = "In Stock";
             document.getElementById('p_stock').classList.add('in-stock');
@@ -268,7 +263,7 @@ function showToast(message, type) {
     </div>`;
 
     $('#toast-container').append(toastHTML);
-    $('.toast').toast({ delay: 1000 }); // Initialize toast with delay
+    $('.toast').toast({ delay: 800 }); // Initialize toast with delay
     $('.toast').toast('show').on('hidden.bs.toast', function () {
         $(this).remove();
     });
