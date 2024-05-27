@@ -19,9 +19,7 @@
                     <li class="nav-item">
                         <a class="nav-link" id="featured-tab" data-bs-toggle="tab" href="#Top" role="tab" aria-controls="featured" aria-selected="false">Top</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="special-tab" data-bs-toggle="tab" href="#Special" role="tab" aria-controls="special" aria-selected="false">Special</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" id="trending-tab" data-bs-toggle="tab" href="#Trending" role="tab" aria-controls="trending" aria-selected="false">Trending</a>
                     </li>
@@ -37,9 +35,7 @@
                 <div class="tab-pane fade" id="Top" role="tabpanel" aria-labelledby="featured-tab">
                     <div id="TopItem" class="row shop_container"></div>
                 </div>
-                <div class="tab-pane fade" id="Special" role="tabpanel" aria-labelledby="special-tab">
-                    <div id="SpecialItem" class="row shop_container"></div>
-                </div>
+           >
                 <div class="tab-pane fade" id="Trending" role="tabpanel" aria-labelledby="trending-tab">
                     <div id="TrendingItem" class="row shop_container"></div>
                 </div>
@@ -94,7 +90,7 @@ async function loadProducts() {
     await renderProducts("#PopularItem", "/ListProductByRemark/popular");
     await renderProducts("#NewItem", "/ListProductByRemark/new");
     await renderProducts("#TopItem", "/ListProductByRemark/top");
-    await renderProducts("#SpecialItem", "/ListProductByRemark/special");
+    // await renderProducts("#SpecialItem", "/ListProductByRemark/special");
     await renderProducts("#TrendingItem", "/ListProductByRemark/trending");
 }
 
