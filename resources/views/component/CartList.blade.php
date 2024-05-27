@@ -112,7 +112,7 @@
     async function CheckOut() {
     $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
 
-  
+
     let hasProfile = await CheckProfile();
 
     $(".preloader").delay(90).fadeOut(100).addClass('loaded');
@@ -144,7 +144,7 @@
             alert("An error occurred while processing your request.");
         }
     } else {
-
+        window.location.href = "/profile";
         alert("Set profile info in Account");
     }
 }

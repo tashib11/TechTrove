@@ -203,58 +203,79 @@
     }
 
     async function AddToCart() {
-        try {
-            let p_size=document.getElementById('p_size').value;
-            let p_color=document.getElementById('p_color').value;
-            let p_qty=document.getElementById('p_qty').value;
+    try {
+        let p_size = document.getElementById('p_size').value;
+        let p_color = document.getElementById('p_color').value;
+        let p_qty = document.getElementById('p_qty').value;
 
-            if(p_size.length===0){
-                alert("Product Size Required !");
-            }
-            else if(p_color.length===0){
-                alert("Product Color Required !");
-            }
-            else if(p_qty===0){
-                alert("Product Qty Required !");
-            }
-            else {
-                $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-                let res = await axios.post("/CreateCartList",{
-                    "product_id":id,
-                    "color":p_color,
-                    "size":p_size,
-                    "qty":p_qty
-                });
-                $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-                if(res.status===200){
-                    alert("Request Successful")
-                }
-            }
-
-        } catch (e) {
-            if (e.response.status === 401) {
-                sessionStorage.setItem("last_location",window.location.href)
-                window.location.href = "/login"
-            }
-        }
-    }
-
-
-    async function AddToWishList() {
-        try{
+        if (p_size.length === 0) {
+            alert("Product Size Required !");
+        } else if (p_color.length === 0) {
+            alert("Product Color Required !");
+        } else if (p_qty === 0) {
+            alert("Product Qty Required !");
+        } else {
             $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-            let res = await axios.get("/CreateWishList/"+id);
+            let res = await axios.post("/CreateCartList", {
+                "product_id": id,
+                "color": p_color,
+                "size": p_size,
+                "qty": p_qty
+            });
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            if(res.status===200){
-                alert("Request Successful")
-            }
-        }catch (e) {
-            if(e.response.status===401){
-                sessionStorage.setItem("last_location",window.location.href)
-                window.location.href="/login"
+            if (res.status === 200) {
+                showToast("Product added to cart successfully!", "success");
             }
         }
+    } catch (e) {
+        if (e.response.status === 401) {
+            sessionStorage.setItem("last_location", window.location.href)
+            window.location.href = "/login"
+        }
     }
+}
+
+
+async function AddToWishList() {
+    try {
+        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
+        let res = await axios.get("/CreateWishList/" + id);
+        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+        if (res.status === 200) {
+            showToast("Product added to wishlist successfully!", "success");
+        }
+    } catch (e) {
+        if (e.response.status === 401) {
+            sessionStorage.setItem("last_location", window.location.href)
+            window.location.href = "/login"
+        }
+    }
+}
+
+function showToast(message, type) {
+    let toastHTML = `
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+        <div class="toast-header">
+            <strong class="mr-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
+            <small class="text-muted">Just now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            ${message}
+        </div>
+    </div>`;
+
+    $('#toast-container').append(toastHTML);
+    $('.toast').toast({ delay: 1000 }); // Initialize toast with delay
+    $('.toast').toast('show').on('hidden.bs.toast', function () {
+        $(this).remove();
+    });
+}
+
+
+
 
 
     async function AddReview(){
