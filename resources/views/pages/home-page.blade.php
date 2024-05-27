@@ -15,7 +15,6 @@
             await Popular();
             await New();
             await Top();
-            await Special();
             await Trending();
             await TopBrands();
         })()
