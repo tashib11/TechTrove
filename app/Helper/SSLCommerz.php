@@ -42,9 +42,9 @@ class SSLCommerz
               "ship_state"=>$Profile->ship_city,
               "ship_country"=>$Profile->ship_country ,
               "ship_postcode"=>"12000",
-              "product_name"=>"Apple Shop Product",
-              "product_category"=>"Apple Shop Category",
-              "product_profile"=>"Apple Shop Profile",
+              "product_name"=>"TechTrove Product",
+              "product_category"=>"TechTroveCategory",
+              "product_profile"=>"TechTrove Profile",
               "product_amount"=>$payable,
           ]);
           return $response->json('desc');
