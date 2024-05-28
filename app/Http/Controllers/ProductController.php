@@ -259,4 +259,36 @@ class ProductController extends Controller
         }
     }
 
+    public function detailSelect(){
+        $data = [];
+        $products= Product::orderBy('title','ASC')->get();
+
+        $data['products']=$products;
+
+        return view('admin.products.detailselect', $data);
+    }
+
+
+   public function detailEdit($product, Request $request) {
+    $data = [];
+    // Find the ProductDetails record by product_id
+    $products = ProductDetails::where('product_id', $product)->first();
+    $pods= Product::orderBy('title','ASC')->get();
+
+        $data['products'] = $products;
+        $data['pods'] = $pods;
+        return view('admin.products.detailedit', $data);
+
+}
+
+public function detailUpdate($id, Request $request){
+    $product = ProductDetails::find($id);
+    $product->update($request->all());
+    if($product) {
+        return redirect()->route('product.detail.select')->with('success', 'Product updated successfully');
+    }else {
+        return redirect()->route('product.detail.edit')->with('error', 'Product details update failed');
+    }
+}
+
 }

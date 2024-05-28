@@ -43,7 +43,7 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
 							<h4 class="h4 mb-0"><strong>Admin</strong></h4>
-							<div class="mb-3">tashib91221@gmail.com</div>
+							<div class="mb-3">tashib02c@gmail.com</div>
 
 							<div class="dropdown-divider"></div>
 
