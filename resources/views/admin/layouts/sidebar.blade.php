@@ -53,6 +53,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ asset('/Dashboard/DetailsSelect') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>Update Product-Details</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ asset('/Dashboard/InvoiceList') }}" class="nav-link">
                         <i class="nav-icon fas fa-shopping-bag"></i>
                         <p>Invoices</p>

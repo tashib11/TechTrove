@@ -103,6 +103,10 @@ Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])
 Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
 Route::get('/Dashboard/ProductDelete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
 
+Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])->name('product.detail.select');
+Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
+Route::post("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
+
 Route::get("/Dashboard/brand",[BrandController::class,'create'])->name('brand.create');
 Route::post("/BrandStore",[BrandController::class,'store'])->name('brand.store');
 
