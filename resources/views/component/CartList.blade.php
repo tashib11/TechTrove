@@ -115,15 +115,20 @@
 
     let hasProfile = await CheckProfile();
 
-    $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
     if(hasProfile) {
         try {
+            let cartItems = await axios.get("/CartList");
+            if (cartItems.data.data.length === 0) {
+    $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+                alert("No cart products here");
+                return;
+            }
 
             let res = await axios.get("/InvoiceCreate");
 
             if(res.status === 200) {
-
+                $(".preloader").delay(90).fadeOut(100).addClass('loaded');
                 $("#paymentMethodModal").modal('show');
 
                 // Display payment methods
@@ -144,7 +149,7 @@
             alert("An error occurred while processing your request.");
         }
     } else {
-        window.location.href = "/profile";
+    window.location.href = "/profile";
         alert("Set profile info in Account");
     }
 }
