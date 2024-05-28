@@ -18,6 +18,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ asset('/Dashboard/Piechart') }}" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>Statistics</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ asset('/Dashboard/category') }}" class="nav-link">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>Category</p>
