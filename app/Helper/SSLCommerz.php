@@ -43,7 +43,7 @@ class SSLCommerz
               "ship_country"=>$Profile->ship_country ,
               "ship_postcode"=>"12000",
               "product_name"=>"TechTrove Product",
-              "product_category"=>"TechTroveCategory",
+              "product_category"=>"TechTrove Category",
               "product_profile"=>"TechTrove Profile",
               "product_amount"=>$payable,
           ]);
