@@ -117,5 +117,22 @@ class InvoiceController extends Controller
         return view('admin.products.invoicelist', $data);
     }
 
-  
+    public function showPieChart()
+    {
+        $data = Invoice::query()
+            ->join('invoice_products', 'invoices.id', '=', 'invoice_products.invoice_id')
+            ->join('products', 'invoice_products.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('brands', 'products.brand_id', '=', 'brands.id')
+            ->select(
+                DB::raw("COUNT(invoice_products.product_id) as product_count"),
+                'categories.categoryName',
+                'brands.brandName'
+            )
+            ->where('invoices.payment_status', 'Success')
+            ->groupBy('categories.categoryName', 'brands.brandName')
+            ->get();
+
+        return view('admin.products.piechart', ['chartData' => $data]);
+    }
 }

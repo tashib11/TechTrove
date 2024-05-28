@@ -4,6 +4,32 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>TechTrove - eCommerce</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            .chart-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .chart-container canvas {
+                max-width: 70%;
+                max-height: 70%;
+            }
+            .additional-info {
+            font-size: 1.2em; /* Increase the font size */
+            padding-bottom: 20px; /* Add some space below the info */
+            text-align: center; /* Center the text */
+        }
+        </style>
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
@@ -155,22 +181,8 @@
 		<script src="{{  asset('admin-assets/js/demo.js') }}"></script>
 
 
+        @yield('pie')
 
-<script  type="text/javascript">
-  $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-    $(document).ready(function() {
-        $('.summernote').summernote({
-        height: 200
-        });
-    });
-
-
-</script>
 
 
 	</body>
