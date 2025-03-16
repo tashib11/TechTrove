@@ -40,7 +40,7 @@
 
 </div>
 <div class="pb-5 pt-3">
-    <a href="{{ route('product.detail.edit', $product->id) }}" class="btn btn-primary">Update</a>
+    <a href="{{ route('product.detail.edit', $products->id) }}" class="btn btn-primary">Update</a>
     <a href="{{ route('product.detail.select') }}" class="btn btn-outline-dark ml-3">Cancel</a>
 </div>
 @endsection
