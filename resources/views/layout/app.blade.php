@@ -10,32 +10,32 @@
 
     <title>TechTrove - eCommerce</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{secure_asset('assets/images/favicon.png')}}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('assets/css/animate.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
-    <link href="{{asset('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap')}}" rel="stylesheet">
-    <link href="{{asset('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/animate.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/bootstrap/css/bootstrap.min.css')}}">
+    <link href="{{secure_asset('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap')}}" rel="stylesheet">
+    <link href="{{secure_asset('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap')}}" rel="stylesheet">
 
     <!-- Icon Font CSS -->
-    <link rel="stylesheet" href="{{asset('assets/css/all.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/ionicons.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/linearicons.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/flaticon.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/simple-line-icons.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/ionicons.min.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/linearicons.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/simple-line-icons.css')}}">
 
-    <link rel="stylesheet" href="{{asset('assets/css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/magnific-popup.css')}}">
 
 
-    <link rel="stylesheet" href="{{asset('assets/css/slick.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/slick-theme.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/slick.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/slick-theme.css')}}">
 
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('assets/css/responsive.css')}}">
 
-    <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
-    <script src="{{asset('assets/js/axios.min.js')}}"></script>
+    <script src="{{secure_asset('assets/js/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{secure_asset('assets/js/axios.min.js')}}"></script>
 
 
 </head>
@@ -54,10 +54,10 @@
 <div>
     @yield('content')
 </div>
-<script src="{{asset('assets/js/scripts.js')}}"></script>
-<script src="{{asset('assets/js/magnific-popup.min.js')}}"></script>
-<script src="{{asset('assets/js/popper.min.js')}}"></script>
-<script src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{secure_asset('assets/js/scripts.js')}}"></script>
+<script src="{{secure_asset('assets/js/magnific-popup.min.js')}}"></script>
+<script src="{{secure_asset('assets/js/popper.min.js')}}"></script>
+<script src="{{secure_asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
 
  <!-- Bootstrap JS and dependencies -->
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

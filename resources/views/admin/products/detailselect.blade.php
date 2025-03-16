@@ -8,7 +8,7 @@
                 <h1>Modify Details of Product</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
+                <a href="{{ secure_asset ('/') }}" class="btn btn-primary">Home</a>
             </div>
         </div>
     </div>

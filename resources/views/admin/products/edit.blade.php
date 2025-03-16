@@ -8,7 +8,7 @@
                 <h1>Create Product</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
+                <a href="{{ secure_asset ('/') }}" class="btn btn-primary">Home</a>
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
 
         <div class="pb-5 pt-3">
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ asset('/Dashboard/ProductList') }}" class="btn btn-outline-dark ml-3">Cancel</a>
+            <a href="{{ secure_asset('/Dashboard/ProductList') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
     </div>
 </form>

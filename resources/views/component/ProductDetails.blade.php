@@ -130,7 +130,7 @@
             document.getElementById('p_discount_price').classList.add('no-discount');
         }
         document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
-        document.getElementById('p_details').innerHTML = Details[0]['des']; 
+        document.getElementById('p_details').innerHTML = Details[0]['des'];
         if (Details[0]['product']['stock']) {
             document.getElementById('p_stock').innerText = "In Stock";
             document.getElementById('p_stock').classList.add('in-stock');
