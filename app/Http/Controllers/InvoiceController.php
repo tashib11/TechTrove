@@ -135,4 +135,9 @@ class InvoiceController extends Controller
 
         return view('admin.products.piechart', ['chartData' => $data]);
     }
+
+    public function PaymentPage() {
+        return view('pages.payment-page');
+    }
+
 }

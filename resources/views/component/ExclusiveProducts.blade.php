@@ -35,7 +35,7 @@
                 <div class="tab-pane fade" id="Top" role="tabpanel" aria-labelledby="featured-tab">
                     <div id="TopItem" class="row shop_container"></div>
                 </div>
-           
+
                 <div class="tab-pane fade" id="Trending" role="tabpanel" aria-labelledby="trending-tab">
                     <div id="TrendingItem" class="row shop_container"></div>
                 </div>

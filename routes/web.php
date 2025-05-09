@@ -75,6 +75,8 @@ Route::post('/CreateCartList', [ProductController::class, 'CreateCartList'])->mi
 Route::get('/CartList', [ProductController::class, 'CartList'])->middleware([TokenAuthenticate::class]);
 Route::get('/DeleteCartList/{product_id}', [ProductController::class, 'DeleteCartList'])->middleware([TokenAuthenticate::class]);
 
+Route::get('/payment-page', [InvoiceController::class, 'PaymentPage']);
+
 
 
 
