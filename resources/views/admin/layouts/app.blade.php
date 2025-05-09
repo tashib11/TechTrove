@@ -33,11 +33,11 @@
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
-		<link rel="stylesheet" href="{{ secure_asset ('admin-assets/plugins/fontawesome-free/css/all.min.css') }}">
+		<link rel="stylesheet" href="{{ asset ('admin-assets/plugins/fontawesome-free/css/all.min.css') }}">
 		<!-- Theme style -->
-		<link rel="stylesheet" href="{{ secure_asset('admin-assets/css/adminlte.min.css') }}">
-        <link rel="stylesheet" href="{{ secure_asset('admin-assets/plugins/summernote/summernote.min.css') }}">
-		<link rel="stylesheet" href="{{ secure_asset('admin-assets/css/custom.css') }}">
+		<link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
 
@@ -65,7 +65,7 @@
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
-							<img src="{{  secure_asset('admin-assets/img/avatar5.png')}}" class='img-circle elevation-2' width="40" height="40" alt="">
+							<img src="{{  asset('admin-assets/img/avatar5.png')}}" class='img-circle elevation-2' width="40" height="40" alt="">
 						</a>
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
 							<h4 class="h4 mb-0"><strong>Admin</strong></h4>
@@ -170,15 +170,15 @@
 
 		<!-- ./wrapper -->
 		<!-- jQuery -->
-		<script src="{{ secure_asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
+		<script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
 		<!-- Bootstrap 4 -->
-		<script src="{{ secure_asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+		<script src="{{ asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 		<!-- AdminLTE App -->
-		<script src="{{ secure_asset('admin-assets/js/adminlte.min.js') }}"></script>
+		<script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
 
-        <script src="{{ secure_asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
+        <script src="{{ asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
-		<script src="{{  secure_asset('admin-assets/js/demo.js') }}"></script>
+		<script src="{{  asset('admin-assets/js/demo.js') }}"></script>
 
 
         @yield('pie')
