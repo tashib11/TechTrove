@@ -62,6 +62,11 @@
  <!-- Bootstrap JS and dependencies -->
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery (optional but you are using it) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap Bundle (includes Popper.js and Bootstrap) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-mQ93W8V3UElkoE3z+2xNyE+a7H2gAMbVdEv8d9cE2LfFhxH/Tjq7GV8t9FqJeI2y" crossorigin="anonymous"></script>
 
 
 </body>
