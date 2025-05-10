@@ -1,5 +1,23 @@
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-title">
+               <h2 class="mb-4">Order History</h2>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb justify-content-md-end">
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">This Page</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container my-5">
-    <h2 class="mb-4">Order History</h2>
     <div id="order-list" class="row g-4">
         <!-- Orders will be injected here -->
     </div>
@@ -94,7 +112,7 @@
 </style>
 
 <div class="container my-5">
-    <h2 class="mb-4">Order History</h2>
+    {{-- <h2 class="mb-4">Order History</h2> --}}
     <div id="order-list" class="row g-4">
         <!-- Orders will be injected here -->
     </div>

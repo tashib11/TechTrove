@@ -1,3 +1,21 @@
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-title">
+                    <h3>Order Page</h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb justify-content-md-end">
+                    <li class="breadcrumb-item"><a href="{{ url('/cart') }}">Cart</a></li>
+                    <li class="breadcrumb-item"><a href="#">This Page</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Blade Content -->
 <div class="container py-4">
     <div class="row g-4">
@@ -11,9 +29,9 @@
                     </button>
                 </div>
                 <div id="shipping-display">
-                    <p><strong>Name:</strong> John Doe</p>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Address:</strong> Dhaka, Mirpur, Road 10</p>
+                    <p><strong>Name:</strong> Set Name</p>
+                    <p><strong>Phone:</strong> Set Number</p>
+                    <p><strong>Address:</strong> Set Address</p>
                 </div>
             </div>
         </div>
@@ -62,7 +80,7 @@
                     <span id="payable">Tk 0</span>
                 </div>
                 <div class="text-end mt-4">
-                    <button class="btn btn-lg btn-primary px-4" id="place-order-btn">Proceed to Payment</button>
+                    <button class="btn btn-lg btn-primary px-4" id="place-order-btn">Proceed to Order</button>
                 </div>
             </div>
         </div>
@@ -87,6 +105,24 @@
             </div>
             <div class="modal-footer border-0">
                 <button class="btn btn-success" id="save-shipping">Save Address</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Missing Shipping Info Modal -->
+<div class="modal fade" id="missingShippingModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 text-center">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle me-2"></i>Missing Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please fill up required fields of the <strong>shipping address</strong> </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button class="btn btn-primary" data-bs-dismiss="modal">OK</button>
             </div>
         </div>
     </div>
@@ -181,32 +217,44 @@
     });
 
     // Place Order click handler
-    $('#place-order-btn').on('click', function () {
-        const orderData = {
-            shipping_name: $('#ship-name').val(),
-            shipping_phone: $('#ship-phone').val(),
-            shipping_alt_phone: $('#ship-alt-phone').val(),
-            shipping_city: $('#ship-city').val(),
-            shipping_division: $('#ship-division').val(),
-            shipping_address: $('#ship-address').val(),
-            gift_wrap: $('#giftWrap').is(':checked') ? 1 : 0,
-            payable: parseInt($('#payable').text().replace('Tk ', ''))
-        };
+   $('#place-order-btn').on('click', function () {
+    const name = $('#ship-name').val()?.trim();
+    const phone = $('#ship-phone').val()?.trim();
+    const city = $('#ship-city').val()?.trim();
+    const division = $('#ship-division').val()?.trim();
+    const address = $('#ship-address').val()?.trim();
 
-        axios.post('/place-order', orderData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                id: user_id
-            }
-        })
-        .then(res => {
-            window.location.href = `/track-order`;
-        })
-        .catch(err => {
-            alert("Order Failed");
-            console.error(err);
-        });
+    if (!name || !phone || !city || !division || !address) {
+        $('#missingShippingModal').modal('show');
+        return;
+    }
+
+    const orderData = {
+        shipping_name: name,
+        shipping_phone: phone,
+        shipping_alt_phone: $('#ship-alt-phone').val()?.trim(),
+        shipping_city: city,
+        shipping_division: division,
+        shipping_address: address,
+        gift_wrap: $('#giftWrap').is(':checked') ? 1 : 0,
+        payable: parseInt($('#payable').text().replace('Tk ', ''))
+    };
+
+    axios.post('/place-order', orderData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            id: user_id
+        }
+    })
+    .then(res => {
+        window.location.href = `/track-order`;
+    })
+    .catch(err => {
+        alert("Order Failed");
+        console.error(err);
     });
+});
+
 });
 
 </script>
