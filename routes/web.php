@@ -9,6 +9,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenAuthenticate;
 use App\Models\Category;
@@ -74,16 +75,22 @@ Route::get('/RemoveWishList/{product_id}', [ProductController::class, 'RemoveWis
 Route::post('/CreateCartList', [ProductController::class, 'CreateCartList'])->middleware([TokenAuthenticate::class]);
 Route::get('/CartList', [ProductController::class, 'CartList'])->middleware([TokenAuthenticate::class]);
 Route::get('/DeleteCartList/{product_id}', [ProductController::class, 'DeleteCartList'])->middleware([TokenAuthenticate::class]);
+Route::get('/user-cart', [ProductController::class, 'UserCart'])->middleware([TokenAuthenticate::class]);
 
-Route::get('/payment-page', [InvoiceController::class, 'PaymentPage']);
+//payment page
+Route::get('/payment-page', [InvoiceController::class, 'PaymentPage'])->middleware([TokenAuthenticate::class]);
+Route::post('/place-order', [InvoiceController::class, 'placeOrder'])->middleware([TokenAuthenticate::class]);
+
+//order trck
+Route::get('/track-order', [OrderController::class, 'TrackOrderPage'])->middleware([TokenAuthenticate::class]);;
+Route::get('/user-orders', [OrderController::class, 'UserOrders'])->middleware([TokenAuthenticate::class]);
 
 
 
-
-// Invoice and payment
-Route::get("/InvoiceCreate",[InvoiceController::class,'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
-Route::get("/InvoiceList",[InvoiceController::class,'InvoiceList'])->middleware([TokenAuthenticate::class]);
-Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
+// // Invoice and payment
+// Route::get("/InvoiceCreate",[InvoiceController::class,'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
+// Route::get("/InvoiceList",[InvoiceController::class,'InvoiceList'])->middleware([TokenAuthenticate::class]);
+// Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
 
 
 //payment

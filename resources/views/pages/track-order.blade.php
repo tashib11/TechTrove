@@ -1,13 +1,12 @@
 @extends('layout.app')
 @section('content')
     @include('component.MenuBar')
-    {{-- @include('component.PaymentMethodList') --}}
-    @include('component.CartList')
-    @include('component.ExclusiveProducts')
+    @include('component.Orders')
     @include('component.Footer')
     <script>
         (async () => {
-            await CartList();
+            // await CartList();
+            await fetchOrders();
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
         })()
     </script>

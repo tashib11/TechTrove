@@ -291,4 +291,13 @@ public function detailUpdate($id, Request $request){
     }
 }
 
+public function UserCart(Request $request): JsonResponse
+{
+    $user_id = $request->header('id');
+    $cartItems = ProductCart::where('user_id', $user_id)->with('product')->get();
+
+    return ResponseHelper::Out('success', $cartItems, 200);
+}
+
+
 }

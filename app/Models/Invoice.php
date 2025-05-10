@@ -10,20 +10,42 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Invoice extends Model
 {
 
+    use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'shipping_name',
+        'shipping_phone',
+        'shipping_alt_phone',
+        'shipping_city',
+        'shipping_division',
+        'shipping_address',
+        'gift_wrap',
+        'shipping_fee',
         'total',
-        'discount',
-        'vat',
-        'payable',
-        'cus_details',
-        'ship_details',
-        'shipping_method',
         'tran_id',
-        'delivery_status',
-        'payment_status',
-        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // public function products()
+    // {
+    //     return $this->hasMany(InvoiceProduct::class);
+//     // }
+//     public function products()
+// {
+//     return $this->hasMany(InvoiceProduct::class, 'invoice_id', 'id');
+// }
+
+
+
+    public function products()
+{
+    return $this->hasMany(InvoiceProduct::class, 'invoice_id')->with('product');
+}
 
 
 }
