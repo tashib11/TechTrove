@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+        {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>TechTrove - eCommerce</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
         <style>
             body, html {
                 margin: 0;
@@ -179,10 +183,12 @@
         <script src="{{ asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{  asset('admin-assets/js/demo.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
         @yield('pie')
 
+@yield('script')
 
 
 	</body>
