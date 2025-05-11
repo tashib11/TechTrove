@@ -109,9 +109,10 @@ Route::get("/Dashboard/Piechart",[InvoiceController::class,'showPieChart'])->nam
 
 Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 
-Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])->name('product.edit');
-Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
-Route::get('/Dashboard/ProductDelete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+Route::get("/Dashboard/ProductList", [ProductController::class, 'index'])->name('product.list');
+Route::get("/Dashboard/ProductEdit/{product}", [ProductController::class, 'edit'])->name('product.edit');
+Route::post("/Dashboard/ProductUpdate/{product}", [ProductController::class, 'update'])->name('product.update');
+Route::get('/Dashboard/ProductDelete/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
 Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])->name('product.detail.select');
 Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
