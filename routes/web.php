@@ -124,6 +124,10 @@ Route::get("/Dashboard/category",[CategoryController::class,'create'])->name('ca
 Route::post("/CategoryStore",[CategoryController::class,'store'])->name('category.store');
 
 Route::get("/Dashboard/InvoiceList",[InvoiceController::class,'index'])->name('invoice.list');
+Route::post('/Dashboard/InvoiceList/UpdateStatus', [InvoiceController::class, 'updateStatus']);
+Route::get('/Dashboard/InvoiceList/{id}/Details', [InvoiceController::class, 'getInvoiceDetails']);
+Route::get('/Dashboard/InvoiceList/Search', [InvoiceController::class, 'search']);
+
 
 Route::get("/Dashboard/UserList",[UserController::class,'index'])->name('user.list');
 

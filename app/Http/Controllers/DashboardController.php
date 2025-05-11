@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $data = [];
         $totalInvoices = Invoice::count();
-        $successfulPayments = Invoice::where('payment_status', 'Success')->sum('payable');
+        $successfulPayments = Invoice::where('payment_status', 'paid')->sum('total');
         $totalUsers = User::count();
         $totalProducts = Product::count();
         $data['totalInvoices'] = $totalInvoices;

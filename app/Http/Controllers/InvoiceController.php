@@ -183,29 +183,89 @@ class InvoiceController extends Controller
 
     public function index() {
         $data = [];
-        $invs = Invoice::latest('id')->paginate();
+        $invs = Invoice::oldest('id')->paginate();
     $data['invs'] = $invs;
         return view('admin.products.invoicelist', $data);
     }
 
-    public function showPieChart()
-    {
-        $data = Invoice::query()
-            ->join('invoice_products', 'invoices.id', '=', 'invoice_products.invoice_id')
-            ->join('products', 'invoice_products.product_id', '=', 'products.id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->select(
-                DB::raw("COUNT(invoice_products.product_id) as product_count"),
-                'categories.categoryName',
-                'brands.brandName'
-            )
-            ->where('invoices.payment_status', 'Success')
-            ->groupBy('categories.categoryName', 'brands.brandName')
-            ->get();
+public function updateStatus(Request $request)
+{
+    $invoice = Invoice::findOrFail($request->invoice_id);
 
-        return view('admin.products.piechart', ['chartData' => $data]);
+    if ($request->has('order_status')) {
+        $invoice->order_status = $request->order_status;
     }
+
+    if ($request->has('payment_status')) {
+        $invoice->payment_status = $request->payment_status;
+    }
+
+    $invoice->save();
+
+    return response()->json(['status' => 'success']);
+}
+
+public function getInvoiceDetails($id)
+{
+    $invoice = Invoice::findOrFail($id);
+
+    $products = $invoice->products()->with('product')->get()->map(function ($item) {
+        return [
+            'id' => $item->product->id,
+            'title' => $item->product->title ?? 'Unknown',
+            'image' => $item->product->image ?? '/no-image.png',
+            'qty' => $item->qty,
+            'price' => $item->price,
+            'color' => $item->color,
+            'size' => $item->size,
+        ];
+    });
+
+    return response()->json([
+        'status' => 'success',
+        'products' => $products
+    ]);
+}
+
+public function search(Request $request)
+{
+    $query = Invoice::query();
+
+    if ($search = $request->query('search')) {
+        $query->where(function ($q) use ($search) {
+            $q->where('tran_id', 'LIKE', "%{$search}%")
+              ->orWhere('shipping_name', 'LIKE', "%{$search}%");
+        });
+    }
+
+    $invs = $query->orderBy('created_at', 'desc')->paginate(10);
+
+    $view = view('admin.products.invoice-partial-table', compact('invs'))->render();
+
+    return response()->json(['html' => $view]);
+}
+
+
+
+
+    // public function showPieChart()
+    // {
+    //     $data = Invoice::query()
+    //         ->join('invoice_products', 'invoices.id', '=', 'invoice_products.invoice_id')
+    //         ->join('products', 'invoice_products.product_id', '=', 'products.id')
+    //         ->join('categories', 'products.category_id', '=', 'categories.id')
+    //         ->join('brands', 'products.brand_id', '=', 'brands.id')
+    //         ->select(
+    //             DB::raw("COUNT(invoice_products.product_id) as product_count"),
+    //             'categories.categoryName',
+    //             'brands.brandName'
+    //         )
+    //         ->where('invoices.payment_status', 'Success')
+    //         ->groupBy('categories.categoryName', 'brands.brandName')
+    //         ->get();
+
+    //     return view('admin.products.piechart', ['chartData' => $data]);
+    // }
 
 
 
