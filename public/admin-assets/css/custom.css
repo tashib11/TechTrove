@@ -21,3 +21,25 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+}
+
+.main-footer {
+    background: #f4f6f9;
+    padding: 10px 20px;
+    text-align: center;
+}

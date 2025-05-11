@@ -19,12 +19,55 @@ class ProductController extends Controller
 {
 
 
-    public function index() {
-        $data = [];
-        $products = Product::latest('id')->paginate();
-    $data['products'] = $products;
-        return view('admin.products.Product-list', $data);
+public function index(Request $request)
+{
+    $products = Product::query();
+
+    // Filters
+    if ($request->category_id) {
+        $products->where('category_id', $request->category_id);
     }
+    if ($request->brand_id) {
+        $products->where('brand_id', $request->brand_id);
+    }
+    if ($request->remark) {
+        $products->where('remark', $request->remark);
+    }
+    if ($request->min_price) {
+        $products->where('price', '>=', $request->min_price);
+    }
+    if ($request->max_price) {
+        $products->where('price', '<=', $request->max_price);
+    }
+    if ($request->stock) {
+        if ($request->stock === 'in') {
+            $products->where('stock', '>', 0);
+        } elseif ($request->stock === 'out') {
+            $products->where('stock', '=', 0);
+        }
+    }
+    if ($request->star) {
+        $products->where('star', $request->star);
+    }
+if ($request->has('title') && !empty($request->title)) {
+    $products->where('title', 'like', '%' . $request->title . '%');
+}
+
+    $products = $products->latest('id')->get();
+    $categories = Category::orderBy('categoryName', 'ASC')->get();
+    $brands = Brand::orderBy('brandName', 'ASC')->get();
+
+    // Return partial view for AJAX
+    if ($request->ajax()) {
+        return view('admin.products.product-partial', compact('products'))->render();
+    }
+
+
+    // Return full view on first load
+    return view('admin.products.Product-list', compact('products', 'categories', 'brands'));
+}
+
+
 
     public function create() {
         $data = [];
@@ -204,11 +247,12 @@ class ProductController extends Controller
 
         $product->delete();
         if($product) {
-            return redirect()->route('product.list')->with('success', 'Product deleted successfully');
+         return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
         }else {
-            return redirect()->route('product.list')->with('error', 'Product delete failed');
+           return response()->json(['status' => false, 'message' => 'Product delete failed'], 500);
         }
     }
+
 
     public function detailSelect(){
         $data = [];
