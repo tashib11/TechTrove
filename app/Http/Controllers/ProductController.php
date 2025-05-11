@@ -23,7 +23,7 @@ class ProductController extends Controller
         $data = [];
         $products = Product::latest('id')->paginate();
     $data['products'] = $products;
-        return view('admin.products.list', $data);
+        return view('admin.products.Product-list', $data);
     }
 
     public function create() {
@@ -292,7 +292,7 @@ public function detailUpdate($id, Request $request){
         $data=ProductCart::where('user_id','=',$user_id)->where('product_id','=',$request->product_id)->delete();
         return ResponseHelper::Out('success',$data,200);
     }
-    
+
 public function UserCart(Request $request): JsonResponse
 {
     $user_id = $request->header('id');
