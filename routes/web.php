@@ -37,6 +37,13 @@ Route::get('/CategoryList', [CategoryController::class, 'CategoryList']);
 Route::get('/ListProductByCategory/{id}', [ProductController::class, 'ListProductByCategory']);
 Route::get('/ListProductByBrand/{id}', [ProductController::class, 'ListProductByBrand']);
 Route::get('/ListProductByRemark/{remark}', [ProductController::class, 'ListProductByRemark']);
+Route::get('/product-filter', [ProductController::class, 'ProductFilter']);
+Route::get('/api/product-filters', function () {
+    $brands = \App\Models\Brand::select('id', 'brandName')->get();
+    $categories = \App\Models\Category::select('id', 'categoryName')->get();
+    return response()->json(['brands' => $brands, 'categories' => $categories]);
+});
+
 // Slider
 Route::get('/ListProductSlider', [ProductController::class, 'ListProductSlider']);
 // Product Details

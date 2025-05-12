@@ -138,6 +138,83 @@ if ($request->has('title') && !empty($request->title)) {
         return ResponseHelper::Out('success',$data,200);
     }
 
+
+public function ProductFilter(Request $request)
+{
+    $query = Product::with(['brand', 'category']);
+
+    // Filter by remark (popular, new, top, trending)
+  if ($request->filled('remark')) {
+  $query->whereRaw("TRIM(LOWER(remark)) = ?", [trim(strtolower($request->remark))]);
+}
+
+
+    // Search by title
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+
+    // Filter by brand
+    if ($request->filled('brand')) {
+        $query->where('brand_id', $request->brand);
+    }
+
+    // Filter by star (optional)
+if ($request->filled('star')) {
+    $query->where('star', '>=', $request->star); // star is % out of 100
+}
+
+// Dynamic category
+if ($request->filled('dynamic_category')) {
+    $query->where('category_id', $request->dynamic_category);
+}
+
+    // Dynamic price filtering based on each product's discount flag
+    if ($request->filled('price_min') || $request->filled('price_max')) {
+    $query->where(function ($q) use ($request) {
+        if ($request->filled('price_min')) {
+            $q->where(function ($q2) use ($request) {
+                $q2->where(function ($q3) use ($request) {
+                    $q3->where('discount', 0)->where('price', '>=', $request->price_min);
+                })->orWhere(function ($q4) use ($request) {
+                    $q4->where('discount', 1)->where('discount_price', '>=', $request->price_min);
+                });
+            });
+        }
+
+        if ($request->filled('price_max')) {
+            $q->where(function ($q2) use ($request) {
+                $q2->where(function ($q3) use ($request) {
+                    $q3->where('discount', 0)->where('price', '<=', $request->price_max);
+                })->orWhere(function ($q4) use ($request) {
+                    $q4->where('discount', 1)->where('discount_price', '<=', $request->price_max);
+                });
+            });
+        }
+    });
+}
+// Sort by price (considering discount)
+if ($request->filled('sort')) {
+    switch ($request->sort) {
+        case 'asc':
+            $query->orderByRaw("IF(discount = '1', COALESCE(discount_price, price), price) ASC");
+            break;
+        case 'desc':
+            $query->orderByRaw("IF(discount = '1', COALESCE(discount_price, price), price) DESC");
+            break;
+        case 'latest':
+            $query->latest('id');
+            break;
+    }
+} else {
+    $query->latest('id'); // default fallback
+}
+
+    $products = $query->get();
+
+    return view('component.product-list', compact('products'))->render();
+}
+
     public function ListProductByBrand(Request $request):JsonResponse{
         $data=Product::where('brand_id',$request->id)->with('brand','category')->get();
         return ResponseHelper::Out('success',$data,200);

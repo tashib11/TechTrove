@@ -202,19 +202,19 @@
             <p><strong>Address:</strong> ${address}, ${city}, ${division}</p>
         `);
 
-        $('#editAddressModal').modal('hide');
+        // $('#editAddressModal').modal('hide');
+        bootstrap.Modal.getInstance(document.getElementById('editAddressModal')).hide();
+
         updatePayable();
     });
 </script>
 
 <script>
     // Bootstrap tooltip init
-    $(document).ready(function () {
-    // Tooltip initialization
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+
 
     // Place Order click handler
    $('#place-order-btn').on('click', function () {
