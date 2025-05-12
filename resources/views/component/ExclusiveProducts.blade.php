@@ -67,7 +67,7 @@
       <!-- Right Side: Sort -->
       <div class="flex-shrink-0">
        <select id="sort-price" class="form-select">
-  
+
   <option value="latest">Latest</option>
   <option value="asc">Price: Low to High</option>
   <option value="desc">Price: High to Low</option>
@@ -151,7 +151,7 @@
         this.classList.add('active');
         currentCategory = selectedCategory;
 
-        // 👇 ADD small delay here to ensure UI fully updates
+        //  ADD small delay here to ensure UI fully updates
       setTimeout(() => {
     document.getElementById('loading-spinner').classList.remove('d-none');
     fetchProducts();
