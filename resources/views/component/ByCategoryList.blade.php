@@ -1,7 +1,7 @@
 <style>
   @media (max-width: 576px) {
     #filterOffcanvas {
-      width: 85% !important;
+      width: 60% !important;
     }
 
     #filterOffcanvas .offcanvas-body {
@@ -36,38 +36,36 @@
   }
 </style>
 
+
+
 <div class="container">
   <div class="row justify-content-center mb-4">
     <div class="col-md-6 text-center">
-      <h2>Exclusive Products</h2>
+      <h4>Categorised Products</h4>
     </div>
   </div>
 
-  <!-- Search + Filter + Sort -->
-  <div class="row mb-3">
-    <div class="col-12">
-      <div class="top-bar">
-        <!-- Left Side: Search + Filter -->
-        <div class="input-group flex-grow-1">
-          <input type="text" id="search-input" class="form-control" placeholder="Search by Title">
-          <button class="btn btn-warning d-flex align-items-center gap-1 px-3" type="button"
-            data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
-            <i class="bi bi-funnel-fill"></i> Filter
-          </button>
-        </div>
-
-        <!-- Right Side: Sort -->
-        <div class="flex-shrink-0">
-          <select id="sort-price" class="form-select">
-            <option value="latest">Latest</option>
+<!-- Search + Filter Controls -->
+<div class="container my-4">
+  <div class="row g-2">
+    <div class="col-12 col-md-6 col-lg-4">
+        <input type="text" id="search-input" class="form-control" placeholder="Search product...">
+    </div>
+    <div class="col-6 col-md-3 col-lg-2">
+        <select id="sort-price" class="form-select w-100">
+           <option value="latest">Latest</option>
             <option value="asc">Price: Low to High</option>
             <option value="desc">Price: High to Low</option>
             <option value="reset">Reset</option>
-          </select>
-        </div>
-      </div>
+        </select>
     </div>
-  </div>
+    <div class="col-6 col-md-3 col-lg-2">
+        <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+            <i class="fas fa-filter me-1"></i> Filters
+        </button>
+    </div>
+</div>
+</div>
 
   <!-- Offcanvas Filter Panel -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas">

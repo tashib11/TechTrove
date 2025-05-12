@@ -137,6 +137,16 @@ if ($request->has('title') && !empty($request->title)) {
         return ResponseHelper::Out('success',$data,200);
     }
 
+public function ProductPage()
+{
+    $products = Product::with(['brand', 'category'])
+        ->whereRaw("TRIM(LOWER(remark)) = 'popular'")
+        ->latest('id')
+        ->take(12)
+        ->get();
+
+    return view('pages.product', compact('products'));
+}
 
 public function ProductFilter(Request $request)
 {
