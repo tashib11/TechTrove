@@ -29,7 +29,7 @@
     async function ByCategory(){
         let searchParams=new URLSearchParams(window.location.search);
         let id=searchParams.get('id');// link a id lekha so .get er vitor id liksi
-        
+
 
 
         let res=await axios.get(`/ListProductByCategory/${id}`);

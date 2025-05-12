@@ -87,6 +87,7 @@
           <option value="new">New</option>
           <option value="popular">Popular</option>
           <option value="top">Top</option>
+          <option value="trending">Trending</option>
         </select>
       </div>
 
