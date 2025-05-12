@@ -13,7 +13,6 @@ use App\Models\ProductSlider;
 use App\Models\ProductWish;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
