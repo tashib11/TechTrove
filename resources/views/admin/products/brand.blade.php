@@ -1,108 +1,81 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<section class="content-header">
-    <div class="container-fluid my-2">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Add Brand</h1>
+<div class="container mt-4">
+    <h2>Create Brand</h2>
+<form id="brandForm" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="brandName">Brand Name</label>
+        <input type="text" class="form-control" id="brandName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="brandFile">Upload Brand Image</label>
+        <input type="file" class="form-control" id="brandFile" accept="image/*" required>
+    </div>
+
+    <!-- Image Preview Card -->
+    <div id="brandPreviewCard" class="card mt-3 d-none">
+        <img id="brandPreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="brandAlt">Image Alt Text</label>
+                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
+            <div class="form-group">
+                <label for="brandWidth">Set Width (px)</label>
+                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 300">
+            </div>
+            <div class="form-group">
+                <label for="brandHeight">Set Height (px)</label>
+                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 200">
             </div>
         </div>
     </div>
-    <!-- /.container-fluid -->
-</section>
-<!-- Main content -->
-<section class="content">
-    <!-- Default box -->
-    <form action="{{ route("brand.store") }}" method="POST" name="productForm" id="productForm">
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-
-
-
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="brandname">Brand Name </label>
-                                <input type="text" name="brandName" id="brandName" class="form-control" placeholder="name">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="image">Image </label>
-                                <input type="text" name="brandImg" id="brandImg" class="form-control" placeholder="image link">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
-            </div>
-
-        </div>
-
-        <div class="pb-5 pt-3">
-            <button type="submit" class="btn btn-primary">Add</button>
-            <a href="{{  asset('/Dashboard/brand') }}" class="btn btn-outline-dark ml-3">Cancel</a>
-        </div>
-    </div>
+    <button type="submit" class="btn btn-primary mt-3">Create Brand</button>
+    <div id="brandMsg" class="mt-2"></div>
 </form>
-    <!-- /.card -->
-</section>
+
+
+
+
+
+    <div id="brandAlert" class="alert mt-3 d-none"></div>
+</div>
 @endsection
 
-
-
-@section('customJs')
+@section('script')
 <script>
+setupImagePreview('brandFile', 'brandPreviewCard', 'brandPreview');
 
-$("#productForm").submit(function(event){
-    event.preventDefault();
-       var formArray = $(this).serializeArray();
-    $.ajax({
-        url:'{{ route("brand.store") }}',
-        type:'post',
-        data:formArray,
-        dataType: 'json',
-        success:function(response){
-            if(response['status']== true){
-            console.log(response);
-            }else{
+// Form submit stays the same
+document.getElementById('brandForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const brandName = document.getElementById('brandName').value;
+    const brandFile = document.getElementById('brandFile').files[0];
+    const brandAlt = document.getElementById('brandAlt').value;
+    const brandWidth = document.getElementById('brandWidth').value;
+    const brandHeight = document.getElementById('brandHeight').value;
 
-                var error = response['errors'];
+    const formData = new FormData();
+    formData.append('brandName', brandName);
+    formData.append('brandFile', brandFile);
+    formData.append('brandAlt', brandAlt);
+    formData.append('brandWidth', brandWidth);
+    formData.append('brandHeight', brandHeight);
 
-
-            $(".error").removeClass('is-invalid').html("");
-            $("input[type=text],select").removeClass('is-invalid');
-            $.each(error,function(key,value){
-                $('#'+key).addClass('is-invalid').siblings('p').
-                addClass('invalid-feedback').html(value);
-            });
-
-            }
-        },
-        error:function(){
-            console.log("something went wrong");
-        }
-    });
+    axios.post('/Dashboard/brand', formData)
+        .then(response => {
+            document.getElementById('brandMsg').innerHTML =
+                `<div class="alert alert-success">${response.data.message}</div>`;
+            document.getElementById('brandForm').reset();
+            document.getElementById('brandPreviewCard').classList.add('d-none');
+        })
+        .catch(() => {
+            document.getElementById('brandMsg').innerHTML =
+                `<div class="alert alert-danger">Error creating brand.</div>`;
+        });
 });
-
-
 </script>
 @endsection

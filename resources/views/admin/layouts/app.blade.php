@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-        {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +9,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
         <style>
             body, html {
@@ -189,6 +189,23 @@
 
 
         @yield('pie')
+<script>
+    function setupImagePreview(inputId, previewCardId, previewImgId) {
+        const input = document.getElementById(inputId);
+        input.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const previewImg = document.getElementById(previewImgId);
+                    previewImg.src = event.target.result;
+                    document.getElementById(previewCardId).classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
 
 @yield('script')
 
