@@ -126,11 +126,11 @@ Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])
 Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
 Route::post("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
 
-Route::get("/Dashboard/brand",[BrandController::class,'create'])->name('brand.create');
-Route::post("/BrandStore",[BrandController::class,'store'])->name('brand.store');
+Route::get('/Dashboard/brand', [BrandController::class, 'create']); // Show form
+Route::post('/Dashboard/brand', [BrandController::class, 'store']);
 
-Route::get("/Dashboard/category",[CategoryController::class,'create'])->name('category.create');
-Route::post("/CategoryStore",[CategoryController::class,'store'])->name('category.store');
+Route::get("/Dashboard/category",[CategoryController::class,'create']);
+Route::post("/Dashboard/category",[CategoryController::class,'store']);
 
 Route::get("/Dashboard/InvoiceList",[InvoiceController::class,'index'])->name('invoice.list');
 Route::post('/Dashboard/InvoiceList/UpdateStatus', [InvoiceController::class, 'updateStatus']);

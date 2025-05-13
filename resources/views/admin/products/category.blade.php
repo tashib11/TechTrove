@@ -1,108 +1,91 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<section class="content-header">
-    <div class="container-fluid my-2">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Add Category</h1>
+<div class="container mt-4">
+    <h2>Create Category</h2>
+<form id="catForm" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="catName">Category Name</label>
+        <input type="text" class="form-control" id="catName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="catFile">Upload Category Image</label>
+        <input type="file" class="form-control" id="catFile" accept="image/*" required>
+    </div>
+
+    <!-- Image Preview Card -->
+    <div id="imagePreviewCard" class="card mt-3 d-none">
+        <img id="catPreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="catAlt">Image Alt Text</label>
+                <input type="text" class="form-control" id="catAlt" placeholder="Describe the image">
             </div>
-            <div class="col-sm-6 text-right">
-                <a href="{{ asset ('/') }}" class="btn btn-primary">Home</a>
+            <div class="form-group">
+                <label for="catWidth">Set Width (px)</label>
+                <input type="number" class="form-control" id="catWidth" placeholder="e.g., 300">
+            </div>
+            <div class="form-group">
+                <label for="catHeight">Set Height (px)</label>
+                <input type="number" class="form-control" id="catHeight" placeholder="e.g., 200">
             </div>
         </div>
     </div>
-    <!-- /.container-fluid -->
-</section>
-<!-- Main content -->
-<section class="content">
-    <!-- Default box -->
-    <form action="{{ route("category.store") }}" method="POST" name="productForm" id="productForm">
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-
-
-
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="category name">Category Name </label>
-                                <input type="text" name="categoryName" id="categoryName" class="form-control" placeholder="name">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="image">Image </label>
-                                <input type="text" name="categoryImg" id="categoryImg" class="form-control" placeholder="image link">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
-            </div>
-
-        </div>
-
-        <div class="pb-5 pt-3">
-            <button type="submit" class="btn btn-primary">Add</button>
-            <a href="{{  asset('/Dashboard/category') }}" class="btn btn-outline-dark ml-3">Cancel</a>
-        </div>
-    </div>
+    <button type="submit" class="btn btn-primary mt-3">Create Category</button>
+    <div id="catMsg" class="mt-2"></div>
 </form>
-    <!-- /.card -->
-</section>
+
+
+
+
+
+    <div id="catAlert" class="alert mt-3 d-none"></div>
+</div>
 @endsection
 
 
-
-@section('customJs')
+@section('script')
 <script>
 
-$("#productForm").submit(function(event){
-    event.preventDefault();
-       var formArray = $(this).serializeArray();
-    $.ajax({
-        url:'{{ route("category.store") }}',
-        type:'post',
-        data:formArray,
-        dataType: 'json',
-        success:function(response){
-            if(response['status']== true){
-            console.log(response);
-            }else{
+setupImagePreview('catFile', 'imagePreviewCard', 'catPreview');
+document.getElementById('catForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-                var error = response['errors'];
+    const catName = document.getElementById('catName').value;
+    const catFile = document.getElementById('catFile').files[0];
+    const catAlt = document.getElementById('catAlt').value;
+    const catWidth = document.getElementById('catWidth').value;
+    const catHeight = document.getElementById('catHeight').value;
 
+    const formData = new FormData();
+    formData.append('catName', catName);
+    formData.append('catFile', catFile);
+    formData.append('catAlt', catAlt);
+    formData.append('catWidth', catWidth);
+    formData.append('catHeight', catHeight);
 
-            $(".error").removeClass('is-invalid').html("");
-            $("input[type=text],select").removeClass('is-invalid');
-            $.each(error,function(key,value){
-                $('#'+key).addClass('is-invalid').siblings('p').
-                addClass('invalid-feedback').html(value);
-            });
-
-            }
-        },
-        error:function(){
-            console.log("something went wrong");
+    axios.post('/Dashboard/category', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
+    })
+    .then(function (response) {
+        document.getElementById('catMsg').innerHTML =
+            '<div class="alert alert-success">' + response.data.message + '</div>';
+        document.getElementById('catForm').reset();
+        document.getElementById('imagePreviewCard').classList.add('d-none');
+    })
+    .catch(function (error) {
+        document.getElementById('catMsg').innerHTML =
+            '<div class="alert alert-danger">Error creating category.</div>';
     });
 });
-
-
 </script>
 @endsection
+
+
+
+
+
