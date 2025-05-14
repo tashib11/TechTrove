@@ -130,8 +130,8 @@ public function store(Request $request) {
     }
 
 
-    public function detailstore(Request $request) {
-            $request->validate([
+  public function detailstore(Request $request) {
+    $request->validate([
         'des'  => 'required',
         'img1' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         'img2' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -140,56 +140,53 @@ public function store(Request $request) {
         'color' => 'required',
         'size' => 'required',
         'product_id' => 'required|exists:products,id',
-            ]);
+        // optional but recommended:
+        'img1_alt' => 'nullable|string|max:255',
+        'img2_alt' => 'nullable|string|max:255',
+        'img3_alt' => 'nullable|string|max:255',
+        'img4_alt' => 'nullable|string|max:255',
+    ]);
 
-                if ($request->hasFile('img1')) {
-        $file = $request->file('img1');
-        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
-        $publicUrl1 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
-    } else {
-        $publicUrl1 = null;
-    }
-            if ($request->hasFile('img2')) {
-        $file = $request->file('img2');
-        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
-        $publicUrl2 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
-    } else {
-        $publicUrl2 = null;
-    }
-            if ($request->hasFile('img3')) {
-        $file = $request->file('img3');
-        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
-        $publicUrl3 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
-    } else {
-        $publicUrl3 = null;
-    }
-            if ($request->hasFile('img4')) {
-        $file = $request->file('img4');
-        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
-        $publicUrl4 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
-    } else {
-        $publicUrl4 = null;
-    }
+    // Upload logic for all images
+    $publicUrl1 = $request->hasFile('img1') ? asset('storage/' . $request->file('img1')->store('product-details', 'public')) : null;
+    $publicUrl2 = $request->hasFile('img2') ? asset('storage/' . $request->file('img2')->store('product-details', 'public')) : null;
+    $publicUrl3 = $request->hasFile('img3') ? asset('storage/' . $request->file('img3')->store('product-details', 'public')) : null;
+    $publicUrl4 = $request->hasFile('img4') ? asset('storage/' . $request->file('img4')->store('product-details', 'public')) : null;
 
-        // $product = ProductDetails::create($request->all());
-         $product = ProductDetails::create([
+    // Store into DB
+    $product = ProductDetails::create([
+        'img1' => $publicUrl1,
+        'img2' => $publicUrl2,
+        'img3' => $publicUrl3,
+        'img4' => $publicUrl4,
 
-    'img1' => $publicUrl1,
-    'img2' => $publicUrl2,
-    'img3' => $publicUrl3,
-    'img4' => $publicUrl4,
-       'des' => $request->input('des'),
-       'color' => $request->input('color'),
-       'size' => $request->input('size'),
+        'img1_alt' => $request->input('img1_alt'),
+        'img2_alt' => $request->input('img2_alt'),
+        'img3_alt' => $request->input('img3_alt'),
+        'img4_alt' => $request->input('img4_alt'),
+
+        'img1_width' => 600,
+        'img1_height' => 600,
+        'img2_width' => 600,
+        'img2_height' => 600,
+        'img3_width' => 600,
+        'img3_height' => 600,
+        'img4_width' => 600,
+        'img4_height' => 600,
+
+        'des' => $request->input('des'),
+        'color' => $request->input('color'),
+        'size' => $request->input('size'),
         'product_id' => $request->input('product_id'),
-         ]);
-        // return $request->all();
-      if($product) {
+    ]);
+
+    if($product) {
         return response()->json(['status' => true, 'message' => 'Product created successfully']);
     } else {
         return response()->json(['status' => false, 'errors' => ['general' => 'Product creation failed']]);
     }
-    }
+}
+
 
     public function WishList()
     {
