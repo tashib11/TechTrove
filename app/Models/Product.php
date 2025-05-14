@@ -24,7 +24,7 @@ class Product extends Model
         'star'
     ];
 
- 
+
 
     public function brand(): BelongsTo
     {
@@ -34,4 +34,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function productDetails(): HasOne
+{
+    return $this->hasOne(ProductDetails::class);
+}
+
 }

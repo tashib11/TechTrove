@@ -17,7 +17,7 @@
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
-    <form action="{{ route('product.store') }}" method="POST" name="productForm" id="productForm">
+    <form action="{{ route('product.store') }}" method="POST" name="productForm" id="productForm" enctype="multipart/form-data">
 
     <div class="container-fluid">
         <div class="row">
@@ -41,17 +41,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mb-3">
+
+                  <div class="card mb-3">
                     <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="image">Image </label>
-                                <input type="text" name="image" id="image" class="form-control" placeholder="image link">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-12">
+    <div class="mb-3">
+        <label for="image">Upload Product Image</label>
+        <input type="file" name="image" id="image" class="form-control">
+        <p class="error"></p>
+    </div>
+            </div>
+      <!-- Image Preview Card -->
+    <div id="imagePreviewCard" class="card mt-3 d-none">
+        <img id="imagePreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="brandAlt">Image Alt Text</label>
+                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
+            </div>
+            <div class="form-group">
+                <label for="brandWidth">Set Width (px)</label>
+                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
+            </div>
+            <div class="form-group">
+                <label for="brandHeight">Set Height (px)</label>
+                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
+            </div>
+        </div>
+    </div>
+            </div>
+</div>
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <h2 class="h4 mb-3">Pricing</h2>
@@ -64,17 +84,21 @@
                                 </div>
                             </div>
 
+                     <div class="col-md-12">
+    <div class="mb-3">
+        <label for="discount">Discount</label>
+        <select name="discount" id="discount" class="form-control">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+        <p class="error"></p>
+    </div>
+</div>
+
+
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="discount">Discount </label>
-                                    <input type="boolean" name="discount" id="discount" class="form-control" placeholder="Discount available(0/1)">
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="discount_price">Discount Price</label>
+                                    <label for="discount_price">Final Price(if Discount available)</label>
                                     <input type="text" name="discount_price" id="discount_price" class="form-control" placeholder="Discount Price">
 
                                 </div>
@@ -89,17 +113,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="stock">Stock </label>
-                                    <input type="boolean" name="stock" id="stock" class="form-control" placeholder="stock(1/0)">
+                                    <input type="text" name="stock" id="stock" class="form-control" placeholder="Number of stock">
                                     <p class="error" ></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="star">Star</label>
-                                    <input type="float" name="star" id="star" class="form-control" placeholder="Star">
-                                    <p class="error"> </p>
-                                </div>
-                            </div>
+
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Product remark</h2>
                                 <div class="mb-3">
@@ -107,9 +125,7 @@
                                         <option value="popular">popular</option>
                                         <option value="new">new</option>
                                         <option value="top">top</option>
-                                        <option value="specail">specail</option>
                                         <option value="trending">trending</option>
-                                        <option value="regular">regular</option>
                                     </select>
                                 </div>
                             </div>
@@ -173,45 +189,51 @@
 
 
 
-@section('customJs')
+@section('script')
 <script>
-
+setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
 $("#productForm").submit(function(event){
     event.preventDefault();
-       var formArray = $(this).serializeArray();
+
+    var formData = new FormData(this);
+
     $.ajax({
         url:'{{ route("product.store") }}',
-        type:'post',
-        data:formArray,
+        type:'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
         dataType: 'json',
-        success:function(response){
-            if(response['status']== true){
-            console.log(response);
-            }else{
+     success:function(response){
+  if (response.status == true || response.status === "true") {
+    window.location.href = "/Dashboard/DetailsCreate";
+}
+else {
+    if (response.errors && response.errors.general) {
+        alert(response.errors.general);
+    } else {
+        alert("Product creation failed. Please check your inputs.");
+    }
+}
 
-                var error = response['errors'];
+},
+       error:function(xhr){
+    let res = xhr.responseJSON;
+    if (res && res.errors) {
+        $(".error").removeClass('is-invalid').html("");
+        $("input, select").removeClass('is-invalid');
+        $.each(res.errors, function(key, value){
+            $('#' + key).addClass('is-invalid').siblings('p')
+                .addClass('invalid-feedback').html(value);
+        });
+    } else {
+        alert("Fill up all fields. Please try again.");
+    }
+}
 
-            //  if(error['title']){
-            //         $('#title').addClass('is-invalid').siblings('p').
-            //         addClass('invalid-feedback').html(error['title']);
-            //     }else{
-            //         $('#title').removeClass('is-invalid').siblings('p').
-            //         removeClass('invalid-feedback').html("");;
-            //     }
-            $(".error").removeClass('is-invalid').html("");
-            $("input[type=text],select").removeClass('is-invalid');
-            $.each(error,function(key,value){
-                $('#'+key).addClass('is-invalid').siblings('p').
-                addClass('invalid-feedback').html(value);
-            });
-
-            }
-        },
-        error:function(){
-            console.log("something went wrong");
-        }
     });
 });
+
 
 
 </script>

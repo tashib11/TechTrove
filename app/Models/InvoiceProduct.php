@@ -8,10 +8,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InvoiceProduct extends Model
 {
-    protected $fillable = ['invoice_id', 'product_id', 'qty', 'sale_price','user_id'];
+       use HasFactory;
 
-    public function product(): BelongsTo
+    protected $fillable = [
+        'invoice_id',
+        'user_id',
+        'product_id',
+        'qty',
+        'price',
+        'color',
+        'size',
+    ];
+
+    public function invoice()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Invoice::class);
     }
+
+ 
+    public function product()
+{
+    return $this->belongsTo(Product::class, 'product_id');
+}
+
 }

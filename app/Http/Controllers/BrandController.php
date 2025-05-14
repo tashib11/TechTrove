@@ -12,15 +12,30 @@ class BrandController extends Controller
         return view('admin.products.brand');
     }
 
-    public function store(Request $request) {
-        $brand = Brand::create($request->all() );
-       // return $request->all();
-       if($brand) {
-           return redirect()->route('brand.create')->with('success', 'brand created successfully');
-       }else {
-           return redirect()->route('brand.create')->with('error', 'brand creation failed');
-       }
-   }
+
+public function store(Request $request)
+{
+    $request->validate([
+        'brandName' => 'required|string|max:255',
+        'brandFile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Store image in storage/app/public/brands
+    $path = $request->file('brandFile')->store('brands', 'public');
+
+    // Get public URL: e.g., https://yourdomain.com/storage/brands/filename.jpg
+    $imageUrl = asset('storage/' . $path);
+
+    Brand::create([
+        'brandName' => $request->brandName,
+        'brandImg' => $imageUrl,
+    ]);
+
+    return response()->json(['message' => 'Brand created successfully!']);
+}
+
+
+
 
     public function ByBrandPage()
     {

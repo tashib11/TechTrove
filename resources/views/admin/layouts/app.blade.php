@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>TechTrove - eCommerce</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Add to your <head> -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+
+            .chart-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .chart-container canvas {
+                max-width: 70%;
+                max-height: 70%;
+            }
+            .additional-info {
+            font-size: 1.2em; /* Increase the font size */
+            padding-bottom: 20px; /* Add some space below the info */
+            text-align: center; /* Center the text */
+        }
+        </style>
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
@@ -43,7 +77,7 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
 							<h4 class="h4 mb-0"><strong>Admin</strong></h4>
-							<div class="mb-3">tashib91221@gmail.com</div>
+							<div class="mb-3">tashib02c@gmail.com</div>
 
 							<div class="dropdown-divider"></div>
 
@@ -153,24 +187,32 @@
         <script src="{{ asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{  asset('admin-assets/js/demo.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-
-<script  type="text/javascript">
-  $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-    $(document).ready(function() {
-        $('.summernote').summernote({
-        height: 200
+        @yield('pie')
+<script>
+    function setupImagePreview(inputId, previewCardId, previewImgId) {
+        const input = document.getElementById(inputId);
+        input.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const previewImg = document.getElementById(previewImgId);
+                    previewImg.src = event.target.result;
+                    document.getElementById(previewCardId).classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
         });
-    });
-
-
+    }
 </script>
+
+
+<!-- Add before the closing </body> tag or in @section('script') -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@yield('script')
 
 
 	</body>

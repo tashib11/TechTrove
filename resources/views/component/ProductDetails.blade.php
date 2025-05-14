@@ -162,10 +162,8 @@
             $('#p_price').text(Details[0]['product']['price']);
             $('#p_discount_price').text("No Discount Available").addClass('no-discount');
         }
-
-        // Product description and stock
-        $('#p_des').html(Details[0]['product']['short_des']);
-        $('#p_details').html(Details[0]['des']);
+        document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
+        document.getElementById('p_details').innerHTML = Details[0]['des'];
         if (Details[0]['product']['stock']) {
             $('#p_stock').text("In Stock").addClass('in-stock');
         } else {

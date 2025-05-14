@@ -9,6 +9,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenAuthenticate;
 use App\Models\Category;
@@ -35,7 +36,15 @@ Route::get('/CategoryList', [CategoryController::class, 'CategoryList']);
 // Product List
 Route::get('/ListProductByCategory/{id}', [ProductController::class, 'ListProductByCategory']);
 Route::get('/ListProductByBrand/{id}', [ProductController::class, 'ListProductByBrand']);
-Route::get('/ListProductByRemark/{remark}', [ProductController::class, 'ListProductByRemark']);
+
+Route::get('/product-filter', [ProductController::class, 'ProductFilter']);
+Route::get('/api/product-filters', function () {
+    $brands = \App\Models\Brand::select('id', 'brandName')->get();
+    $categories = \App\Models\Category::select('id', 'categoryName')->get();
+    return response()->json(['brands' => $brands, 'categories' => $categories]);
+});
+
+
 // Slider
 Route::get('/ListProductSlider', [ProductController::class, 'ListProductSlider']);
 // Product Details
@@ -74,14 +83,22 @@ Route::get('/RemoveWishList/{product_id}', [ProductController::class, 'RemoveWis
 Route::post('/CreateCartList', [ProductController::class, 'CreateCartList'])->middleware([TokenAuthenticate::class]);
 Route::get('/CartList', [ProductController::class, 'CartList'])->middleware([TokenAuthenticate::class]);
 Route::get('/DeleteCartList/{product_id}', [ProductController::class, 'DeleteCartList'])->middleware([TokenAuthenticate::class]);
+Route::get('/user-cart', [ProductController::class, 'UserCart'])->middleware([TokenAuthenticate::class]);
+
+//payment page
+Route::get('/payment-page', [InvoiceController::class, 'PaymentPage'])->middleware([TokenAuthenticate::class]);
+Route::post('/place-order', [InvoiceController::class, 'placeOrder'])->middleware([TokenAuthenticate::class]);
+
+//order trck
+Route::get('/track-order', [OrderController::class, 'TrackOrderPage'])->middleware([TokenAuthenticate::class]);;
+Route::get('/user-orders', [OrderController::class, 'UserOrders'])->middleware([TokenAuthenticate::class]);
 
 
 
-
-// Invoice and payment
-Route::get("/InvoiceCreate",[InvoiceController::class,'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
-Route::get("/InvoiceList",[InvoiceController::class,'InvoiceList'])->middleware([TokenAuthenticate::class]);
-Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
+// // Invoice and payment
+// Route::get("/InvoiceCreate",[InvoiceController::class,'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
+// Route::get("/InvoiceList",[InvoiceController::class,'InvoiceList'])->middleware([TokenAuthenticate::class]);
+// Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
 
 
 //payment
@@ -96,20 +113,30 @@ Route::get("/Dashboard/ProductCreate",[ProductController::class,'create'])->name
 Route::post("/ProductStore",[ProductController::class,'store'])->name('product.store');
 Route::get("/Dashboard/DetailsCreate",[ProductController::class,'detailCreate'])->name('product.detail.create');
 Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->name('product.detail.store');
+Route::get("/Dashboard/Piechart",[InvoiceController::class,'showPieChart'])->name('product.piechart');
 
 Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 
-Route::get("/Dashboard/ProductEdit/{product}",[ProductController::class,'edit'])->name('product.edit');
-Route::post("/Dashboard/ProductUpdate/{product}",[ProductController::class,'update'])->name('product.update');
-Route::get('/Dashboard/ProductDelete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+Route::get("/Dashboard/ProductList", [ProductController::class, 'index'])->name('product.list');
+Route::get("/Dashboard/ProductEdit/{product}", [ProductController::class, 'edit'])->name('product.edit');
+Route::post("/Dashboard/ProductUpdate/{product}", [ProductController::class, 'update'])->name('product.update');
+Route::get('/Dashboard/ProductDelete/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
-Route::get("/Dashboard/brand",[BrandController::class,'create'])->name('brand.create');
-Route::post("/BrandStore",[BrandController::class,'store'])->name('brand.store');
+Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])->name('product.detail.select');
+Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
+Route::put("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
 
-Route::get("/Dashboard/category",[CategoryController::class,'create'])->name('category.create');
-Route::post("/CategoryStore",[CategoryController::class,'store'])->name('category.store');
+Route::get('/Dashboard/brand', [BrandController::class, 'create']); // Show form
+Route::post('/Dashboard/brand', [BrandController::class, 'store']);
+
+Route::get("/Dashboard/category",[CategoryController::class,'create']);
+Route::post("/Dashboard/category",[CategoryController::class,'store']);
 
 Route::get("/Dashboard/InvoiceList",[InvoiceController::class,'index'])->name('invoice.list');
+Route::post('/Dashboard/InvoiceList/UpdateStatus', [InvoiceController::class, 'updateStatus']);
+Route::get('/Dashboard/InvoiceList/{id}/Details', [InvoiceController::class, 'getInvoiceDetails']);
+Route::get('/Dashboard/InvoiceList/Search', [InvoiceController::class, 'search']);
+
 
 Route::get("/Dashboard/UserList",[UserController::class,'index'])->name('user.list');
 
