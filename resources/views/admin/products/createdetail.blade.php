@@ -68,17 +68,18 @@
         <img id="imagePreview1" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
             <div class="form-group">
-                <label for="brandAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
-            </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
-            </div>
+    <label>Image Alt Text</label>
+    <input type="text" class="form-control" name="img1_alt" placeholder="Describe the image">
+</div>
+<div class="form-group">
+    <label>Image Width (px)</label>
+    <input type="number" class="form-control" name="img1_width" value="600" readonly>
+</div>
+<div class="form-group">
+    <label>Image Height (px)</label>
+    <input type="number" class="form-control" name="img1_height" value="600" readonly>
+</div>
+
         </div>
     </div>
                     </div>
@@ -97,18 +98,19 @@
     <div id="imagePreviewCard2" class="card mt-3 d-none">
         <img id="imagePreview2" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
-            <div class="form-group">
-                <label for="brandAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
-            </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
-            </div>
+        <div class="form-group">
+    <label>Image Alt Text</label>
+    <input type="text" class="form-control" name="img2_alt" placeholder="Describe the image">
+</div>
+<div class="form-group">
+    <label>Image Width (px)</label>
+    <input type="number" class="form-control" name="img2_width" value="600" readonly>
+</div>
+<div class="form-group">
+    <label>Image Height (px)</label>
+    <input type="number" class="form-control" name="img2_height" value="600" readonly>
+</div>
+
         </div>
     </div>
                     </div>
@@ -127,18 +129,19 @@
     <div id="imagePreviewCard3" class="card mt-3 d-none">
         <img id="imagePreview3" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
-            <div class="form-group">
-                <label for="brandAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
-            </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
-            </div>
+       <div class="form-group">
+    <label>Image Alt Text</label>
+    <input type="text" class="form-control" name="img3_alt" placeholder="Describe the image">
+</div>
+<div class="form-group">
+    <label>Image Width (px)</label>
+    <input type="number" class="form-control" name="img3_width" value="600" readonly>
+</div>
+<div class="form-group">
+    <label>Image Height (px)</label>
+    <input type="number" class="form-control" name="img3_height" value="600" readonly>
+</div>
+
         </div>
     </div>
                     </div>
@@ -157,18 +160,18 @@
     <div id="imagePreviewCard4" class="card mt-3 d-none">
         <img id="imagePreview4" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
-            <div class="form-group">
-                <label for="brandAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
-            </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
-            </div>
+        <div class="form-group">
+    <label>Image Alt Text</label>
+    <input type="text" class="form-control" name="img4_alt" placeholder="Describe the image">
+</div>
+<div class="form-group">
+    <label>Image Width (px)</label>
+    <input type="number" class="form-control" name="img4_width" value="600" readonly>
+</div>
+<div class="form-group">
+    <label>Image Height (px)</label>
+    <input type="number" class="form-control" name="img4_height" value="600" readonly>
+</div>
         </div>
     </div>
                     </div>
