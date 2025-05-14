@@ -57,7 +57,7 @@
                     </div>
                     <div class="cart_btn">
                         <button onclick="AddToCart()" class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
-                        <a class="add_wishlist" onclick="AddToWishList()" href="#"><i class="icon-heart"></i></a>
+                        <a class="add_wishlist" onclick="AddToWishList()" href="#"> <i id="wishIcon" class="icon-heart"></i></a>
                     </div>
                 </div>
                 <hr />
@@ -123,7 +123,7 @@
     $(document).ready(function() {
         productDetails();
         productReview();
-
+  checkWishlistStatus();
         $('.plus').on('click', function() {
             if ($(this).prev().val()) {
                 $(this).prev().val(+$(this).prev().val() + 1);
@@ -261,9 +261,10 @@ function reinitZoom() {
             let p_color = $('#p_color').val();
             let p_qty = $('#p_qty').val();
 
-            if (!p_size) return alert("Product Size Required!");
-            if (!p_color) return alert("Product Color Required!");
-            if (p_qty === "0") return alert("Product Qty Required!");
+            if (!p_size) return showToast("Product size is required!", "error");
+if (!p_color) return showToast("Product color is required!", "error");
+if (p_qty === "0") return showToast("Quantity must be at least 1!", "error");
+
 
             $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
             let res = await axios.post("/CreateCartList", {
@@ -284,46 +285,69 @@ function reinitZoom() {
         }
     }
 
-    async function AddToWishList() {
-        try {
-            $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-            let res = await axios.get("/CreateWishList/" + id);
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            if (res.status === 200) {
-                showToast("Product added to wishlist successfully!", "success");
-            }
-        } catch (e) {
-            if (e.response.status === 401) {
-                sessionStorage.setItem("last_location", window.location.href)
-                window.location.href = "/login"
-            }
+ async function checkWishlistStatus() {
+    try {
+        let res = await axios.get("/CheckWishListStatus/" + id);
+        if (res.status === 200 && res.data.inWishlist) {
+            document.getElementById('wishIcon').classList.add('text-success');
+        }
+    } catch (e) {
+        // Optional: only redirect if unauthorized
+        if (e.response?.status === 401) {
+            // You can skip redirection or handle it silently
         }
     }
+}
 
-    function showToast(message, type) {
-        let toastHTML = `
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
-            <div class="toast-header">
-                <strong class="mr-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
-                <small class="text-muted">Just now</small>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+async function AddToWishList() {
+    try {
+        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
+        let res = await axios.get("/CreateWishList/" + id);
+        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+
+        if (res.status === 200) {
+            if (res.data?.alreadyExists) {
+                showToast("Product is already in your wishlist!", "error");
+            } else {
+                document.getElementById('wishIcon').classList.add('text-success');
+                showToast("Product added to wishlist successfully!", "success");
+            }
+        }
+    } catch (e) {
+        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+        if (e.response?.status === 401) {
+            sessionStorage.setItem("last_location", window.location.href);
+            window.location.href = "/login";
+        } else {
+            showToast("Something went wrong!", "error");
+        }
+    }
+}
+
+
+  function showToast(message, type = "success") {
+    let bgClass = type === 'success' ? 'bg-success text-white' : 'bg-danger text-white';
+    let toastHTML = `
+        <div class="toast ${bgClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+            <div class="toast-header ${bgClass}">
+                <strong class="me-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
+                <small class="text-white-50">Just now</small>
+                <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">${message}</div>
         </div>`;
-        $('#toast-container').append(toastHTML);
-        $('.toast').toast({ delay: 800 });
-        $('.toast').toast('show').on('hidden.bs.toast', function () {
-            $(this).remove();
-        });
-    }
+    $('#toast-container').append(toastHTML);
+    $('.toast').toast('show').on('hidden.bs.toast', function () {
+        $(this).remove();
+    });
+}
 
     async function AddReview() {
         let reviewText = $('#reviewTextID').val();
         let reviewScore = $('#reviewScore').val();
-        if (!reviewScore) return alert("Score Required!");
-        if (!reviewText) return alert("Review Required!");
+       if (!reviewScore) return showToast("Rating score is required!", "error");
+if (!reviewText) return showToast("Review description is required!", "error");
+
 
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
         await axios.post("/CreateProductReview", {

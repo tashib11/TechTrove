@@ -71,7 +71,7 @@ Route::get('/CheckProfile', [ProfileController::class, 'CheckProfile'])->middlew
 Route::post('/CreateProductReview', [ProductController::class, 'CreateProductReview'])->middleware([TokenAuthenticate::class]);
 
 
-
+Route::get('/CheckWishListStatus/{id}', [ProductController::class, 'CheckWishListStatus']);
 // Product Wish
 Route::get('/ProductWishList', [ProductController::class, 'ProductWishList'])->middleware([TokenAuthenticate::class]);
 Route::get('/CreateWishList/{product_id}', [ProductController::class, 'CreateWishList'])->middleware([TokenAuthenticate::class]);
