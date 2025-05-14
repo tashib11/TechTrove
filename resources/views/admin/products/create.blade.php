@@ -224,7 +224,7 @@ else {
                 .addClass('invalid-feedback').html(value);
         });
     } else {
-        alert("Something went wrong. Please try again.");
+        alert("Fill up all fields. Please try again.");
     }
 }
 

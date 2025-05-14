@@ -82,6 +82,14 @@ public function store(Request $request) {
         'title' => 'required|string|max:255',
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         // add other validation rules
+        'short_des'  => 'required',
+         'price' => 'required',
+        'discount' => 'required',
+        'discount_price' => 'required',
+        'stock' => 'required',
+        'remark' => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'brand_id' => 'required|exists:brands,id',
     ]);
 
     if ($request->hasFile('image')) {
@@ -113,23 +121,74 @@ public function store(Request $request) {
 
     public function detailCreate(){
 
-        $data = [];
-        $products= Product::orderBy('title','ASC')->get();
+        // Get only products that do NOT have a related ProductDetails record, ordered by latest
+    $products = Product::whereDoesntHave('productDetails')
+                ->latest()
+                ->get();
 
-        $data['products']=$products;
-
-        return view('admin.products.createdetail', $data);
+    return view('admin.products.createdetail', compact('products'));
     }
 
 
     public function detailstore(Request $request) {
-        $product = ProductDetails::create($request->all());
+            $request->validate([
+        'des'  => 'required',
+        'img1' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img2' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img3' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img4' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'color' => 'required',
+        'size' => 'required',
+        'product_id' => 'required|exists:products,id',
+            ]);
+
+                if ($request->hasFile('img1')) {
+        $file = $request->file('img1');
+        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
+        $publicUrl1 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
+    } else {
+        $publicUrl1 = null;
+    }
+            if ($request->hasFile('img2')) {
+        $file = $request->file('img2');
+        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
+        $publicUrl2 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
+    } else {
+        $publicUrl2 = null;
+    }
+            if ($request->hasFile('img3')) {
+        $file = $request->file('img3');
+        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
+        $publicUrl3 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
+    } else {
+        $publicUrl3 = null;
+    }
+            if ($request->hasFile('img4')) {
+        $file = $request->file('img4');
+        $path = $file->store('product-details', 'public'); // stored in storage/app/public/product-details
+        $publicUrl4 = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-details/filename.jpg
+    } else {
+        $publicUrl4 = null;
+    }
+
+        // $product = ProductDetails::create($request->all());
+         $product = ProductDetails::create([
+
+    'img1' => $publicUrl1,
+    'img2' => $publicUrl2,
+    'img3' => $publicUrl3,
+    'img4' => $publicUrl4,
+       'des' => $request->input('des'),
+       'color' => $request->input('color'),
+       'size' => $request->input('size'),
+        'product_id' => $request->input('product_id'),
+         ]);
         // return $request->all();
-        if($product) {
-            return redirect()->route('product.detail.create')->with('success', 'Product Details created successfully');
-        }else {
-            return redirect()->route('product.detail.create')->with('error', 'Product Details creation failed');
-        }
+      if($product) {
+        return response()->json(['status' => true, 'message' => 'Product created successfully']);
+    } else {
+        return response()->json(['status' => false, 'errors' => ['general' => 'Product creation failed']]);
+    }
     }
 
     public function WishList()
