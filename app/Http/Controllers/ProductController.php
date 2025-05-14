@@ -121,12 +121,12 @@ public function store(Request $request) {
 
     public function detailCreate(){
 
-        $data = [];
-        $products= Product::orderBy('title','ASC')->get();
+        // Get only products that do NOT have a related ProductDetails record, ordered by latest
+    $products = Product::whereDoesntHave('productDetails')
+                ->latest()
+                ->get();
 
-        $data['products']=$products;
-
-        return view('admin.products.createdetail', $data);
+    return view('admin.products.createdetail', compact('products'));
     }
 
 
