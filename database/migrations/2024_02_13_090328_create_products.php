@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image',200);
             $table->boolean('stock');
             $table->float('star');
+            // $table->enum('remark',['popular','new','top','trending']);
             $table->enum('remark',['popular','new','top','specail','trending','regular']);
 
             $table->unsignedBigInteger('category_id');

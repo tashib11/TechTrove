@@ -77,15 +77,39 @@ if ($request->has('title') && !empty($request->title)) {
         return view('admin.products.create', $data);
     }
 
-    public function store(Request $request) {
-         $product = Product::create($request->all());
-        // return $request->all();
-        if($product) {
-            return redirect()->route('product.list')->with('success', 'Product created successfully');
-        }else {
-            return redirect()->route('product.create')->with('error', 'Product creation failed');
-        }
+public function store(Request $request) {
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        // add other validation rules
+    ]);
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $path = $file->store('product-create', 'public'); // stored in storage/app/public/product-create
+        $publicUrl = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-create/filename.jpg
+    } else {
+        $publicUrl = null;
     }
+
+ $product = Product::create([
+    'title' => $request->input('title'),
+    'short_des' => $request->input('short_des'),
+    'image' => $publicUrl,
+    'price' => $request->input('price'),
+    'discount' => $request->input('discount'),
+    'discount_price' => $request->input('discount_price'),
+    'stock' => $request->input('stock'),
+    'remark' => $request->input('remark'),
+    'category_id' => $request->input('category_id'),
+    'brand_id' => $request->input('brand_id'),
+]);
+    if($product) {
+        return response()->json(['status' => true, 'message' => 'Product created successfully']);
+    } else {
+        return response()->json(['status' => false, 'errors' => ['general' => 'Product creation failed']]);
+    }
+}
 
     public function detailCreate(){
 
