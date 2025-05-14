@@ -37,7 +37,7 @@
     <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
     <script src="{{asset('assets/js/axios.min.js')}}"></script>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 </head>
 <body>
     <div id="toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
