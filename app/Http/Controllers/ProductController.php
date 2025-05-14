@@ -350,6 +350,16 @@ if ($request->filled('sort')) {
     }
 
 
+public function CheckWishListStatus($product_id)
+{
+    $user_id = auth()->id();
+
+    $exists = ProductWish::where('user_id', $user_id)
+        ->where('product_id', $product_id)
+        ->exists();
+
+    return response()->json(['inWishlist' => $exists], 200);
+}
 
     public function ProductWishList(Request $request):JsonResponse{
         $user_id=$request->header('id');
