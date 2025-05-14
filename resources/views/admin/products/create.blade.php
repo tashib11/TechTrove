@@ -41,13 +41,16 @@
                         </div>
                     </div>
                 </div>
+
+                  <div class="card mb-3">
+                    <div class="card-body">
             <div class="col-md-12">
     <div class="mb-3">
         <label for="image">Upload Product Image</label>
         <input type="file" name="image" id="image" class="form-control">
         <p class="error"></p>
     </div>
-
+            </div>
       <!-- Image Preview Card -->
     <div id="imagePreviewCard" class="card mt-3 d-none">
         <img id="imagePreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
@@ -66,7 +69,7 @@
             </div>
         </div>
     </div>
-
+            </div>
 </div>
 
                 <div class="card mb-3">
