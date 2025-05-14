@@ -9,7 +9,7 @@
     background-repeat: no-repeat;
     background-position: 8px 50%;
     background-size: 16px;
-    
+
 }
 
 /* Optional: Better visual appearance */
@@ -19,7 +19,6 @@
     padding: 5px 10px;
 }
 </style>
-
 <section class="content-header">
     <div class="container-fluid my-2">
         <div class="row mb-2">

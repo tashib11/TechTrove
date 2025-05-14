@@ -124,7 +124,7 @@ Route::get('/Dashboard/ProductDelete/{product}', [ProductController::class, 'des
 
 Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])->name('product.detail.select');
 Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
-Route::post("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
+Route::put("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
 
 Route::get('/Dashboard/brand', [BrandController::class, 'create']); // Show form
 Route::post('/Dashboard/brand', [BrandController::class, 'store']);

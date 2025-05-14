@@ -424,12 +424,12 @@ if ($request->filled('sort')) {
 
 
     public function detailSelect(){
-        $data = [];
-        $products= Product::orderBy('title','ASC')->get();
+              // Get only products that do NOT have a related ProductDetails record, ordered by latest
+    $products = Product::whereHas('productDetails')
+                ->latest()
+                ->get();
 
-        $data['products']=$products;
-
-        return view('admin.products.detailselect', $data);
+    return view('admin.products.detailselect', compact('products'));
     }
 
 
@@ -445,15 +445,36 @@ if ($request->filled('sort')) {
 
 }
 
-public function detailUpdate($id, Request $request){
-    $product = ProductDetails::find($id);
-    $product->update($request->all());
-    if($product) {
-        return redirect()->route('product.detail.select')->with('success', 'Product updated successfully');
-    }else {
-        return redirect()->route('product.detail.edit')->with('error', 'Product details update failed');
+public function detailUpdate(Request $request, $id)
+{
+    $detail = ProductDetails::findOrFail($id);
+
+    $request->validate([
+        'des' => 'required',
+        'color' => 'required',
+        'size' => 'required',
+        'product_id' => 'required|exists:products,id',
+        'img1' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img2' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img3' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'img4' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
+
+    $detail->fill($request->only('des', 'color', 'size', 'product_id'));
+
+    for ($i = 1; $i <= 4; $i++) {
+        if ($request->hasFile("img$i")) {
+            $file = $request->file("img$i");
+            $path = $file->store('product-details', 'public');
+            $detail->{"img$i"} = asset('storage/' . $path);
+        }
     }
+
+    $detail->save();
+
+    return response()->json(['status' => true]);
 }
+
 
 
     public function CreateCartList(Request $request):JsonResponse{
