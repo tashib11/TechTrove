@@ -32,6 +32,7 @@ public function store(Request $request)
     Category::create([
         'categoryName' => $request->catName,
         'categoryImg' => $imageUrl,
+          'categoryAlt' => $request->catAlt,
     ]);
 
     return response()->json(['message' => 'Category created successfully!']);

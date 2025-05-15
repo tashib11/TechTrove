@@ -19,17 +19,10 @@
         <img id="catPreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
             <div class="form-group">
-                <label for="catAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="catAlt" placeholder="Describe the image">
+                <label for="categoryAlt">Image Alt Text</label>
+                <input type="text" class="form-control" id="categoryAlt" placeholder="Describe the image">
             </div>
-            <div class="form-group">
-                <label for="catWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="catWidth" placeholder="e.g., 300">
-            </div>
-            <div class="form-group">
-                <label for="catHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="catHeight" placeholder="e.g., 200">
-            </div>
+
         </div>
     </div>
 
@@ -55,16 +48,12 @@ document.getElementById('catForm').addEventListener('submit', function (e) {
 
     const catName = document.getElementById('catName').value;
     const catFile = document.getElementById('catFile').files[0];
-    const catAlt = document.getElementById('catAlt').value;
-    const catWidth = document.getElementById('catWidth').value;
-    const catHeight = document.getElementById('catHeight').value;
+    const catAlt = document.getElementById('categoryAlt').value;
 
     const formData = new FormData();
     formData.append('catName', catName);
     formData.append('catFile', catFile);
     formData.append('catAlt', catAlt);
-    formData.append('catWidth', catWidth);
-    formData.append('catHeight', catHeight);
 
     axios.post('/Dashboard/category', formData, {
         headers: {

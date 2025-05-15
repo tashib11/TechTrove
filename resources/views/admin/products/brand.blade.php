@@ -22,14 +22,8 @@
                 <label for="brandAlt">Image Alt Text</label>
                 <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
             </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 300">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 200">
-            </div>
+
+          
         </div>
     </div>
 
@@ -55,15 +49,11 @@ document.getElementById('brandForm').addEventListener('submit', function (e) {
     const brandName = document.getElementById('brandName').value;
     const brandFile = document.getElementById('brandFile').files[0];
     const brandAlt = document.getElementById('brandAlt').value;
-    const brandWidth = document.getElementById('brandWidth').value;
-    const brandHeight = document.getElementById('brandHeight').value;
 
     const formData = new FormData();
     formData.append('brandName', brandName);
     formData.append('brandFile', brandFile);
     formData.append('brandAlt', brandAlt);
-    formData.append('brandWidth', brandWidth);
-    formData.append('brandHeight', brandHeight);
 
     axios.post('/Dashboard/brandStore', formData)
         .then(response => {

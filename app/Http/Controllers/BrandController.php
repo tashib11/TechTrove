@@ -29,6 +29,7 @@ public function store(Request $request)
     Brand::create([
         'brandName' => $request->brandName,
         'brandImg' => $imageUrl,
+        'brandAlt' =>$request->brandAlt,
     ]);
 
     return response()->json(['message' => 'Brand created successfully!']);

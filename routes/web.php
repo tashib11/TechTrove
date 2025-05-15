@@ -36,6 +36,7 @@ Route::get('/CategoryList', [CategoryController::class, 'CategoryList']);
 // Product List
 Route::get('/ListProductByCategory/{id}', [ProductController::class, 'ListProductByCategory']);
 Route::get('/ListProductByBrand/{id}', [ProductController::class, 'ListProductByBrand']);
+Route::get('/GetBrandById/{id}', [ProductController::class, 'GetBrandById']);
 
 Route::get('/product-filter', [ProductController::class, 'ProductFilter']);
 Route::get('/api/product-filters', function () {
@@ -129,7 +130,6 @@ Route::put("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detai
 
 Route::get('/Dashboard/brand', [BrandController::class, 'create']); // Show form
 Route::post('/Dashboard/brandStore', [BrandController::class, 'store']);
-// Serve the Blade view
 Route::get("/Dashboard/BrandList", [BrandController::class, 'index']);
 Route::get("/Dashboard/BrandListData", [BrandController::class, 'BrandList']);
 Route::get("/Dashboard/BrandEdit/{brand}", [BrandController::class, 'edit']);

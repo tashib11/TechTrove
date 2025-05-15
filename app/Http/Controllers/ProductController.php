@@ -308,6 +308,19 @@ if ($request->filled('sort')) {
         $data=Product::where('brand_id',$request->id)->with('brand','category')->get();
         return ResponseHelper::Out('success',$data,200);
     }
+    
+
+public function GetBrandById(Request $request): JsonResponse
+{
+    $brand = Brand::find($request->id);
+
+    if (!$brand) {
+        return ResponseHelper::Out('Brand not found', null, 404);
+    }
+
+    return ResponseHelper::Out('success', $brand, 200);
+}
+
 
     public function ListProductSlider():JsonResponse{
         $data=ProductSlider::all();

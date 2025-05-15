@@ -149,47 +149,65 @@
 <script>
 
 
-    async function ByBrand(){
-        let searchParams=new URLSearchParams(window.location.search);
-        let id=searchParams.get('id');
+   async function ByBrand() {
+    let searchParams = new URLSearchParams(window.location.search);
+    let id = searchParams.get('id');
 
-        let res=await axios.get(`/ListProductByBrand/${id}`);
-        $("#byBrandList").empty();
-        res.data['data'].forEach((item,i)=>{
-            let EachItem=`<div class="col-lg-3 col-md-4 col-6">
-                                <div class="product">
-                                    <div class="product_img">
-                                        <a href="#">
-                                            <img src="${item['image']}" alt="product_img9">
-                                        </a>
-                                        <div class="product_action_box">
-                                            <ul class="list_none pr_action_btn">
+    let res = await axios.get(`/ListProductByBrand/${id}`);
+    $("#byBrandList").empty();
 
-                                                <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+    const products = res.data['data'];
 
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="product_info">
-                                        <h6 class="product_title"><a href="/details?id=${item['id']}">${item['title']}</a></h6>
-                                        <div class="product_price">
-                                            <span class="price">$ ${item['price']}</span>
-                                        </div>
-                                        <div class="rating_wrap">
-                                            <div class="rating">
-                                                <div class="product_rate" style="width:${item['star']}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`
-            $("#byBrandList").append(EachItem);
-
-            $("#BrandName").text( res.data['data'][0]['brand']['brandName']);
+    // Set brand name even if there are no products
+    if (products.length > 0) {
+        $("#BrandName").text(products[0]['brand']['brandName']);
+    } else {
+   let brandRes = await axios.get(`/GetBrandById/${id}`);
+$("#BrandName").text(brandRes.data.data.brandName); // ✅ Correct
 
 
-        })
     }
+
+    if (products.length === 0) {
+        $("#byBrandList").html(`
+            <div class="col-12 text-center py-5">
+                <h5>No products available of this brand.</h5>
+            </div>
+        `);
+        return;
+    }
+
+    products.forEach((item) => {
+        let EachItem = `
+        <div class="col-lg-3 col-md-4 col-6">
+            <div class="product">
+                <div class="product_img">
+                    <a href="#">
+                        <img src="${item['image']}" alt="product_img9">
+                    </a>
+                    <div class="product_action_box">
+                        <ul class="list_none pr_action_btn">
+                            <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="product_info">
+                    <h6 class="product_title"><a href="/details?id=${item['id']}">${item['title']}</a></h6>
+                    <div class="product_price">
+                        <span class="price">$ ${item['price']}</span>
+                    </div>
+                    <div class="rating_wrap">
+                        <div class="rating">
+                            <div class="product_rate" style="width:${item['star']}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        $("#byBrandList").append(EachItem);
+    });
+}
+
 
 </script>
 <script>
