@@ -35,15 +35,27 @@
     -webkit-overflow-scrolling: touch;
   }
 </style>
-
-
-
-<div class="container">
-  <div class="row justify-content-center mb-4">
-    <div class="col-md-6 text-center">
-      <h4>Categorised Products</h4>
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini py-3">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-6 text-center text-md-start">
+                <h3 class="h4 mb-0">Category</h3>
+            </div>
+            <div class="col-12 col-md-6 text-center text-md-end mt-2 mt-md-0">
+                <nav>
+                    <ol class="breadcrumb justify-content-center justify-content-md-end mb-0">
+                        <li class="breadcrumb-item"><a href="{{url("/")}}">Home</a></li>
+                        <li class="breadcrumb-item active">This Page</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+
+
 
 <!-- Search + Filter Controls -->
 <div class="container my-4">
@@ -93,6 +105,7 @@
         <option value="{{ $cat->id }}" {{ $categoryId == $cat->id ? 'selected' : '' }}>
           {{ $cat->categoryName }}
         </option>
+
       @endforeach
     </select>
   </div>

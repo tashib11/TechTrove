@@ -101,7 +101,7 @@
                 <div class="item">
                     <div class="categories_box">
                         <a href="/by-category?id=${item['id']}">
-                            <img src="${item['categoryImg']}" alt="${item['categoryName']}"/>
+                            <img src="${item['categoryImg']}" alt="${item['categoryAlt'] || item['categoryName']}"/>
                             <span>${item['categoryName']}</span>
                         </a>
                     </div>
