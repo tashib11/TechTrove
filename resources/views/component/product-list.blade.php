@@ -5,8 +5,9 @@
     </div>
 @else
     @foreach($products as $item)
-        <div class="col-lg-3 col-md-4 col-6 mb-4">
-            <div class="product">
+<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+
+    <div class="product w-100">
                 <div class="product_img">
                     <a href="/details?id={{ $item->id }}">
                         <img src="{{ $item->image }}" alt="{{ $item->title }}">

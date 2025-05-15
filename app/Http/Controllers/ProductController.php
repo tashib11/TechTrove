@@ -396,13 +396,16 @@ public function CheckWishListStatus($product_id)
     }
 
      public function update($id, Request $request){
-        $product = Product::find($id);
-        $product->update($request->all());
-        if($product) {
-            return redirect()->route('product.list')->with('success', 'Product updated successfully');
-        }else {
-            return redirect()->route('product.edit')->with('error', 'Product update failed');
+        $detail = Product::findOrFail($id);
+
+    $detail->fill($request->only('title','short_des','price','discount','discount_price','stock','remark','category_id','brand_id'));
+          if ($request->hasFile("image")) {
+            $file = $request->file("image");
+            $path = $file->store('product-create', 'public');
+            $detail->{"image"} = asset('storage/' . $path);
         }
+  $detail->save();
+       return response()->json(['status' => true]);
      }
 
      public function destroy($id)

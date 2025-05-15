@@ -65,7 +65,7 @@ document.getElementById('brandForm').addEventListener('submit', function (e) {
     formData.append('brandWidth', brandWidth);
     formData.append('brandHeight', brandHeight);
 
-    axios.post('/Dashboard/brand', formData)
+    axios.post('/Dashboard/brandStore', formData)
         .then(response => {
             document.getElementById('brandMsg').innerHTML =
                 `<div class="alert alert-success">${response.data.message}</div>`;
