@@ -308,7 +308,7 @@ if ($request->filled('sort')) {
         $data=Product::where('brand_id',$request->id)->with('brand','category')->get();
         return ResponseHelper::Out('success',$data,200);
     }
-    
+
 
 public function GetBrandById(Request $request): JsonResponse
 {
@@ -343,24 +343,30 @@ public function GetBrandById(Request $request): JsonResponse
     }
 
 
+public function CreateProductReview(Request $request): JsonResponse
+{
+    $user_id = $request->header('id');
+    $profile = CustomerProfile::where('user_id', $user_id)->first();
 
-    public function CreateProductReview(Request $request):JsonResponse{
-        $user_id=$request->header('id');
-        $profile=CustomerProfile::where('user_id',$user_id)->first();
+    if ($profile) {
+        $request->merge(['customer_id' => $profile->id]);
 
-        if($profile){
-            $request->merge(['customer_id' =>$profile->id]);
-            $data=ProductReview::updateOrCreate(
-                ['customer_id' => $profile->id,'product_id'=>$request->input('product_id')],
-                $request->input()
-            );
-            return ResponseHelper::Out('success',$data,200);
-        }
-        else{
-            return ResponseHelper::Out('fail','Customer profile not exists',200);
-        }
+        // Save or update the review
+        $data = ProductReview::updateOrCreate(
+            ['customer_id' => $profile->id, 'product_id' => $request->input('product_id')],
+            $request->input()
+        );
 
+        // Update the 'star' column in product with the rating from the review
+        Product::where('id', $request->input('product_id'))
+            ->update(['star' => $request->input('rating')]);
+
+        return ResponseHelper::Out('success', $data, 200);
+    } else {
+        return ResponseHelper::Out('fail', 'Customer profile not exists', 200);
     }
+}
+
 
 
 public function CheckWishListStatus($product_id)

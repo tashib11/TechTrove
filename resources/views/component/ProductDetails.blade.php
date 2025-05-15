@@ -63,6 +63,59 @@
                 <hr />
             </div>
         </div>
+
+        <!-- Description, review,add review tabs -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details-tab-pane" type="button" role="tab" aria-controls="details-tab-pane" aria-selected="true">Details</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review-tab-pane" type="button" role="tab" aria-controls="review-tab-pane" aria-selected="false">Reviews</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="review_create-tab" data-bs-toggle="tab" data-bs-target="#review_create-tab-pane" type="button" role="tab" aria-controls="review_create-tab-pane" aria-selected="false">Add Review</button>
+                </li>
+            </ul>
+
+            <div class="tab-content pt-3" id="myTabContent">
+                <!-- Product Full Description -->
+                <div class="tab-pane fade show active" id="details-tab-pane" role="tabpanel" aria-labelledby="details-tab" tabindex="0">
+                    <div id="p_details"></div>
+                </div>
+
+                <!-- Product Reviews -->
+                <div class="tab-pane fade" id="review-tab-pane" role="tabpanel" aria-labelledby="review-tab" tabindex="0">
+                    <ul id="reviewList" class="list-group"></ul>
+                </div>
+
+                <!-- Add Review -->
+                <div class="tab-pane fade" id="review_create-tab-pane" role="tabpanel" aria-labelledby="review_create-tab" tabindex="0">
+                  <div class="mb-3">
+    <label class="form-label">Rating</label>
+    <div id="starRating">
+        <i class="fa fa-star star" data-value="20"></i>
+        <i class="fa fa-star star" data-value="40"></i>
+        <i class="fa fa-star star" data-value="60"></i>
+        <i class="fa fa-star star" data-value="80"></i>
+        <i class="fa fa-star star" data-value="100"></i>
+    </div>
+    <input type="hidden" id="reviewScore" value="">
+</div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Review</label>
+                        <textarea id="reviewTextID" class="form-control" rows="4" placeholder="Write your review..."></textarea>
+                    </div>
+                    <button onclick="AddReview()" class="btn btn-success">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
@@ -116,6 +169,17 @@
         transform: scale(1.05);
         border: 2px solid #007bff;
     }
+#starRating .star {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#starRating .star.hover,
+#starRating .star.selected {
+    color: #f1c40f;
+}
 
 </style>
 
@@ -135,6 +199,34 @@
                 $(this).next().val(+$(this).next().val() - 1);
             }
         });
+
+          $('#starRating .star').on('mouseenter', function () {
+        const value = parseInt($(this).data('value'));
+        highlightStars(value);
+    });
+
+    $('#starRating .star').on('mouseleave', function () {
+        const selectedValue = parseInt($('#reviewScore').val());
+        highlightStars(selectedValue);
+    });
+
+    $('#starRating .star').on('click', function () {
+        const value = parseInt($(this).data('value'));
+        $('#reviewScore').val(value);
+        highlightStars(value);
+    });
+
+    function highlightStars(value) {
+        $('#starRating .star').each(function () {
+            const starVal = parseInt($(this).data('value'));
+            if (starVal <= value) {
+                $(this).addClass('selected');
+            } else {
+                $(this).removeClass('selected');
+            }
+        });
+    }
+    
     });
 
     let searchParams = new URLSearchParams(window.location.search);
