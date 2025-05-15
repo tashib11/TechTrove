@@ -43,9 +43,52 @@ public function store(Request $request)
     }
 
 
-    public function BrandList():JsonResponse
+  public function index()
     {
-        $data= Brand::all();
-        return ResponseHelper::Out('success',$data,200);
+        // This serves the brand list page
+        return view('admin.products.brand-list');
+    }
+
+    public function BrandList(): JsonResponse
+    {
+        $data = Brand::all();
+        return ResponseHelper::Out('success', $data, 200);
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $brand = Brand::find($id);
+
+        if (!$brand) {
+            return response()->json(['message' => 'Brand not found'], 404);
+        }
+
+        $brand->delete();
+        return response()->json(['message' => 'Brand deleted successfully']);
+    }
+
+    public function edit($id)
+    {
+        $brand = Brand::findOrFail($id);
+        return view('admin.products.brand-edit', compact('brand'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'brandName' => 'required|string|max:255',
+        ]);
+
+        $brand = Brand::findOrFail($id);
+        $brand->brandName = $request->brandName;
+
+        if ($request->hasFile('brandFile')) {
+            $path = $request->file('brandFile')->store('brands', 'public');
+            $brand->brandImg = asset('storage/' . $path);
+        }
+
+        $brand->save();
+
+        return response()->json(['message' => 'Brand updated successfully!']);
     }
 }
