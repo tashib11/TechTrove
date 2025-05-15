@@ -79,6 +79,14 @@
                     </a>
                 </li>
 
+
+                <li class="nav-item">
+                    <a href="{{ asset('/admin/product-slider') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>Product-Sliders List</p>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a href="{{ asset('/Dashboard/InvoiceList') }}" class="nav-link">
                         <i class="nav-icon fas fa-shopping-bag"></i>
