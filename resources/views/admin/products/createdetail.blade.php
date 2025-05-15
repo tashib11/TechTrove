@@ -36,23 +36,32 @@
 <section class="content">
     <!-- Default box -->
     <form action="{{ route('product.detail.store') }}" method="POST" name="productForm" id="productForm" enctype="multipart/form-data">
-
+     @csrf
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <div class="row">
-
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="description">Description</label>
-                                    <textarea name="des" id="des" cols="30" rows="10" class="summernote" placeholder="Description"></textarea>
-                                </div>
-                            </div>
+                        <h2 class="h4  mb-3">Product titles</h2>
+                        <div class="mb-3">
+                            <label for="product">Product</label>
+                            <select name="product_id" id="product" class="form-control select2">
+                                <option value="" disabled selected>Select a Product</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->title }}</option>
+                                @endforeach
+                            </select>
+                            <p class="error"> </p>
                         </div>
                     </div>
                 </div>
+
+                  <div class="card mb-3">
+                        <div class="card-body">
+                            <label for="des">Description</label>
+                            <textarea name="des" id="des" class="summernote"></textarea>
+                        </div>
+                    </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
@@ -64,26 +73,26 @@
                             </div>
                         </div>
                            <!-- Image Preview Card -->
-    <div id="imagePreviewCard1" class="card mt-3 d-none">
-        <img id="imagePreview1" class="card-img-top" style="max-height: 200px; object-fit: contain;">
-        <div class="card-body">
-            <div class="form-group">
-    <label>Image Alt Text</label>
-    <input type="text" class="form-control" name="img1_alt" placeholder="Describe the image">
-</div>
-<div class="form-group">
-    <label>Image Width (px)</label>
-    <input type="number" class="form-control" name="img1_width" value="600" readonly>
-</div>
-<div class="form-group">
-    <label>Image Height (px)</label>
-    <input type="number" class="form-control" name="img1_height" value="600" readonly>
-</div>
-
-        </div>
-    </div>
+                         <div id="imagePreviewCard1" class="card mt-3 d-none">
+                           <img id="imagePreview1" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+                          <div class="card-body">
+                          <div class="form-group">
+                          <label>Image Alt Text</label>
+                         <input type="text" class="form-control" name="img1_alt" placeholder="Describe the image">
+                        </div>
+                    <div class="form-group">
+                           <label>Image Width (px)</label>
+                           <input type="number" class="form-control" name="img1_width" value="600" readonly>
                     </div>
-                </div>
+                    <div class="form-group">
+                          <label>Image Height (px)</label>
+                          <input type="number" class="form-control" name="img1_height" value="600" readonly>
+                    </div>
+
+                  </div>
+                         </div>
+                       </div>
+                      </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
@@ -198,41 +207,17 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-            <div class="col-md-4">
 
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="h4  mb-3">Product titles</h2>
-                   <div class="mb-3">
-    <label for="product">Product</label>
-    <select name="product_id" id="product" class="form-control select2">
-        <option value="" disabled selected>Select a Product</option>
-        @foreach ($products as $product)
-            <option value="{{ $product->id }}">{{ $product->title }}</option>
-        @endforeach
-    </select>
-    <p class="error"> </p>
-</div>
-
-
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-
-        <div class="pb-5 pt-3">
+              <div class="pb-5 pt-3">
             <button type="submit" class="btn btn-primary">Create</button>
             <a href="{{ asset('/Dashboard/DetailsCreate') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
-    </div>
+      </div>
+     </div>
+
+
 </form>
-    <!-- /.card -->
 </section>
 @endsection
 
@@ -241,6 +226,13 @@
 @section('script')
 <script>
       $(document).ready(function () {
+
+        $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+// search bar
     $('#product').select2({
         placeholder: 'Select a Product',
         allowClear: true,
@@ -248,6 +240,8 @@
         dropdownCssClass: 'custom-select2-dropdown'
     });
 });
+
+    $('.summernote').summernote();
 
 setupImagePreview('img1', 'imagePreviewCard1', 'imagePreview1');
 setupImagePreview('img2', 'imagePreviewCard2', 'imagePreview2');

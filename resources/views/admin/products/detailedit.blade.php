@@ -21,6 +21,27 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8">
+                    <!-- Product Name -->
+                         <div class="card mb-3">
+                    <div class="card-body">
+                        <h2 class="h4  mb-3">Product Titles</h2>
+                        <div class="mb-3">
+                            <label for="product">Product</label>
+                            <select name="product_id" id="product" class="form-control">
+                                <option value="">Select a Product</option>
+
+                                @if ($pods->isnotEmpty())
+                                      @foreach ($pods as $product )
+
+                                      <option  {{ ($products->product_id== $product->id) ? 'selected' : '' }}  value="{{  $product->id}}">{{  $product->title}}</option>
+                                      @endforeach
+                                @endif
+
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
                     <!-- Description -->
                     <div class="card mb-3">
                         <div class="card-body">
@@ -46,15 +67,7 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="alt{{ $i }}">Image Alt Text</label>
-                                            <input type="text" class="form-control" name="alt{{ $i }}" placeholder="Describe the image">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="width{{ $i }}">Set Width (px)</label>
-                                            <input type="number" class="form-control" name="width{{ $i }}" placeholder="e.g., 200">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="height{{ $i }}">Set Height (px)</label>
-                                            <input type="number" class="form-control" name="height{{ $i }}" placeholder="e.g., 300">
+                                            <input type="text" class="form-control" name="alt{{ $i }}"  value="{{ $products->{'img'.$i.'_alt'} }}" placeholder="Describe the image">
                                         </div>
                                     </div>
                                 </div>
@@ -75,31 +88,7 @@
                     </div>
                 </div>
 
-                <!-- Sidebar -->
 
-            <div class="col-md-4">
-
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="h4  mb-3">Product category</h2>
-                        <div class="mb-3">
-                            <label for="product">Product</label>
-                            <select name="product_id" id="product" class="form-control">
-                                <option value="">Select a Product</option>
-
-                                @if ($pods->isnotEmpty())
-                                      @foreach ($pods as $product )
-
-                                      <option  {{ ($products->product_id== $product->id) ? 'selected' : '' }}  value="{{  $product->id}}">{{  $product->title}}</option>
-                                      @endforeach
-                                @endif
-
-                            </select>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="pb-5 pt-3">
                 <button type="submit" class="btn btn-success">Update</button>
@@ -113,12 +102,19 @@
 @section('script')
 <script>
 $(document).ready(function () {
+
+        $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+//search bar
     $('#product').select2({
         placeholder: 'Select a Product',
         allowClear: true,
         width: '100%'
     });
-
+// for textarea of description
     $('.summernote').summernote();
 
     // Set up all previews
@@ -139,7 +135,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function(response){
                 if (response.status == true || response.status === "true") {
-                    window.location.href = "/Dashboard/ProductCreate";
+                    window.location.href = "/Dashboard/DetailsSelect";
                 } else {
                     alert("Update failed.");
                 }

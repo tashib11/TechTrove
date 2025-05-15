@@ -34,8 +34,9 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-<div class="col-md-4">
-
+   <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
     <div class="card">
         <div class="card-body">
             <h2 class="h4  mb-3">Products</h2>
@@ -57,12 +58,13 @@
         </div>
     </div>
 
-
-</div>
 <div class="pb-5 pt-3">
    <a href="#" id="updateBtn" class="btn btn-primary">Update</a>
     <a href="{{ route('product.detail.select') }}" class="btn btn-outline-dark ml-3">Cancel</a>
 </div>
+</div>
+        </div>
+    </div>
 @endsection
 
 
