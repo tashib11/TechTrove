@@ -126,21 +126,24 @@ Route::get("/Dashboard/DetailsSelect",[ProductController::class,'detailSelect'])
 Route::get("/Dashboard/DetailsEdit/{product}",[ProductController::class,'detailEdit'])->name('product.detail.edit');
 Route::put("/Dashboard/DetailsUpdate/{product}",[ProductController::class,'detailUpdate'])->name('product.detail.update');
 
+
 Route::get('/Dashboard/brand', [BrandController::class, 'create']); // Show form
 Route::post('/Dashboard/brandStore', [BrandController::class, 'store']);
 // Serve the Blade view
 Route::get("/Dashboard/BrandList", [BrandController::class, 'index']);
-
-// API: Get brand data (for Axios)
 Route::get("/Dashboard/BrandListData", [BrandController::class, 'BrandList']);
-
-// Edit + Update + Delete
 Route::get("/Dashboard/BrandEdit/{brand}", [BrandController::class, 'edit']);
 Route::post("/Dashboard/BrandUpdate/{brand}", [BrandController::class, 'update']);
 Route::get("/Dashboard/BrandDelete/{brand}", [BrandController::class, 'destroy']);
 
+
 Route::get("/Dashboard/category",[CategoryController::class,'create']);
 Route::post("/Dashboard/category",[CategoryController::class,'store']);
+Route::get("/Dashboard/CategoryList", [CategoryController::class, 'index']);
+Route::get("/Dashboard/CategoryListData", [CategoryController::class, 'CategoryList']);
+Route::get("/Dashboard/CategoryEdit/{category}", [CategoryController::class, 'edit']);
+Route::post("/Dashboard/CategoryUpdate/{category}", [CategoryController::class, 'update']);
+Route::get("/Dashboard/CategoryDelete/{category}", [CategoryController::class, 'destroy']);
 
 Route::get("/Dashboard/InvoiceList",[InvoiceController::class,'index'])->name('invoice.list');
 Route::post('/Dashboard/InvoiceList/UpdateStatus', [InvoiceController::class, 'updateStatus']);

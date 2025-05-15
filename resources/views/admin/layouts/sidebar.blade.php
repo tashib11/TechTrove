@@ -29,6 +29,12 @@
                         <p>Category</p>
                     </a>
                 </li>
+                 <li class="nav-item">
+                    <a href="{{ asset('/Dashboard/CategoryList') }}" class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Category List</p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ asset('/Dashboard/brand') }}" class="nav-link">
