@@ -18,7 +18,7 @@
 <section class="content">
     <!-- Default box -->
     <form action="{{ route("product.update", $product->id) }}" method="POST" name="productForm" id="productForm">
-
+    @csrf
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
@@ -33,25 +33,39 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="description">Description</label>
-                                    <textarea name="short_des" id="description" cols="30" rows="10" class="summernote" placeholder="Description" > {{ $product->short_des }}</textarea>
+                                 <!-- Description -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <label for="des">Description</label>
+                            <textarea name="short_des" id="short_des" class="summernote">{{ $product->short_des }}</textarea>
+                        </div>
+                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    @php
+                            $imgUrl = $product->image;
+                        @endphp
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <label for="image">Update Image</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                                <p class="error"></p>
+
+                                <div id="imagePreviewCard" class="card mt-3 {{ $imgUrl ? '' : 'd-none' }}">
+                                    <img id="imagePreview" src="{{ $imgUrl }}" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+                                    {{-- <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="alt{{ $i }}">Image Alt Text</label>
+                                            <input type="text" class="form-control" name="alt"  value="{{ $product->img_alt }}" placeholder="Describe the image">
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="image">Image </label>
-                                <input type="text" name="image" id="image" class="form-control" placeholder="image link"  value="{{ $product->image }}">
-                                <p class="error"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <h2 class="h4 mb-3">Pricing</h2>
@@ -89,17 +103,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="stock">Stock </label>
-                                    <input type="boolean" name="stock" id="stock" class="form-control" placeholder="stock(1/0)"  value="{{ $product->stock }}">
+                                    <input type="text" name="stock" id="stock" class="form-control" placeholder="stock(1/0)"  value="{{ $product->stock }}">
                                     <p class="error" ></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="star">Star</label>
-                                    <input type="float" name="star" id="star" class="form-control" placeholder="Star"  value="{{ $product->star }}">
-                                    <p class="error"> </p>
-                                </div>
-                            </div>
+
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Product remark</h2>
                                 <div class="mb-3">
@@ -107,9 +115,7 @@
                                         <option {{ ($product->remark=='popular') ? 'selected' : '' }} value="popular">popular</option>
                                         <option {{ ($product->remark=='new') ? 'selected' : '' }} value="new">new</option>
                                         <option {{ ($product->remark=='top') ? 'selected' : '' }} value="top">top</option>
-                                        <option {{ ($product->remark=='specail') ? 'selected' : '' }} value="specail">specail</option>
                                         <option {{ ($product->remark=='trending') ? 'selected' : '' }} value="trending">trending</option>
-                                        <option {{ ($product->remark=='regular') ? 'selected' : '' }} value="regular">regular</option>
                                     </select>
                                 </div>
                             </div>
@@ -173,45 +179,60 @@
 
 
 
-@section('customJs')
+@section('script')
 <script>
+
+    // CSRF Token Setup for Ajax
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    //desc area
+    $('.summernote').summernote()
+setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
 
 $("#productForm").submit(function(event){
     event.preventDefault();
-       var formArray = $(this).serializeArray();
+      var formData = new FormData(this);
     $.ajax({
         url:'{{ route("product.update", $product->id) }}',
-        type:'post',
-        data:formArray,
+        type:'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
         dataType: 'json',
         success:function(response){
-            if(response['status']== true){
-            console.log(response);
-            }else{
+           if (response.status == true || response.status === "true") {
+    window.location.href = "/Dashboard/ProductList";
+}
+else {
+    if (response.errors && response.errors.general) {
+        alert(response.errors.general);
+    } else {
+        alert("Product creation failed. Please check your inputs.");
+    }
+}
 
-                var error = response['errors'];
+},
+      error:function(xhr){
+    let res = xhr.responseJSON;
+    if (res && res.errors) {
+        $(".error").removeClass('is-invalid').html("");
+        $("input, select").removeClass('is-invalid');
+        $.each(res.errors, function(key, value){
+            $('#' + key).addClass('is-invalid').siblings('p')
+                .addClass('invalid-feedback').html(value);
+        });
+    } else {
+        alert("Fill up all fields. Please try again.");
+    }
+}
 
-            //  if(error['title']){
-            //         $('#title').addClass('is-invalid').siblings('p').
-            //         addClass('invalid-feedback').html(error['title']);
-            //     }else{
-            //         $('#title').removeClass('is-invalid').siblings('p').
-            //         removeClass('invalid-feedback').html("");;
-            //     }
-            $(".error").removeClass('is-invalid').html("");
-            $("input[type=text],select").removeClass('is-invalid');
-            $.each(error,function(key,value){
-                $('#'+key).addClass('is-invalid').siblings('p').
-                addClass('invalid-feedback').html(value);
-            });
-
-            }
-        },
-        error:function(){
-            console.log("something went wrong");
-        }
     });
 });
+
 
 
 </script>

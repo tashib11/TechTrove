@@ -18,7 +18,7 @@
 <section class="content">
     <!-- Default box -->
     <form action="{{ route('product.store') }}" method="POST" name="productForm" id="productForm" enctype="multipart/form-data">
-
+    @csrf
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
@@ -33,10 +33,12 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="description">Description</label>
-                                    <textarea name="short_des" id="description" cols="30" rows="10" class="summernote" placeholder="Description"></textarea>
-                                </div>
+                                    <div class="card mb-3">
+                        <div class="card-body">
+                            <label for="des">Description</label>
+                            <textarea name="short_des" id="short_des" class="summernote"></textarea>
+                        </div>
+                    </div>
                             </div>
                         </div>
                     </div>
@@ -191,6 +193,16 @@
 
 @section('script')
 <script>
+        // CSRF Token Setup for Ajax
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+//desc area
+    $('.summernote').summernote()
+
 setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
 $("#productForm").submit(function(event){
     event.preventDefault();
