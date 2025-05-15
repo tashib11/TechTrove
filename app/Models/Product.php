@@ -38,5 +38,9 @@ class Product extends Model
 {
     return $this->hasOne(ProductDetails::class);
 }
+public function slider()
+{
+    return $this->hasOne(ProductSlider::class);
+}
 
 }

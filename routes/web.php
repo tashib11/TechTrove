@@ -12,6 +12,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenAuthenticate;
+use App\Http\Controllers\ProductSliderController;
+
 use App\Models\Category;
 
 // Home Page
@@ -156,6 +158,12 @@ Route::get("/Dashboard/UserList",[UserController::class,'index'])->name('user.li
 
 
 
+
+Route::get('/admin/product-slider', [ProductSliderController::class, 'index']);
+Route::get('/admin/product-slider/all', [ProductSliderController::class, 'all']);
+Route::post('/admin/product-slider/store', [ProductSliderController::class, 'store']);
+Route::post('/admin/product-slider/update/{id}', [ProductSliderController::class, 'update']);
+Route::delete('/admin/product-slider/delete/{id}', [ProductSliderController::class, 'destroy']);
 
 
 

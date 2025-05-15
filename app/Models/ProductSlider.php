@@ -9,5 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductSlider extends Model
 {
+ protected $fillable = ['title', 'short_des', 'price', 'image', 'product_id'];
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
