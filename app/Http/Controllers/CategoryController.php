@@ -23,10 +23,10 @@ public function store(Request $request)
         'catFile' => 'required|image|max:2048',
     ]);
 
-    // Store image in storage/app/public/brands
+    // Store image in storage/app/public/category
     $path = $request->file('catFile')->store('categories', 'public');
 
-    // Get public URL: e.g., https://yourdomain.com/storage/brands/filename.jpg
+    // Get public URL: e.g., https://yourdomain.com/storage/category/filename.jpg
     $imageUrl = asset('storage/' . $path);
 
     Category::create([
@@ -54,11 +54,56 @@ public function store(Request $request)
     return view('pages.product-by-category', compact('products', 'categories', 'brands', 'categoryId'));
 }
 
-    public function CategoryList():JsonResponse
+
+
+
+  public function index()
     {
-        $data= Category::all();
-        return  ResponseHelper::Out('success',$data,200);
+        // This serves the category list page
+        return view('admin.products.category-list');
     }
 
+    public function CategoryList(): JsonResponse
+    {
+        $data = Category::all();
+        return ResponseHelper::Out('success', $data, 200);
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        $category->delete();
+        return response()->json(['message' => 'Category deleted successfully']);
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.products.category-edit', compact('category'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'categoryName' => 'required|string|max:255',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->categoryName = $request->categoryName;
+
+        if ($request->hasFile('categoryFile')) {
+            $path = $request->file('categoryFile')->store('categories', 'public');
+            $category->categoryImg = asset('storage/' . $path);
+        }
+
+        $category->save();
+
+        return response()->json(['message' => 'Category updated successfully!']);
+    }
 
 }
