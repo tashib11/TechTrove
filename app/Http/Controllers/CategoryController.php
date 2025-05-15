@@ -20,7 +20,7 @@ public function store(Request $request)
 {
     $request->validate([
         'catName' => 'required|string|max:255',
-        'catFile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'catFile' => 'required|image|max:2048',
     ]);
 
     // Store image in storage/app/public/brands

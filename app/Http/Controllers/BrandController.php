@@ -17,7 +17,7 @@ public function store(Request $request)
 {
     $request->validate([
         'brandName' => 'required|string|max:255',
-        'brandFile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'brandFile' => 'required|image|max:2048',
     ]);
 
     // Store image in storage/app/public/brands
