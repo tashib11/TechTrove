@@ -144,14 +144,16 @@
         let res = await axios.get("/ProductDetailsById/" + id);
         let Details = await res.data['data'];
 
-        // Update product images
-        $('#product_img1')
-            .attr('src', Details[0]['img1'])
-            .attr('data-zoom-image', Details[0]['img1']);
-        $('#img1').attr('src', Details[0]['img1']);
-        $('#img2').attr('src', Details[0]['img2']);
-        $('#img3').attr('src', Details[0]['img3']);
-        $('#img4').attr('src', Details[0]['img4']);
+// Update product images with alt text
+$('#product_img1')
+    .attr('src', Details[0]['img1'])
+    .attr('alt', Details[0]['img1_alt'])
+    .attr('data-zoom-image', Details[0]['img1']);
+
+$('#img1').attr('src', Details[0]['img1']).attr('alt', Details[0]['img1_alt']);
+$('#img2').attr('src', Details[0]['img2']).attr('alt', Details[0]['img2_alt']);
+$('#img3').attr('src', Details[0]['img3']).attr('alt', Details[0]['img3_alt']);
+$('#img4').attr('src', Details[0]['img4']).attr('alt', Details[0]['img4_alt']);
 
         // Product title and price
         $('#p_title').text(Details[0]['product']['title']);
@@ -207,7 +209,9 @@ function changeMainImage(src) {
     $('.zoomContainer').remove();
 
     // Replace image element entirely
-    $container.html(`<img id="product_img1" class="w-100 zoom-image" src="${src}" data-zoom-image="${src}" />`);
+let altText = $('#img1[src="' + src + '"]').attr('alt') || '';
+$container.html(`<img id="product_img1" class="w-100 zoom-image" src="${src}" alt="${altText}" data-zoom-image="${src}" />`);
+
 
     // Reinitialize zoom after image loads
     const newImage = document.getElementById('product_img1');
