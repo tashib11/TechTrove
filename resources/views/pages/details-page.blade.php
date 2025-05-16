@@ -2,7 +2,7 @@
 @section('content')
     @include('component.MenuBar')
     @include('component.ProductDetails')
-    @include('component.ProductSpecification')
+    {{-- @include('component.ProductSpecification') --}}
     @include('component.TopBrands')
     @include('component.Footer')
     <script>

@@ -1,182 +1,100 @@
-<div class="container-fluid">
+<div class="container mt-4">
+    <div class="card p-4 shadow rounded">
+        <h4>User Profile</h4>
 
-    <div class="row">
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Name</label>
-            <input type="text" id="cus_name" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Address</label>
-            <input type="text" id="cus_add" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer City</label>
-            <input type="text" id="cus_city" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Division</label>
-            <input type="text" id="cus_state" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Post Code</label>
-            <input type="text" id="cus_postcode" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Country</label>
-            <input type="text" id="cus_country" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Customer Phone</label>
-            <input type="text" id="cus_phone" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Alter Phone</label>
-            <input type="text" id="cus_fax" class="form-control form-control-sm"/>
-        </div>
-
+        <form id="profileForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="cus_name" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Phone</label>
+                    <input type="text" class="form-control" name="cus_phone" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="cus_add" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>City</label>
+                    <input type="text" class="form-control" name="cus_city" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>State</label>
+                    <input type="text" class="form-control" name="cus_state" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Country</label>
+                    <input type="text" class="form-control" name="cus_country" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Save Profile</button>
+        </form>
     </div>
-
-    <hr/>
-
-    <div class="row">
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Name</label>
-            <input type="text" id="ship_name" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Address</label>
-            <input type="text" id="ship_add" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping City</label>
-            <input type="text" id="ship_city" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Division</label>
-            <input type="text" id="ship_state" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Post Code</label>
-            <input type="text" id="ship_postcode" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Country</label>
-            <input type="text" id="ship_country" class="form-control form-control-sm"/>
-        </div>
-
-        <div class="col-md-3 p-2">
-            <label class="form-label">Shipping Phone</label>
-            <input type="text" id="ship_phone" class="form-control form-control-sm"/>
-        </div>
-
-    </div>
-
-    <hr/>
-
-
-
-    <div class="row">
-        <div class="col-md-3">
-            <button onclick="ProfileCreate()" class="btn btn-danger">Save Change</button>
-        </div>
-    </div>
-
-
 </div>
 
-
 <script>
+const userId = localStorage.getItem('id'); // Adjust as needed
 
+async function ProfileDetails() {
+    try {
+        let res = await axios.get('/ReadProfile', {
+            headers: {
+                'id': userId
+            }
+        });
 
-    async  function ProfileCreate(){
-
-       let cus_name= document.getElementById('cus_name').value;
-       let cus_add= document.getElementById('cus_add').value;
-       let cus_city= document.getElementById('cus_city').value;
-       let cus_state= document.getElementById('cus_state').value;
-       let cus_postcode= document.getElementById('cus_postcode').value;
-       let cus_phone= document.getElementById('cus_phone').value;
-       let cus_country= document.getElementById('cus_country').value;
-       let cus_fax= document.getElementById('cus_fax').value;
-       let ship_name= document.getElementById('ship_name').value;
-       let ship_add= document.getElementById('ship_add').value;
-       let ship_city= document.getElementById('ship_city').value;
-       let ship_state= document.getElementById('ship_state').value;
-       let ship_postcode= document.getElementById('ship_postcode').value;
-       let ship_country= document.getElementById('ship_country').value;
-       let ship_phone= document.getElementById('ship_phone').value;
-
-       let postBody={
-           "cus_name": cus_name,
-           "cus_add": cus_add,
-           "cus_city": cus_city,
-           "cus_state": cus_state,
-           "cus_postcode": cus_postcode,
-           "cus_country": cus_country,
-           "cus_phone": cus_phone,
-           "cus_fax": cus_fax,
-           "ship_name": ship_name,
-           "ship_add": ship_add,
-           "ship_city":ship_city,
-           "ship_state": ship_state,
-           "ship_postcode": ship_postcode,
-           "ship_country": ship_country,
-           "ship_phone": ship_phone
-       }
-
-
-        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res = await axios.post("/CreateProfile",postBody);
-        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-        if(res.data['msg']==="success"){
-            alert("Request Successful")
+        if (res.data && res.data['data']) {
+            const profile = res.data['data'];
+            Object.keys(profile).forEach(key => {
+                if (document.querySelector(`[name="${key}"]`)) {
+                    document.querySelector(`[name="${key}"]`).value = profile[key];
+                }
+            });
         }
-        else{
-            alert("Request Fail")
-        }
-
+    } catch (err) {
+        console.warn("Profile not found or error occurred");
     }
+}
 
-      async function ProfileDetails() {
+document.getElementById("profileForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-          let res = await axios.get("/ReadProfile");
-          if (res.data['data'] !== null) {
+    const formData = new FormData(this);
+    let data = {};
+    formData.forEach((value, key) => data[key] = value);
 
-              document.getElementById('cus_name').value = res.data['data']['cus_name']
-              document.getElementById('cus_add').value = res.data['data']['cus_add']
-              document.getElementById('cus_city').value = res.data['data']['cus_city']
-              document.getElementById('cus_state').value = res.data['data']['cus_state']
-              document.getElementById('cus_postcode').value = res.data['data']['cus_postcode']
-              document.getElementById('cus_phone').value = res.data['data']['cus_phone']
-              document.getElementById('cus_country').value = res.data['data']['cus_country']
-              document.getElementById('cus_fax').value = res.data['data']['cus_fax']
-              document.getElementById('ship_name').value = res.data['data']['ship_name']
-              document.getElementById('ship_add').value = res.data['data']['ship_add']
-              document.getElementById('ship_city').value = res.data['data']['ship_city']
-              document.getElementById('ship_state').value = res.data['data']['ship_state']
-              document.getElementById('ship_postcode').value = res.data['data']['ship_postcode']
-              document.getElementById('ship_country').value = res.data['data']['ship_country']
-              document.getElementById('ship_phone').value = res.data['data']['ship_phone']
+    try {
+        let res = await axios.post('/CreateProfile', data, {
+            headers: {
+                'id': userId
+            }
+        });
 
+        Swal.fire({
+            icon: 'success',
+            title: 'Profile Saved',
+            text: res.data['msg'],
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            let lastLocation = sessionStorage.getItem("last_location");
+            if (lastLocation) {
+                sessionStorage.removeItem("last_location");
+                window.location.href = lastLocation;
+            } else {
+                window.location.href = "/"; // or dashboard/home page
+            }
+        });
 
-          }
-
-
-      }
-
-
+    }  catch (err) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error saving profile'
+        });
+    }
+});
 
 </script>

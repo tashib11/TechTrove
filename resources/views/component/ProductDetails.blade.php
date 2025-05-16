@@ -169,6 +169,7 @@
         transform: scale(1.05);
         border: 2px solid #007bff;
     }
+
 #starRating .star {
     font-size: 24px;
     color: #ccc;
@@ -226,7 +227,7 @@
             }
         });
     }
-    
+
     });
 
     let searchParams = new URLSearchParams(window.location.search);
@@ -301,7 +302,8 @@ function changeMainImage(src) {
     $('.zoomContainer').remove();
 
     // Replace image element entirely
-let altText = $('#img1[src="' + src + '"]').attr('alt') || '';
+let altText = $(`.thumb-img[src="${src}"]`).attr('alt') || '';
+
 $container.html(`<img id="product_img1" class="w-100 zoom-image" src="${src}" alt="${altText}" data-zoom-image="${src}" />`);
 
 
@@ -410,7 +412,6 @@ async function AddToWishList() {
             }
         }
     } catch (e) {
-        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
         if (e.response?.status === 401) {
             sessionStorage.setItem("last_location", window.location.href);
             window.location.href = "/login";
@@ -438,7 +439,19 @@ async function AddToWishList() {
     });
 }
 
-    async function AddReview() {
+
+
+async function AddReview() {
+      try {
+        let profileCheck = await axios.get('/CheckProfile');
+        let hasProfile = profileCheck.data.data.hasProfile;
+
+        if (!hasProfile) {
+            // showToast('warning', 'You must create a profile before adding a review.');
+            sessionStorage.setItem("last_location", window.location.href);
+            window.location.href = "/profile";
+            return;
+        }
         let reviewText = $('#reviewTextID').val();
         let reviewScore = $('#reviewScore').val();
        if (!reviewScore) return showToast("Rating score is required!", "error");
@@ -453,7 +466,14 @@ if (!reviewText) return showToast("Review description is required!", "error");
         });
         $(".preloader").delay(90).fadeOut(100).addClass('loaded');
         await productReview();
+    } catch (err) {
+        if (err.response?.status === 401) {
+            sessionStorage.setItem("last_location", window.location.href);
+            window.location.href = "/login";
+        }
     }
+}
+
 </script>
 
 
