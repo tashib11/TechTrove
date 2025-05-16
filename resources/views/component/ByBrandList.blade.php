@@ -110,29 +110,7 @@
    }
 }
 
-    .product {
-        border: 1px solid #eaeaea;
-        border-radius: 8px;
-        padding: 10px;
-        background: #fff;
-        transition: box-shadow 0.3s ease;
-    }
 
-    .product:hover {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .product_img img {
-        max-width: 100%;
-        height: auto;
-        object-fit: cover;
-        border-radius: 4px;
-    }
-
-    .product_title {
-        font-size: 0.9rem;
-        margin-top: 10px;
-    }
 
     @media (max-width: 576px) {
         .breadcrumb_section h1 {
@@ -143,6 +121,117 @@
             font-size: 0.9rem;
         }
     }
+
+/* Product Card Layout */
+.product {
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.product:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product_img {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.product_img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Product content section */
+.product_info {
+  padding: 10px 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Product title */
+.product_title {
+  font-size: 1rem; /* Default size */
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 2.6em; /* enough space for 2 lines */
+  overflow: hidden;
+}
+
+/* Price styling */
+.product_price {
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.discount_price {
+  color: #007bff;
+  font-weight: bold;
+}
+
+del {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+
+
+/* Stock status */
+.stock-status {
+  font-size: 0.8rem;
+  color: #28a745;
+}
+
+.stock-status.out {
+  color: #dc3545;
+}
+@media (max-width: 576px) {
+
+
+  .rating_wrap {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+   .product_img {
+    padding-top: 100%; /* Make image area much taller */
+  }
+
+  .product_info {
+    padding: 8px 10px;
+  }
+
+  .product_title {
+    font-size: 1.1rem;
+    min-height: 2.1em;
+  }
+
+  .product_price {
+    font-size: 0.95rem;
+  }
+
+  .stock-status {
+    font-size: 0.75rem;
+  }
+}
+
 </style>
 
 
@@ -177,35 +266,43 @@ $("#BrandName").text(brandRes.data.data.brandName); // ✅ Correct
         return;
     }
 
-    products.forEach((item) => {
-        let EachItem = `
-        <div class="col-lg-3 col-md-4 col-6">
-            <div class="product">
-                <div class="product_img">
-                    <a href="#">
-                        <img src="${item['image']}" alt="product_img9">
-                    </a>
-                    <div class="product_action_box">
-                        <ul class="list_none pr_action_btn">
-                            <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="product_info">
-                    <h6 class="product_title"><a href="/details?id=${item['id']}">${item['title']}</a></h6>
-                    <div class="product_price">
-                        <span class="price">$ ${item['price']}</span>
-                    </div>
-                    <div class="rating_wrap">
-                        <div class="rating">
-                            <div class="product_rate" style="width:${item['star']}%"></div>
-                        </div>
-                    </div>
+   products.forEach((item) => {
+    let stock = parseInt(item['stock'] || '0');
+    let stockStatus = stock > 0
+        ? `<span class="text-success small">In Stock (${stock} available)</span>`
+        : `<span class="text-danger small">Out of Stock</span>`;
+
+    let EachItem = `
+ <div class="col-lg-3 col-md-4 col-12">
+        <div class="product">
+            <div class="product_img">
+                <a href="/details?id=${item['id']}">
+                    <img src="${item['image']}" alt="product_img">
+                </a>
+                <div class="product_action_box">
+                    <ul class="list_none pr_action_btn">
+                        <li><a href="/details?id=${item['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                    </ul>
                 </div>
             </div>
-        </div>`;
-        $("#byBrandList").append(EachItem);
-    });
+            <div class="product_info">
+                <h6 class="product_title"><a href="/details?id=${item['id']}">${item['title']}</a></h6>
+                <div class="product_price">
+                    <span class="price">$ ${item['price']}</span>
+                </div>
+                <div class="rating_wrap mb-1">
+                    <div class="rating">
+                        <div class="product_rate" style="width:${item['star']}%"></div>
+                    </div>
+                </div>
+                <div class="stock_status">${stockStatus}</div>
+            </div>
+        </div>
+    </div>`;
+
+    $("#byBrandList").append(EachItem);
+});
+
 }
 
 

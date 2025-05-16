@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Helper\ResponseHelper;
 use App\Helper\SSLCommerz;
 use App\Models\Invoice;
+use App\Models\Product;
 use App\Models\InvoiceProduct;
 use App\Models\ProductCart;
 use Exception;
@@ -71,8 +72,17 @@ class InvoiceController extends Controller
                 'color' => $item->color,
                 'size' => $item->size,
             ]);
-        }
 
+
+           // Update product stock
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $currentStock = (int) $product->stock;
+                $newStock = max($currentStock - $item->qty, 0); // prevent negative
+                $product->stock = (string) $newStock;
+                $product->save();
+            }
+        }
         ProductCart::where('user_id', $user_id)->delete();
 
         DB::commit();
