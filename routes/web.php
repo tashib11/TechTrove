@@ -112,11 +112,19 @@ Route::post("/PaymentFail",[InvoiceController::class,'PaymentFail']);
 //dashboard
 
 Route::get("/Dashboard",[DashboardController::class,'dashboardPage']);
+Route::get("/admin/dashboard-stats",[DashboardController::class,'statistics']);
+
+Route::get("/Dashboard/Piechart",[DashboardController::class,'showChart']);
+Route::get('/admin/weekly-stats', [DashboardController::class, 'weeklyStats']);
+Route::get('/dashboard/stats/invoices-by-date/{date}', [DashboardController::class, 'getInvoicesByDate']);
+Route::post('/admin/invoices/update-order-status', [DashboardController::class, 'updateOrderStatus']);
+Route::post('/admin/invoices/update-payment-status', [DashboardController::class, 'updatePaymentStatus']);
+
+
 Route::get("/Dashboard/ProductCreate",[ProductController::class,'create'])->name('product.create');
 Route::post("/ProductStore",[ProductController::class,'store'])->name('product.store');
 Route::get("/Dashboard/DetailsCreate",[ProductController::class,'detailCreate'])->name('product.detail.create');
 Route::post("/ProductDetailStore",[ProductController::class,'detailstore'])->name('product.detail.store');
-Route::get("/Dashboard/Piechart",[InvoiceController::class,'showPieChart'])->name('product.piechart');
 
 Route::get("/Dashboard/ProductList",[ProductController::class,'index'])->name('product.list');
 
