@@ -35,8 +35,9 @@
             <thead class="table-dark">
                 <tr>
                     <th>Order ID</th>
-                    <th>Total (৳)</th>
-                    <th>Customer Email</th>
+                    <th>Total (Tk)</th>
+                    <th>User Email</th>
+                     <th>Customer Phone</th>
                 </tr>
             </thead>
             <tbody id="recent-orders"></tbody>
@@ -100,8 +101,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     recentOrdersTbody.innerHTML += `
                         <tr>
                             <td>${order.tran_id}</td>
-                            <td>৳${order.total}</td>
+                            <td>Tk${order.total}</td>
                             <td>${order.user?.email || 'Guest'}</td>
+                              <td>${order.shipping_phone || 'N/A'}</td>
                         </tr>`;
                 });
             })
