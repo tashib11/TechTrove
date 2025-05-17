@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="cart_btn">
-                        <button onclick="AddToCart()" class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
+                        <a onclick="AddToCart()" class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</a>
                         <a class="add_wishlist" onclick="AddToWishList()" href="#"> <i id="wishIcon" class="icon-heart"></i></a>
                     </div>
                 </div>
@@ -117,9 +117,45 @@
 </div>
 
     </div>
-    <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+   <div id="toast-container" style="position: fixed; top: 20px; left: 20px; z-index: 9999;"></div>
+
 
 </div>
+
+<style>
+#toast-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    max-width: 300px;
+}
+
+.toast-message {
+    padding: 10px 16px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Toast types */
+.toast-message.success {
+    background-color: #28a745;
+}
+
+.toast-message.error {
+    background-color: #dc3545;
+}
+
+/* Fade out animation */
+.toast-message.fade-out {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+</style>
 
 <style>
     .price {
@@ -181,6 +217,7 @@
 #starRating .star.selected {
     color: #f1c40f;
 }
+
 
 </style>
 
@@ -431,22 +468,22 @@ async function AddToWishList() {
 }
 
 
-  function showToast(message, type = "success") {
-    let bgClass = type === 'success' ? 'bg-success text-white' : 'bg-danger text-white';
-    let toastHTML = `
-        <div class="toast ${bgClass}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
-            <div class="toast-header ${bgClass}">
-                <strong class="me-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
-                <small class="text-white-50">Just now</small>
-                <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">${message}</div>
-        </div>`;
-    $('#toast-container').append(toastHTML);
-    $('.toast').toast('show').on('hidden.bs.toast', function () {
-        $(this).remove();
-    });
+ function showToast(message, type = "success") {
+    const toastContainer = document.getElementById("toast-container");
+
+    const toast = document.createElement("div");
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = message;
+
+    toastContainer.appendChild(toast);
+
+    // Automatically remove after 2 seconds
+    setTimeout(() => {
+        toast.classList.add("fade-out");
+        toast.addEventListener('transitionend', () => toast.remove());
+    }, 2000);
 }
+
 
 
 
