@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Model
 {
-    protected $fillable = ['email','otp'];
+    protected $fillable = ['email','otp','role'];
 
     public function profile(): HasOne
     {
