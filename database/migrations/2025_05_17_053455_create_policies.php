@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('policies', function (Blueprint $table) {
-            $table->id();
+             $table->id();
             $table->enum('type',['about','refund','terms','how to buy','contact','complain']);
             $table->longText('des');
+            $table->timestamps();
+
         });
     }
 

@@ -174,4 +174,7 @@ Route::post('/admin/product-slider/update/{id}', [ProductSliderController::class
 Route::delete('/admin/product-slider/delete/{id}', [ProductSliderController::class, 'destroy']);
 
 
+Route::get('/admin/policies', [PolicyController::class, 'index']);
+Route::post('/admin/policies', [PolicyController::class, 'storeOrUpdate']);
+Route::get('/admin/policies/{type}', [PolicyController::class, 'getPolicy']);
 

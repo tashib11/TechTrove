@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Policy extends Model
 {
+      use HasFactory; 
+      protected $fillable = [
+       'type',
+         'des',
+    ];
 
 }
