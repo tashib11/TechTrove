@@ -6,7 +6,7 @@
     @include('component.Footer')
     <script>
         (async () => {
-            await Category();
+            // await Category();
             await ByBrand();
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
             await TopBrands();
