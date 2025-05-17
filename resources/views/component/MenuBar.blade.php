@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <div class="text-center text-md-end">
                         <ul class="header_list">
-                            <li><a href="/policy?type=about">About</a></li>
+                            <li><a href="/policy?type=about">About Us</a></li>
 
                             @if ($token !== null && $user !== null)
                                 <li><a href="{{ url('/profile') }}"> <i class="linearicons-user"></i> Account</a></li>

@@ -17,4 +17,31 @@ class PolicyController extends Controller
     function PolicyByType(Request $request){
       return Policy::where('type','=',$request->type)->first();
     }
+
+      public function index()
+    {
+        return view('admin.policies');
+    }
+
+    public function getPolicy($type)
+    {
+        $policy = Policy::where('type', $type)->first();
+        return response()->json($policy);
+    }
+
+    public function storeOrUpdate(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:about,refund,terms,how to buy,contact,complain',
+            'des' => 'required',
+        ]);
+
+        $policy = Policy::updateOrCreate(
+            ['type' => $request->type],
+            ['des' => $request->des]
+        );
+
+        return response()->json(['status' => 'success', 'message' => 'Policy saved successfully.']);
+    }
+
 }

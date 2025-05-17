@@ -122,11 +122,19 @@
     </li>
 
     {{-- Other Sections --}}
-    <li class="nav-header">ORDERS & USERS</li>
+
     <li class="nav-item">
         <a href="{{ asset('/Dashboard/InvoiceList') }}" class="nav-link">
             <i class="nav-icon fas fa-file-invoice-dollar"></i>
             <p>Invoices</p>
+        </a>
+    </li>
+
+       <li class="nav-header">Policies & USERS</li>
+          <li class="nav-item">
+        <a href="{{ asset('/admin/policies') }}" class="nav-link">
+            <i class="nav-icon fas fa-file-contract"></i>
+            <p>Polices</p>
         </a>
     </li>
     <li class="nav-item">
