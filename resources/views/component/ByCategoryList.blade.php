@@ -89,13 +89,15 @@
 
 /* Price styling */
 .product_price {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-top: 0;
+    font-weight: bold;
 }
 
 .discount_price {
   color: #007bff;
   font-weight: bold;
+   display: block;
 }
 
 del {
@@ -170,8 +172,17 @@ del {
 
 
 
-<!-- Search + Filter Controls -->
-<div class="container my-4">
+
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6 text-center">
+            <h2>Exclusive Products</h2>
+        </div>
+    </div>
+
+    <!-- Search + Filter + Sort Row -->
+    <div class="row mb-3">
+      <div class="container my-4">
   <div class="row g-2">
     <div class="col-12 col-md-6 col-lg-4">
         <input type="text" id="search-input" class="form-control" placeholder="Search product...">
@@ -192,80 +203,68 @@ del {
 </div>
 </div>
 
-  <!-- Offcanvas Filter Panel -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas">
+    <!-- Filter Offcanvas -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas">
     <div class="offcanvas-header">
-      <h5>Filter Products</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <h5>Filter Products</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body overflow-auto">
-      <label>Price Range</label>
-      <div class="input-group mb-2">
-        <input type="number" id="filter-price-min" class="form-control" placeholder="Min">
-        <input type="number" id="filter-price-max" class="form-control" placeholder="Max">
-      </div>
+        <label>Price Range</label>
+        <div class="input-group mb-2">
+            <input type="number" id="filter-price-min" class="form-control" placeholder="Min">
+            <input type="number" id="filter-price-max" class="form-control" placeholder="Max">
+        </div>
 
-      <label>Brand</label>
-      <select id="filter-brand" class="form-control mb-3">
-        <option value="">All</option>
-      </select>
+        <label>Brand</label>
+        <select id="filter-brand" class="form-control mb-3">
+            <option value="">All</option>
+        </select>
 
-    <div class="row mb-3">
-  <div class="col-md-4">
-    <select id="filter-category" class="form-control">
-      <option value="">All Categories</option>
-      @foreach($categories as $cat)
+        <label>Category</label>
+        <select id="filter-category" class="form-control mb-3">
+            <option value="">All</option>
+              @foreach($categories as $cat)
         <option value="{{ $cat->id }}" {{ $categoryId == $cat->id ? 'selected' : '' }}>
           {{ $cat->categoryName }}
         </option>
 
       @endforeach
-    </select>
-  </div>
+        </select>
 
-  {{-- Add other filters like brand, price etc. here as needed --}}
-</div>
+        <label>Minimum Star Rating</label>
+        <select id="filter-star" class="form-control mb-3">
+            <option value="">Any</option>
+            <option value="20">1★ & up</option>
+            <option value="40">2★ & up</option>
+            <option value="60">3★ & up</option>
+            <option value="80">4★ & up</option>
+            <option value="100">5★</option>
+        </select>
 
-
-
-      <label>Minimum Star Rating</label>
-      <select id="filter-star" class="form-control mb-3">
-        <option value="">Any</option>
-        <option value="20">1★ & up</option>
-        <option value="40">2★ & up</option>
-        <option value="60">3★ & up</option>
-        <option value="80">4★ & up</option>
-        <option value="100">5★</option>
-      </select>
-
-      <button class="btn btn-primary w-100" id="apply-filters">Apply Filters</button>
-      <button class="btn btn-secondary w-100 mt-2" id="reset-filters">Reset Filters</button>
+        <button class="btn btn-primary w-100" id="apply-filters">Apply Filters</button>
+        <button class="btn btn-secondary w-100 mt-2" id="reset-filters">Reset Filters</button>
     </div>
-  </div>
+</div>
 
-  <!-- Tab Navigation -->
-  <ul class="nav nav-tabs justify-content-center mb-3" id="productTab" role="tablist">
-    <li class="nav-item"><button class="nav-link active" data-category="Popular">Popular</button></li>
-    <li class="nav-item"><button class="nav-link" data-category="New">New</button></li>
-    <li class="nav-item"><button class="nav-link" data-category="Top">Top</button></li>
-    <li class="nav-item"><button class="nav-link" data-category="Trending">Trending</button></li>
-  </ul>
 
-  <!-- Loading Spinner -->
-  <div id="loading-spinner" class="text-center my-4 d-none">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs justify-content-center mb-3" id="productTab" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-category="Popular">Popular</button></li>
+        <li class="nav-item"><button class="nav-link" data-category="New">New</button></li>
+        <li class="nav-item"><button class="nav-link" data-category="Top">Top</button></li>
+        <li class="nav-item"><button class="nav-link" data-category="Trending">Trending</button></li>
+    </ul>
+
+    <!-- Product Results -->
+    <div id="loading-spinner" class="text-center my-4 d-none">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
     </div>
-  </div>
 
-  <!-- Product Display Area -->
-
-
-<div class="row" id="product-content">
-    @include('component.product-list', ['products' => $products])
+    <div class="row" id="product-content">
+         @include('component.product-list', ['products' => $products])
+    </div>
 </div>
-</div>
-
 <script>
   let currentCategory = 'Popular';
 

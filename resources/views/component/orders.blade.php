@@ -276,7 +276,7 @@
                 <tr>
                     <td>
                         <a href="/details?id=${product.id || ''}">
-                            <img src="${product.image || '#'}" alt="Image" width="70">
+                            <img src="${product.image || '#'}" alt=" ${product.img_alt || product.title}" width="70">
                         </a>
                     </td>
                     <td>

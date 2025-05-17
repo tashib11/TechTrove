@@ -95,8 +95,9 @@
 
 /* Price styling */
 .product_price {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-top: 0;
+    font-weight: bold;
 }
 
 .discount_price {

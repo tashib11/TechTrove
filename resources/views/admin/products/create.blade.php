@@ -58,17 +58,10 @@
         <img id="imagePreview" class="card-img-top" style="max-height: 200px; object-fit: contain;">
         <div class="card-body">
             <div class="form-group">
-                <label for="brandAlt">Image Alt Text</label>
-                <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
+                <label for="img_alt">Image Alt Text</label>
+                <input type="text" class="form-control" name="img_alt" id="img_alt" placeholder="Describe the image">
             </div>
-            <div class="form-group">
-                <label for="brandWidth">Set Width (px)</label>
-                <input type="number" class="form-control" id="brandWidth" placeholder="e.g., 200">
-            </div>
-            <div class="form-group">
-                <label for="brandHeight">Set Height (px)</label>
-                <input type="number" class="form-control" id="brandHeight" placeholder="e.g., 300">
-            </div>
+
         </div>
     </div>
             </div>
