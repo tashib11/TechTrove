@@ -1,3 +1,10 @@
+<style>
+    .is-invalid {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 0.1rem rgba(220, 53, 69, 0.25);
+    }
+</style>
+
 <!-- START SECTION BREADCRUMB -->
 <div class="breadcrumb_section bg_gray page-title-mini">
     <div class="container">
@@ -217,15 +224,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // Place Order click handler
-   $('#place-order-btn').on('click', function () {
+ $('#place-order-btn').on('click', function () {
     const name = $('#ship-name').val()?.trim();
     const phone = $('#ship-phone').val()?.trim();
     const city = $('#ship-city').val()?.trim();
     const division = $('#ship-division').val()?.trim();
     const address = $('#ship-address').val()?.trim();
 
-    if (!name || !phone || !city || !division || !address) {
-        $('#missingShippingModal').modal('show');
+    // Clear previous validation highlights
+    $('#ship-name, #ship-phone, #ship-city, #ship-division, #ship-address').removeClass('is-invalid');
+
+    let hasError = false;
+
+    if (!name) {
+        $('#ship-name').addClass('is-invalid');
+        hasError = true;
+    }
+    if (!phone) {
+        $('#ship-phone').addClass('is-invalid');
+        hasError = true;
+    }
+    if (!city) {
+        $('#ship-city').addClass('is-invalid');
+        hasError = true;
+    }
+    if (!division) {
+        $('#ship-division').addClass('is-invalid');
+        hasError = true;
+    }
+    if (!address) {
+        $('#ship-address').addClass('is-invalid');
+        hasError = true;
+    }
+
+    if (hasError) {
+        const editModal = new bootstrap.Modal(document.getElementById('editAddressModal'));
+        editModal.show();
         return;
     }
 
@@ -254,6 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error(err);
     });
 });
+
 
 });
 
