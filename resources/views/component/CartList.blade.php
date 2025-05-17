@@ -87,7 +87,7 @@ async function CartList() {
             <td>${i + 1}</td>
             <td class="product-thumbnail">
                 <a href="/details?id=${productId}">
-                    <img src="${item['product']['image']}" alt="product" style="max-width: 80px;">
+                    <img src="${item['product']['image']}" alt="${item['product']['img_alt']}" style="max-width: 80px;">
                 </a>
             </td>
             <td class="product-name">

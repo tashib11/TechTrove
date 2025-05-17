@@ -104,6 +104,7 @@ public function store(Request $request) {
     'title' => $request->input('title'),
     'short_des' => $request->input('short_des'),
     'image' => $publicUrl,
+    'img_alt' =>  $request->input('img_alt'),
     'price' => $request->input('price'),
     'discount' => $request->input('discount'),
     'discount_price' => $request->input('discount_price'),

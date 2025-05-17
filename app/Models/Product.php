@@ -17,6 +17,7 @@ class Product extends Model
         'discount',
         'price',
         'image',
+        'img_alt',
         'brand_id',
         'category_id',
         'remark',

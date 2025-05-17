@@ -175,8 +175,9 @@
 
 /* Price styling */
 .product_price {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .discount_price {
@@ -295,7 +296,7 @@ $("#BrandName").text(brandRes.data.data.brandName); // ✅ Correct
         <div class="product">
             <div class="product_img">
                 <a href="/details?id=${item['id']}">
-                    <img src="${item['image']}" alt="product_img">
+                    <img src="${item['image']}" alt="${item['img_alt']}">
                 </a>
                 <div class="product_action_box">
                     <ul class="list_none pr_action_btn">

@@ -323,7 +323,7 @@ let stockStatus = stock > 0
                     <div class="product">
                         <div class="product_img">
                             <a href="#">
-                                <img src="${product['image']}" alt="product_img">
+                                <img src="${product['image']}" alt="${product['img_alt']}">
                             </a>
                             <div class="product_action_box">
                     <ul class="list_none pr_action_btn">
