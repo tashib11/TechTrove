@@ -259,11 +259,20 @@ $('#img4').attr('src', Details[0]['img4']).attr('alt', Details[0]['img4_alt']);
         }
         document.getElementById('p_des').innerHTML = Details[0]['product']['short_des'];
         document.getElementById('p_details').innerHTML = Details[0]['des'];
-        if (Details[0]['product']['stock']) {
-            $('#p_stock').text("In Stock").addClass('in-stock');
-        } else {
-            $('#p_stock').text("Out of Stock").addClass('out-of-stock');
-        }
+       let stock = parseInt(Details[0]['product']['stock'] || '0');
+
+if (stock > 0) {
+    $('#p_stock')
+        .text(`In Stock (${stock} available)`)
+        .removeClass('out-of-stock')
+        .addClass('in-stock');
+} else {
+    $('#p_stock')
+        .text("Out of Stock")
+        .removeClass('in-stock')
+        .addClass('out-of-stock');
+}
+
 
         // Populate sizes and colors
         $("#p_size").empty().append(`<option value=''>Choose Size</option>`);

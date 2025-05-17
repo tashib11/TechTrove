@@ -32,7 +32,10 @@
                         <div class="rating">
                             <div class="product_rate" style="width:{{ $item->star }}%"></div>
                         </div>
-                        <span class="stock-status small">{{ $item->stock ? 'In Stock' : 'Out of Stock' }}</span>
+                      <span class="stock-status small {{ $item->stock == '0' ? 'out' : '' }}">
+    {{ $item->stock == '0' ? 'Out of Stock' : $item->stock . ' In Stock' }}
+</span>
+
                     </div>
                 </div>
             </div>

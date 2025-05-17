@@ -34,7 +34,120 @@
   .offcanvas-body {
     -webkit-overflow-scrolling: touch;
   }
+
+
+/* Product Card Layout */
+.product {
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.product:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product_img {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+
+.product_img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Product content section */
+.product_info {
+  padding: 10px 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Product title */
+.product_title {
+  font-size: 1rem; /* Default size */
+  font-weight: 600;
+  line-height: 1.3;
+  min-height: 2.6em; /* enough space for 2 lines */
+  overflow: hidden;
+}
+
+/* Price styling */
+.product_price {
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.discount_price {
+  color: #007bff;
+  font-weight: bold;
+}
+
+del {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+
+
+/* Stock status */
+.stock-status {
+  font-size: 0.8rem;
+  color: #28a745;
+}
+
+.stock-status.out {
+  color: #dc3545;
+}
+@media (max-width: 576px) {
+
+
+  .rating_wrap {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+   .product_img {
+    padding-top: 100%; /* Make image area much taller */
+  }
+
+  .product_info {
+    padding: 8px 10px;
+  }
+
+  .product_title {
+    font-size: 1.1rem;
+    min-height: 2.1em;
+  }
+
+  .product_price {
+    font-size: 0.95rem;
+  }
+
+  .stock-status {
+    font-size: 0.75rem;
+  }
+}
+
 </style>
+
 <!-- START SECTION BREADCRUMB -->
 <div class="breadcrumb_section bg_gray page-title-mini py-3">
     <div class="container">
