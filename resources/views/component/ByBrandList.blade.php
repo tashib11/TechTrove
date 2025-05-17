@@ -176,12 +176,13 @@
 /* Price styling */
 .product_price {
   font-size: 1rem;
-  margin-top: 0;
+  margin-bottom: 5px;
 }
 
 .discount_price {
-  color: #007bff;
+ color: #007bff;
   font-weight: bold;
+  display: block;
 }
 
 del {
@@ -272,6 +273,23 @@ $("#BrandName").text(brandRes.data.data.brandName); // ✅ Correct
         ? `<span class="text-success small">In Stock (${stock} available)</span>`
         : `<span class="text-danger small">Out of Stock</span>`;
 
+
+        let discountSection = '';
+
+      if (item['discount']) {
+    discountSection = `
+        <div class="product_price">
+            <span class="discount_price">$${item['discount_price']}</span>
+            <del>$${item['price']}</del>
+        </div>`;
+} else {
+    discountSection = `
+        <div class="product_price">
+            <span class="price">$${item['price']}</span>
+        </div>`;
+}
+
+
     let EachItem = `
  <div class="col-lg-3 col-md-4 col-12">
         <div class="product">
@@ -287,9 +305,7 @@ $("#BrandName").text(brandRes.data.data.brandName); // ✅ Correct
             </div>
             <div class="product_info">
                 <h6 class="product_title"><a href="/details?id=${item['id']}">${item['title']}</a></h6>
-                <div class="product_price">
-                    <span class="price">$ ${item['price']}</span>
-                </div>
+${discountSection}
                 <div class="rating_wrap mb-1">
                     <div class="rating">
                         <div class="product_rate" style="width:${item['star']}%"></div>

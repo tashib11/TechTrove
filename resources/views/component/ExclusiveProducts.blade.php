@@ -115,10 +115,11 @@ del {
 .stock-status {
   font-size: 0.8rem;
   color: #28a745;
+   font-weight: bold;
 }
 
 .stock-status.out {
-  color: #dc3545;
+   color: #28a745;
 }
 @media (max-width: 576px) {
 

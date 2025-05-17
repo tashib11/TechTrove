@@ -81,25 +81,27 @@
 }
 
 .out-of-stock {
-  color: #dc3545;
-  font-size: 0.85rem;
-  font-weight: bold;
+  color: #28a745;
+
 }
 
-/* Rating */
 .rating_wrap {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  margin: 10px 0;
 }
 
-.product_rate {
+/* .product_rate {
   width: 80px;
   height: 10px;
   background: gold;
+} */
+
+.stock {
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
+
 
 /* Remove button */
 .remove {
@@ -113,28 +115,7 @@
   cursor: pointer;
 }
 
-/* Hover actions */
-.product_action_box {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: none;
-  z-index: 2;
-}
 
-.product:hover .product_action_box {
-  display: block;
-}
-
-.product_action_box ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.product_action_box ul li {
-  margin: 5px 0;
-}
 
 /* Equal card height layout fix */
 #byList .col-lg-3,
@@ -161,6 +142,31 @@
 
   .remove {
     padding: 5px 10px;
+  }
+    .rating_wrap {
+  flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .rating {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  /* .product_rate {
+    width: 60px;
+    height: 10px;
+    background: gold;
+  } */
+
+  .stock {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    text-align: right;
+    flex-grow: 1;
   }
 }
 </style>
@@ -308,15 +314,10 @@
         }
 let stock = parseInt(product['stock']);
 let stockStatus = stock > 0
-    ? `<div class="stock-status">In Stock (${stock})</div>`
-    : `<div class="out-of-stock">Out of Stock</div>`;
+    ? `<span class="stock-status">In Stock (${stock})</span>`
+    : `<span class="out-of-stock">Out of Stock</span>`;
 
-       let actionBtnHtml = stock > 0 ? `
-    <div class="product_action_box">
-        <ul class="list_none pr_action_btn">
-            <li><a href="/details?id=${product['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
-        </ul>
-    </div>` : ``;
+
 
        let EachItem = `<div class="col-lg-3 col-md-4 col-6">
                     <div class="product">
@@ -324,19 +325,24 @@ let stockStatus = stock > 0
                             <a href="#">
                                 <img src="${product['image']}" alt="product_img">
                             </a>
-                            ${actionBtnHtml}
+                            <div class="product_action_box">
+                    <ul class="list_none pr_action_btn">
+                        <li><a href="/details?id=${product['id']}" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
+                    </ul>
+                </div>
                         </div>
                         <div class="product_info">
                             <h6 class="product_title">
                                 <a href="/details?id=${product['id']}">${product['title']}</a>
                             </h6>
                             ${discountSection}
-                            <div class="rating_wrap">
-                                <div class="rating">
-                                    <div class="product_rate" style="width:${product['star']}%"></div>
-                                </div>
-                                ${stockStatus}
-                            </div>
+                            <div class="rating_wrap d-flex justify-content-between align-items-center mt-2">
+    <div class="rating d-flex align-items-center">
+        <div class="product_rate" style="width:${product['star']}%"></div>
+    </div>
+    <div class="stock text-end">${stockStatus}</div>
+</div>
+
                             <button class="btn remove btn-sm my-2 btn-danger" data-id="${product['id']}">Remove</button>
                         </div>
                     </div>
