@@ -77,7 +77,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-md-0 text-center text-md-start">© 2024 All Rights Reserved by TechTrove</p>
+                    <p class="mb-md-0 text-center text-md-start">© 2025 All Rights Reserved by TechTrove</p>
                 </div>
                 {{-- <div class="col-md-6">
                     <ul class="footer_payment text-center text-lg-end">
