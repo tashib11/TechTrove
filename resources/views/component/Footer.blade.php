@@ -79,7 +79,7 @@
                 <div class="col-md-6">
                     <p class="mb-md-0 text-center text-md-start">© 2024 All Rights Reserved by TechTrove</p>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <ul class="footer_payment text-center text-lg-end">
                         <li><a href="#"><img src="assets/images/visa.png" alt="visa"></a></li>
                         <li><a href="#"><img src="assets/images/discover.png" alt="discover"></a></li>
@@ -87,7 +87,7 @@
                         <li><a href="#"><img src="assets/images/paypal.png" alt="paypal"></a></li>
                         <li><a href="#"><img src="assets/images/amarican_express.png" alt="amarican_express"></a></li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

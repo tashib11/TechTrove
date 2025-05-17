@@ -232,7 +232,7 @@
                 <div class="order-card">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
-                            <strong>Transaction:</strong> ${order.tran_id}<br>
+                            <strong>Transaction Id:</strong> ${order.tran_id}<br>
                             <small class="text-muted">${new Date(order.created_at).toLocaleString()}</small>
                         </div>
                         <span class="order-status ${statusClass}">${order.order_status}</span>
