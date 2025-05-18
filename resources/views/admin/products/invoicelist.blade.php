@@ -7,7 +7,7 @@
 
 <div class="mb-3 row align-items-center">
     <div class="col-md-6 col-sm-8">
-        <input type="text" id="searchInput" class="form-control" placeholder="Search by Transaction ID or Name">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by Transaction ID or Name or Order status">
     </div>
     <div class="col-auto">
         <div id="searchLoading" class="spinner-border spinner-border-sm text-primary d-none" role="status"></div>
