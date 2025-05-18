@@ -244,7 +244,8 @@ public function search(Request $request)
     if ($search = $request->query('search')) {
         $query->where(function ($q) use ($search) {
             $q->where('tran_id', 'LIKE', "%{$search}%")
-              ->orWhere('shipping_name', 'LIKE', "%{$search}%");
+              ->orWhere('shipping_name', 'LIKE', "%{$search}%")
+                   ->orWhere('order_status', 'LIKE', "%{$search}%");
         });
     }
 
