@@ -9,16 +9,7 @@
             <label for="brandName" class="form-label">Brand Name</label>
             <input type="text" class="form-control" id="brandName" name="brandName" value="{{ $brand->brandName }}">
         </div>
-{{--
-        <div class="mb-3">
-            <label class="form-label">Current Image</label><br>
-            <img src="{{ $brand->brandImg }}" alt="Brand Image" width="120">
-        </div>
 
-        <div class="mb-3">
-            <label for="brandFile" class="form-label">Change Image (optional)</label>
-            <input type="file" class="form-control" id="brandFile" name="brandFile">
-        </div> --}}
                           @php
                             $imgUrl = $brand->brandImg;
                         @endphp
@@ -30,12 +21,12 @@
 
                                 <div id="imagePreviewCard" class="card mt-3 {{ $imgUrl ? '' : 'd-none' }}">
                                     <img id="imagePreview" src="{{ $imgUrl }}" class="card-img-top" style="max-height: 200px; object-fit: contain;">
-                                    {{-- <div class="card-body">
+                                    <div class="card-body">
                                         <div class="form-group">
-                                            <label for="alt{{ $i }}">Image Alt Text</label>
-                                            <input type="text" class="form-control" name="alt"  value="{{ $product->img_alt }}" placeholder="Describe the image">
+                                            <label for="brandAlt">Image Alt Text</label>
+                                            <input type="text" class="form-control" name="brandAlt"  value="{{ $brand->brandAlt }}" placeholder="Describe the image">
                                         </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>

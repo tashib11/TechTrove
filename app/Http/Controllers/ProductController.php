@@ -52,7 +52,7 @@ if ($request->has('title') && !empty($request->title)) {
     $products->where('title', 'like', '%' . $request->title . '%');
 }
 
-    $products = $products->latest('id')->get();
+    $products = $products->with(['brand', 'category'])->latest('id')->get();
     $categories = Category::orderBy('categoryName', 'ASC')->get();
     $brands = Brand::orderBy('brandName', 'ASC')->get();
 
@@ -418,7 +418,7 @@ public function CheckWishListStatus($product_id)
      public function update($id, Request $request){
         $detail = Product::findOrFail($id);
 
-    $detail->fill($request->only('title','short_des','price','discount','discount_price','stock','remark','category_id','brand_id'));
+    $detail->fill($request->only('title','short_des','price','discount','discount_price','img_alt','stock','remark','category_id','brand_id'));
           if ($request->hasFile("image")) {
             $file = $request->file("image");
             $path = $file->store('product-create', 'public');

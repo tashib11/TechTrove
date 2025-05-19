@@ -96,6 +96,7 @@ public function store(Request $request)
 
         $category = Category::findOrFail($id);
         $category->categoryName = $request->categoryName;
+        $category->categoryAlt = $request->categoryAlt;
 
         if ($request->hasFile('categoryFile')) {
             $path = $request->file('categoryFile')->store('categories', 'public');

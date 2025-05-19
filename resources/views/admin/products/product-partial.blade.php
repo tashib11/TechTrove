@@ -40,8 +40,8 @@
                         <td class="text-center">
                             <span class="badge bg-info text-dark">{{ ucfirst($product->remark) }}</span>
                         </td>
-                        <td class="text-center">{{ $product->category_id }}</td>
-                        <td class="text-center">{{ $product->brand_id }}</td>
+                       <td class="text-center">{{ $product->category->categoryName ?? 'N/A' }}</td>
+                        <td class="text-center">{{ $product->brand->brandName ?? 'N/A' }}</td>
                         <td class="text-center">
                             @if($product->stock > 0)
                                 <span class="badge bg-success">In</span>

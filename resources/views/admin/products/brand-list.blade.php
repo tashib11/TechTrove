@@ -78,7 +78,7 @@
                 loadBrands(); // reload brand list
             })
             .catch(err => {
-                alert('Failed to delete brand');
+                alert('You have products of this brand');
                 console.error(err);
             });
     });

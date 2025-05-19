@@ -82,6 +82,7 @@ public function store(Request $request)
 
         $brand = Brand::findOrFail($id);
         $brand->brandName = $request->brandName;
+        $brand->brandAlt = $request->brandAlt;
 
         if ($request->hasFile('brandFile')) {
             $path = $request->file('brandFile')->store('brands', 'public');
