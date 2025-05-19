@@ -1,14 +1,88 @@
+<style>
+/* General improvements */
+.qty-control {
+    max-width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-control .btn {
+    min-width: 30px;
+    padding: 0.25rem 0.5rem;
+}
+
+.qty-input {
+    width: 50px !important;
+    height: 34px;
+    padding: 0 5px;
+}
+
+/* Replace ti-close icon with button */
+.remove-btn {
+    border: none;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.remove-btn:hover {
+    background-color: #e60000;
+}
+
+/* Mobile Responsive Stack Layout */
+@media (max-width: 767.98px) {
+    #byList tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    #byList tr td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        font-size: 0.9rem;
+        padding: 6px 10px;
+        border: none;
+    }
+
+    #byList tr td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    .qty-control {
+        justify-content: flex-end;
+    }
+
+    .remove-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+
+
 <!-- START SECTION BREADCRUMB -->
 <div class="breadcrumb_section bg_gray page-title-mini">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
+        <div class="row align-items-center text-center text-md-start">
+            <div class="col-12 col-md-6 mb-2 mb-md-0">
                 <div class="page-title">
                     <h1>Cart List</h1>
                 </div>
             </div>
-            <div class="col-md-6">
-                <ol class="breadcrumb justify-content-md-end">
+            <div class="col-12 col-md-6">
+                <ol class="breadcrumb justify-content-center justify-content-md-end">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">This Page</a></li>
                 </ol>
@@ -18,13 +92,15 @@
 </div>
 <!-- END SECTION BREADCRUMB -->
 
-<div class="mt-5">
-    <div class="container my-5">
+<!-- CART TABLE SECTION -->
+<div class="mt-4 mb-5">
+    <div class="container">
         <div class="row">
             <div class="col-12">
+                <!-- Responsive Table Wrapper -->
                 <div class="table-responsive shop_cart_table">
-                    <table class="table">
-                        <thead>
+                    <table class="table align-middle text-center">
+                        <thead class="table-light d-none d-md-table-header-group">
                             <tr>
                                 <th>#</th>
                                 <th class="product-thumbnail">&nbsp;</th>
@@ -37,14 +113,16 @@
                         <tbody id="byList"></tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6" class="px-0">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-lg-4 col-md-6 mb-3 mb-md-0 d-flex align-items-center">
-                                            <div><strong>Total:</strong> $<span id="total"></span></div>
+                                <td colspan="6" class="p-0">
+                                    <div class="row g-3 align-items-center px-2 py-3">
+                                        <div class="col-12 col-md-4 text-start">
+                                            <strong>Total:</strong> $<span id="total"></span>
                                         </div>
-                                        <div class="col-lg-4 col-md-6 mb-3 mb-md-0 text-success text-end" id="savings-text" style="font-weight: 600;"></div>
-                                        <div class="col-lg-4 col-md-6 text-start text-md-end">
-                                            <button onclick="CheckOut()" class="btn btn-line-fill btn-sm" type="submit">Check Out</button>
+                                        <div class="col-12 col-md-4 text-md-center text-success" id="savings-text" style="font-weight: 600;"></div>
+                                        <div class="col-12 col-md-4 text-end">
+                                            <!-- Change class on the button -->
+<button onclick="CheckOut()" class="btn btn-success btn-lg w-100 w-md-auto rounded-pill shadow">🛒 Check Out</button>
+
                                         </div>
                                     </div>
                                 </td>
@@ -56,6 +134,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 async function CartList() {
@@ -93,17 +172,19 @@ async function CartList() {
             <td class="product-name">
                 <a href="/details?id=${productId}">${item['product']['title']}</a>
             </td>
-            <td class="product-quantity">
-                <div class="input-group" style="max-width: 120px;">
-                    <button class="btn btn-outline-secondary btn-sm qty-decrease" type="button">−</button>
-                    <input type="text" class="form-control text-center qty-input" value="${item['qty']}" readonly>
-                    <button class="btn btn-outline-secondary btn-sm qty-increase" type="button">+</button>
-                </div>
-            </td>
+          <td class="product-quantity">
+    <div class="qty-control">
+        <button class="btn btn-outline-secondary btn-sm qty-decrease" type="button">−</button>
+        <input type="text" class="form-control text-center qty-input" value="${item['qty']}" readonly>
+        <button class="btn btn-outline-secondary btn-sm qty-increase" type="button">+</button>
+    </div>
+</td>
+
             <td class="product-subtotal">${priceHTML}</td>
-            <td class="product-remove">
-                <a class="remove" data-id="${productId}"><i class="ti-close"></i></a>
-            </td>
+<td class="product-remove">
+    <button class="remove-btn" data-id="${productId}">Remove</button>
+</td>
+
         </tr>`;
 
         $("#byList").append(EachItem);
@@ -111,7 +192,7 @@ async function CartList() {
 
     UpdateTotal();
 
-    $(".remove").on('click', function () {
+    $(".remove-btn").on('click', function () {
         let id = $(this).data('id');
         RemoveCartList(id);
     });
@@ -164,12 +245,15 @@ async function RemoveCartList(id) {
     $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
     let res = await axios.get("/DeleteCartList/" + id);
     $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+
     if (res.status === 200) {
-        await CartList();
+        $(`#byList tr[data-id='${id}']`).remove();  // Remove just the row
+        UpdateTotal();  // Recalculate total
     } else {
         alert("Request Fail");
     }
 }
+
 
 async function CheckOut() {
     $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
@@ -217,4 +301,10 @@ async function CheckOut() {
 $(document).ready(function () {
     CartList();
 });
+    // Always reload if user comes back from back/forward navigation
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            location.reload();
+        }
+    });
 </script>

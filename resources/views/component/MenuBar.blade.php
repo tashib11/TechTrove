@@ -58,11 +58,10 @@
                                 </ul>
                             </div>
                         </li>
-                        
+
                         <li><a class="nav-link nav_item" id="wishLink" href="#"><i class="ti-heart"></i> Wish</a></li>
                         <li><a class="nav-link nav_item" id="cartLink" href="#"><i class="linearicons-cart"></i> Cart</a></li>
-                        <li><a class="nav-link nav_item" id="orderLink" href="#"><i class="linearicons-cart"></i> Orders</a></li>
-
+                        <li><a class="nav-link nav_item" id="orderLink" href="#"><i class="ti-archive fs-7"></i> Orders</a></li>
                             <div class="search_wrap">
                                 <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                                 <form>
@@ -93,6 +92,37 @@
         });
     }
 </script>
+<script>
+    // Copy of existing category logic for mobile
+    async function loadMobileCategories() {
+        let res = await axios.get("/CategoryList");
+        $("#MobileCategoryList").empty();
+        res.data['data'].forEach((item) => {
+            let listItem = `<li><a class="dropdown-item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`;
+            $("#MobileCategoryList").append(listItem);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadMobileCategories();
+
+        const isLoggedIn = @json($token !== null && $user !== null);
+
+        document.getElementById('mobileWish').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = isLoggedIn ? "/wish" : "/login";
+        });
+        document.getElementById('mobileCart').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = isLoggedIn ? "/cart" : "/login";
+        });
+        document.getElementById('mobileOrders').addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = isLoggedIn ? "/track-order" : "/login";
+        });
+    });
+</script>
+
 <script>
     const isLoggedIn = @json($token !== null && $user !== null);
 

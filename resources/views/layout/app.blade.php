@@ -52,6 +52,13 @@
     body {
         font-family: 'Poppins', sans-serif;
     }
+    .mobile-bottom-nav i {
+    line-height: 1;
+}
+.mobile-bottom-nav small {
+    font-size: 12px;
+}
+
 </style>
 
 </head>
@@ -73,6 +80,33 @@
 <div>
     @yield('content')
 </div>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="mobile-bottom-nav d-md-none bg-white shadow-lg border-top fixed-bottom">
+    <div class="d-flex justify-content-around text-center py-2">
+        <a href="/" class="nav-item text-dark">
+            <i class="ti-home fs-5"></i><br><small>Home</small>
+        </a>
+        <a href="#" id="mobileWish" class="nav-item text-dark">
+            <i class="ti-heart fs-5"></i><br><small>Wish</small>
+        </a>
+        <a href="#" id="mobileCart" class="nav-item text-dark">
+            <i class="linearicons-cart fs-5"></i><br><small>Cart</small>
+        </a>
+        <a href="#" id="mobileOrders" class="nav-item text-dark">
+            <i class="ti-archive fs-5"></i><br><small>Orders</small>
+        </a>
+        <div class="dropup">
+            <a class="nav-item text-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="ti-menu fs-5"></i><br><small>Categories</small>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end text-start" id="MobileCategoryList">
+                <!-- Dynamic categories -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
 
 <!-- JS Scripts -->
 <script src="{{ asset('assets/js/scripts.js') }}"></script>

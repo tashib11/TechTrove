@@ -267,6 +267,13 @@
 
     });
 
+        // Always reload if user comes back from back/forward navigation
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            location.reload();
+        }
+    });
+
     let searchParams = new URLSearchParams(window.location.search);
     let id = searchParams.get('id');
 
