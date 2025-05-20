@@ -27,7 +27,7 @@ public function store(Request $request)
     $path = $request->file('catFile')->store('categories', 'public');
 
     // Get public URL: e.g., https://yourdomain.com/storage/category/filename.jpg
-    $imageUrl = asset('storage/' . $path);
+    $imageUrl = '/storage/' . $path;
 
     Category::create([
         'categoryName' => $request->catName,
@@ -100,7 +100,7 @@ public function store(Request $request)
 
         if ($request->hasFile('categoryFile')) {
             $path = $request->file('categoryFile')->store('categories', 'public');
-            $category->categoryImg = asset('storage/' . $path);
+            $category->categoryImg = '/storage/' . $path;
         }
 
         $category->save();

@@ -28,7 +28,7 @@ public function store(Request $request)
     ]);
 
     $path = $request->file('image')->store('sliders', 'public');
-    $imageUrl = asset('storage/' . $path);
+    $imageUrl = '/storage/' . $path;
 
     // Create the slider
     $slider = ProductSlider::create([
@@ -68,7 +68,7 @@ public function update(Request $request, $id)
 
     if ($request->hasFile('image')) {
         $path = $request->file('image')->store('sliders', 'public');
-        $slider->image = asset('storage/' . $path);
+        $slider->image = '/storage/' . $path;
     }
 
     $slider->save();
