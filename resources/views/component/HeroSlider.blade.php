@@ -187,44 +187,111 @@
 }
 
 </style>
+{{--
+<div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow" data-bs-ride="carousel">
+    <div id="carouselSection" class="carousel-inner"></div>
+
+    <div id="carouselIndicators" class="carousel-indicators"></div>
 
 
-<div class="banner_section slide_medium shop_banner_slider staggered-animation-wrap">
-    <div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow" data-bs-ride="carousel">
-        <div id="carouselSection" class="carousel-inner"></div>
-        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
-            <i class="ion-chevron-left"></i>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
-            <i class="ion-chevron-right"></i>
-        </a>
-    </div>
-</div>
+</div> --}}
+<div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow">
+    <div id="carouselSection" class="carousel-inner">
+        @foreach($sliders as $key => $item)
+          <div class="carousel-item background_bg {{ $key === 0 ? 'active' : '' }}" style="background-image: url('{{ $item->image }}')">
+    <!-- PRELOAD hidden image -->
+    <img src="{{ $item->image }}" alt="Preload {{ $item->title }}" style="display:none;">
 
-<script>
-async function Hero() {
-    let res = await axios.get("/ListProductSlider");
-    $("#carouselSection").empty();
-
-    res.data['data'].forEach((item, i) => {
-        let activeClass = i === 0 ? 'active' : '';
-        let SliderItem = `
-            <div class="carousel-item background_bg ${activeClass}" style="background-image: url('${item['image']}')">
-                <div class="banner_slide_content">
+    <div class="banner_slide_content">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-7 col-10">
-                                <div class="banner_content overflow-hidden">
-                                   <h2 class="mb-3 offer-price staggered-animation" data-animation="slideInLeft" data-animation-delay="0.1s">Offer Price ${item['price']}Tk</h2>
-                                    <h2 class="staggered-animation" data-animation="slideInLeft" data-animation-delay="1s">${item['title']}</h2>
-                                    <a class="btn btn-fill-out rounded-0 staggered-animation text-uppercase" href="/details?id=${item['product_id']}" data-animation="slideInLeft" data-animation-delay="1.5s">Shop Now</a>
+                                <div class="banner_content text-start">
+                                    <h2 class="mb-3 offer-price">{{ $item->price }}Tk</h2>
+                                    <h2 class="mb-3">{{ $item->title }}</h2>
+                                    <a class="btn text-uppercase" href="/details?id={{ $item->product_id }}">Shop Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>`;
-        $("#carouselSection").append(SliderItem);
-    });
+            </div>
+        @endforeach
+    </div>
+
+    <div id="carouselIndicators" class="carousel-indicators">
+        @foreach($sliders as $key => $item)
+            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="{{ $key }}" class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $key + 1 }}"></button>
+        @endforeach
+    </div>
+</div>
+
+{{-- <script>
+async function Hero() {
+    try {
+        let res = await axios.get("/ListProductSlider");
+        const section = $("#carouselSection");
+        const indicators = $("#carouselIndicators");
+        section.empty();
+        indicators.empty();
+
+        res.data['data'].forEach((item, i) => {
+            let activeClass = i === 0 ? 'active' : '';
+            let bgImage = i === 0 ? `background-image: url('${item['image']}')` : '';
+            let SliderItem = `
+                <div class="carousel-item background_bg ${activeClass}" style="${bgImage}" data-bg="${item['image']}">
+                    <div class="banner_slide_content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-7 col-10">
+                                    <div class="banner_content text-start">
+                                        <h2 class="mb-3 offer-price">${item['price']}Tk</h2>
+                                        <h2 class="mb-3">${item['title']}</h2>
+                                        <a class="btn text-uppercase" href="/details?id=${item['product_id']}">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            section.append(SliderItem);
+
+            let indicatorItem = `
+                <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="${i}" class="${activeClass}" aria-current="${activeClass ? 'true' : 'false'}" aria-label="Slide ${i + 1}"></button>`;
+            indicators.append(indicatorItem);
+        });
+
+        let carousel = new bootstrap.Carousel(document.querySelector('#carouselExampleControls'), {
+            interval: 5000,
+            pause: 'hover',
+            ride: 'carousel',
+            wrap: true
+        });
+
+        // Lazy load other slides background images on demand
+        const carouselElement = document.querySelector('#carouselExampleControls');
+        carouselElement.addEventListener('slid.bs.carousel', function (event) {
+            let nextSlide = event.relatedTarget;
+            if (nextSlide.style.backgroundImage === '' && nextSlide.dataset.bg) {
+                nextSlide.style.backgroundImage = `url('${nextSlide.dataset.bg}')`;
+            }
+        });
+
+    } catch (error) {
+        console.error("Failed to load slider:", error);
+    }
 }
+
+document.addEventListener("DOMContentLoaded", Hero);
+</script> --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const carouselElement = document.querySelector('#carouselExampleControls');
+        const carousel = new bootstrap.Carousel(carouselElement, {
+            interval: 5000,
+            pause: 'hover',
+            ride: 'carousel',
+            wrap: true
+        });
+    });
 </script>
