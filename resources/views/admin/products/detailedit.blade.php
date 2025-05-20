@@ -67,7 +67,7 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="alt{{ $i }}">Image Alt Text</label>
-                                            <input type="text" class="form-control" name="alt{{ $i }}"  value="{{ $products->{'img'.$i.'_alt'} }}" placeholder="Describe the image">
+                                            <input type="text" class="form-control" name="img{{ $i }}_alt"  value="{{ $products->{'img'.$i.'_alt'} }}" placeholder="Describe the image">
                                         </div>
                                     </div>
                                 </div>

@@ -95,15 +95,15 @@ public function store(Request $request) {
     if ($request->hasFile('image')) {
         $file = $request->file('image');
         $path = $file->store('product-create', 'public'); // stored in storage/app/public/product-create
-        $publicUrl = asset('storage/' . $path); // generates public URL like https://yourdomain.com/storage/product-create/filename.jpg
+        $relativePath  = '/storage/' . $path; // generates public URL like https://yourdomain.com/storage/product-create/filename.jpg
     } else {
-        $publicUrl = null;
+        $relativePath  = null;
     }
 
  $product = Product::create([
     'title' => $request->input('title'),
     'short_des' => $request->input('short_des'),
-    'image' => $publicUrl,
+    'image' => $relativePath ,
     'img_alt' =>  $request->input('img_alt'),
     'price' => $request->input('price'),
     'discount' => $request->input('discount'),
@@ -149,10 +149,10 @@ public function store(Request $request) {
     ]);
 
     // Upload logic for all images
-    $publicUrl1 = $request->hasFile('img1') ? asset('storage/' . $request->file('img1')->store('product-details', 'public')) : null;
-    $publicUrl2 = $request->hasFile('img2') ? asset('storage/' . $request->file('img2')->store('product-details', 'public')) : null;
-    $publicUrl3 = $request->hasFile('img3') ? asset('storage/' . $request->file('img3')->store('product-details', 'public')) : null;
-    $publicUrl4 = $request->hasFile('img4') ? asset('storage/' . $request->file('img4')->store('product-details', 'public')) : null;
+    $publicUrl1 = $request->hasFile('img1') ? '/storage/' . $request->file('img1')->store('product-details', 'public') : null;
+    $publicUrl2 = $request->hasFile('img2') ? '/storage/' . $request->file('img2')->store('product-details', 'public') : null;
+    $publicUrl3 = $request->hasFile('img3') ? '/storage/' . $request->file('img3')->store('product-details', 'public') : null;
+    $publicUrl4 = $request->hasFile('img4') ? '/storage/' . $request->file('img4')->store('product-details', 'public') : null;
 
     // Store into DB
     $product = ProductDetails::create([
@@ -422,7 +422,7 @@ public function CheckWishListStatus($product_id)
           if ($request->hasFile("image")) {
             $file = $request->file("image");
             $path = $file->store('product-create', 'public');
-            $detail->{"image"} = asset('storage/' . $path);
+            $detail->{"image"} = '/storage/' . $path;
         }
   $detail->save();
        return response()->json(['status' => true]);
@@ -488,15 +488,19 @@ public function detailUpdate(Request $request, $id)
         'img2' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         'img3' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         'img4' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+          'img1_alt' => 'nullable|string|max:255',
+        'img2_alt' => 'nullable|string|max:255',
+        'img3_alt' => 'nullable|string|max:255',
+        'img4_alt' => 'nullable|string|max:255',
     ]);
 
-    $detail->fill($request->only('des', 'color', 'size', 'product_id'));
+    $detail->fill($request->only('des', 'color', 'size', 'product_id','img1_alt',   'img2_alt',   'img3_alt',   'img4_alt'));
 
     for ($i = 1; $i <= 4; $i++) {
         if ($request->hasFile("img$i")) {
             $file = $request->file("img$i");
             $path = $file->store('product-details', 'public');
-            $detail->{"img$i"} = asset('storage/' . $path);
+            $detail->{"img$i"} = '/storage/' . $path;
         }
     }
 

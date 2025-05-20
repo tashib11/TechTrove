@@ -24,7 +24,7 @@ public function store(Request $request)
     $path = $request->file('brandFile')->store('brands', 'public');
 
     // Get public URL: e.g., https://yourdomain.com/storage/brands/filename.jpg
-    $imageUrl = asset('storage/' . $path);
+    $imageUrl = '/storage/' . $path;
 
     Brand::create([
         'brandName' => $request->brandName,
@@ -86,7 +86,7 @@ public function store(Request $request)
 
         if ($request->hasFile('brandFile')) {
             $path = $request->file('brandFile')->store('brands', 'public');
-            $brand->brandImg = asset('storage/' . $path);
+            $brand->brandImg = '/storage/' . $path;
         }
 
         $brand->save();
