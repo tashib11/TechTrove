@@ -11,7 +11,7 @@
         (async () => {
             await Category();
             // await Hero();
-            await TopCategory();
+            // await TopCategory();
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
             // await Popular();
             // await New();
