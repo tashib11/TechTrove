@@ -98,7 +98,7 @@
     <div class="item brand-card">
         <a href="/by-brand?id=${item['id']}">
             <div class="brand-img-box">
-                <img src="${item['brandImg']}" alt="${item['brandAlt'] || item['brandName']}" class="brand-img"/>
+                <img loading="lazy" src="${item['brandImg']}" alt="${item['brandAlt'] || item['brandName']}" class="brand-img"/>
             </div>
             <span class="brand-title">${item['brandName']}</span>
         </a>
