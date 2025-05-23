@@ -168,7 +168,10 @@
         </div>
 
         <div class="pb-5 pt-3">
-            <button type="submit" class="btn btn-primary">Update</button>
+          <button type="submit" id="submitBtn" class="btn btn-primary">
+    <span id="spinner" class="spinner-border spinner-border-sm d-none mr-1" role="status" aria-hidden="true"></span>
+    Update
+</button>
             <a href="{{ asset('/Dashboard/ProductList') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
     </div>
@@ -178,62 +181,65 @@
 @endsection
 
 
-
 @section('script')
 <script>
-
-    // CSRF Token Setup for Ajax
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    //desc area
-    $('.summernote').summernote()
-setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
+    $('.summernote').summernote();
+    setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
 
-$("#productForm").submit(function(event){
-    event.preventDefault();
-      var formData = new FormData(this);
-    $.ajax({
-        url:'{{ route("product.update", $product->id) }}',
-        type:'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        success:function(response){
-           if (response.status == true || response.status === "true") {
-    window.location.href = "/Dashboard/ProductList";
-}
-else {
-    if (response.errors && response.errors.general) {
-        alert(response.errors.general);
-    } else {
-        alert("Product creation failed. Please check your inputs.");
-    }
-}
+    $("#productForm").submit(function(event) {
+        event.preventDefault();
+        let formData = new FormData(this);
 
-},
-      error:function(xhr){
-    let res = xhr.responseJSON;
-    if (res && res.errors) {
-        $(".error").removeClass('is-invalid').html("");
-        $("input, select").removeClass('is-invalid');
-        $.each(res.errors, function(key, value){
-            $('#' + key).addClass('is-invalid').siblings('p')
-                .addClass('invalid-feedback').html(value);
+        // Show spinner and disable button
+        $("#spinner").removeClass("d-none");
+        $("#submitBtn").attr("disabled", true);
+
+        $.ajax({
+            url: '{{ route("product.update", $product->id) }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
+
+                if (response.msg === 'success') {
+                    alert(response.data.message || 'Product updated successfully!');
+                    window.location.href = "/Dashboard/ProductList";
+                } else {
+                    alert(response.data.message || 'Update failed. Please check your inputs.');
+                }
+            },
+            error: function(xhr) {
+                $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
+
+                const res = xhr.responseJSON;
+
+                $(".error").removeClass('is-invalid').html("");
+                $("input, select").removeClass('is-invalid');
+
+                if (res && res.errors) {
+                    $.each(res.errors, function(key, value) {
+                        $('#' + key).addClass('is-invalid').siblings('p')
+                            .addClass('invalid-feedback').html(value);
+                    });
+                } else if (res && res.data && res.data.message) {
+                    alert(res.data.message);
+                } else {
+                    alert("Something went wrong. Please try again.");
+                }
+            }
         });
-    } else {
-        alert("Fill up all fields. Please try again.");
-    }
-}
-
     });
-});
-
-
-
 </script>
 @endsection
+n
