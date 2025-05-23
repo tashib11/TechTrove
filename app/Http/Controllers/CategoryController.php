@@ -6,6 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+// use Intervention\Image\Facades\Image;
+
+use Intervention\Image\ImageManagerStatic as Image; // Add this line
+use Illuminate\Support\Facades\Storage;
+// Use the new Intervention Image v3 classes
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver; // Make sure you have GD extension enabled in PHP
+// If you prefer Imagick and have it installed, use: use Intervention\Image\Drivers\Imagick\Driver;
+use Exception; // For better exception handling
 
 
 class CategoryController extends Controller
@@ -15,28 +24,77 @@ class CategoryController extends Controller
         return view('admin.products.category');
     }
 
-
-public function store(Request $request)
+ public function store(Request $request)
 {
     $request->validate([
         'catName' => 'required|string|max:255',
-        'catFile' => 'required|image|max:2048',
+        'catFile' => 'required|image|max:5000', // Accepts all image types
+        'catAlt' => 'nullable|string|max:255',
     ]);
 
-    // Store image in storage/app/public/category
-    $path = $request->file('catFile')->store('categories', 'public');
+    if ($request->hasFile('catFile')) {
+        $uploadedImageFile = $request->file('catFile');
 
-    // Get public URL: e.g., https://yourdomain.com/storage/category/filename.jpg
-    $imageUrl = '/storage/' . $path;
+        // Force webp extension regardless of upload format
+        $filename = time() . '.webp'; // <-- Critical change
+        $path = 'categories/' . $filename;
 
-    Category::create([
-        'categoryName' => $request->catName,
-        'categoryImg' => $imageUrl,
-          'categoryAlt' => $request->catAlt,
-    ]);
+        try {
+            $manager = new ImageManager(new Driver());
+            $img = $manager->read($uploadedImageFile);
 
-    return response()->json(['message' => 'Category created successfully!']);
+            // Maintain aspect ratio with 250px width
+            $img->resize(130, 150);
+
+
+            // Convert to WebP with 80% quality
+            Storage::disk('public')->put($path, (string) $img->toWebp(80));
+
+            // Store webp path in database
+            Category::create([
+                'categoryName' => $request->catName,
+                'categoryImg' => '/storage/' . $path, // webp URL
+                'categoryAlt' => $request->catAlt,
+            ]);
+
+            return ResponseHelper::Out('success', ['message' => 'Category created successfully!'], 200);
+
+        } catch (Exception $e) {
+            return ResponseHelper::Out('error', ['message' => 'Image processing failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+    return ResponseHelper::Out('error', ['message' => 'No image uploaded'], 400);
 }
+
+
+
+
+
+
+
+
+// public function store(Request $request)
+// {
+//     $request->validate([
+//         'catName' => 'required|string|max:255',
+//         'catFile' => 'required|image|max:2048',
+//     ]);
+
+//     // Store image in storage/app/public/category
+//     $path = $request->file('catFile')->store('categories', 'public');
+
+//     // Get public URL: e.g., https://yourdomain.com/storage/category/filename.jpg
+//     $imageUrl = '/storage/' . $path;
+
+//     Category::create([
+//         'categoryName' => $request->catName,
+//         'categoryImg' => $imageUrl,
+//           'categoryAlt' => $request->catAlt,
+//     ]);
+
+//     return response()->json(['message' => 'Category created successfully!']);
+// }
 
     public function ByCategoryPage(Request $request)
   {
@@ -88,24 +146,43 @@ public function store(Request $request)
         return view('admin.products.category-edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'categoryName' => 'required|string|max:255',
-        ]);
 
-        $category = Category::findOrFail($id);
-        $category->categoryName = $request->categoryName;
-        $category->categoryAlt = $request->categoryAlt;
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'categoryName' => 'required|string|max:255',
+    ]);
 
-        if ($request->hasFile('categoryFile')) {
-            $path = $request->file('categoryFile')->store('categories', 'public');
+    $category = Category::findOrFail($id);
+    $category->categoryName = $request->categoryName;
+    $category->categoryAlt = $request->categoryAlt;
+
+    if ($request->hasFile('categoryFile')) {
+        $uploadedImageFile = $request->file('categoryFile');
+
+        $filename = time() . '.webp'; // Force webp extension;
+        $path = 'categories/' . $filename;
+
+        try {
+            $manager = new ImageManager(new Driver());
+            $img = $manager->read($uploadedImageFile);
+
+            // Resize to match frontend box (130x150) or your requirement
+            $img->resize(130, 150);
+
+            // Save as WebP in public disk
+            Storage::disk('public')->put($path, (string) $img->toWebp(80));
+
+            // Update image path
             $category->categoryImg = '/storage/' . $path;
+
+        } catch (Exception $e) {
+            return ResponseHelper::Out('error', ['message' => 'Error processing image: ' . $e->getMessage()], 500);
         }
-
-        $category->save();
-
-        return response()->json(['message' => 'Category updated successfully!']);
     }
 
+    $category->save();
+
+    return response()->json(['message' => 'Category updated successfully!']);
+}
 }

@@ -62,7 +62,7 @@ document.getElementById('catForm').addEventListener('submit', function (e) {
     })
     .then(function (response) {
         document.getElementById('catMsg').innerHTML =
-            '<div class="alert alert-success">' + response.data.message + '</div>';
+            '<div class="alert alert-success">' + response.data.data.message + '</div>';
         document.getElementById('catForm').reset();
         document.getElementById('imagePreviewCard').classList.add('d-none');
     })

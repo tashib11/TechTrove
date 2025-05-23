@@ -23,7 +23,7 @@
 .categories_box img {
     width: 100%;
     height: 130px;
-    object-fit: contain;
+    object-fit: cover;
     margin-bottom: 10px;
     transition: transform 0.3s ease;
 }
@@ -53,7 +53,7 @@
 .category-img-box img {
     max-width: 90%;
     max-height: 90%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform 0.3s ease;
 }
 .categories_box span {
@@ -101,7 +101,7 @@
                 <div class="item">
                     <div class="categories_box">
                         <a href="/by-category?id=${item['id']}">
-                            <img src="${item['categoryImg']}" alt="${item['categoryAlt'] || item['categoryName']}"/>
+                        <img loading="lazy" src="${item['categoryImg']}" alt="${item['categoryAlt'] || item['categoryName']}"/>
                             <span>${item['categoryName']}</span>
                         </a>
                     </div>
