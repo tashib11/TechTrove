@@ -10,7 +10,7 @@
     <div class="product w-100">
                 <div class="product_img">
                     <a href="/details?id={{ $item->id }}">
-                        <img src="{{ $item->image }}" alt="{{ $item->img_alt }}">
+                        <img loading="lazy"  src="{{ $item->image }}" alt="{{ $item->img_alt }}">
                     </a>
                     <div class="product_action_box">
                         <ul class="list_none pr_action_btn">

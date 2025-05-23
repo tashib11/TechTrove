@@ -218,7 +218,7 @@
             contentType: false,
             dataType: 'json',
             success: function (response) {
-                if (response.status === 'success') {
+                if (response.msg === 'success') {
                     // alert(response.data.message || "Product created successfully.");
                     // setTimeout(() => {
                         window.location.href = "/Dashboard/DetailsCreate";
