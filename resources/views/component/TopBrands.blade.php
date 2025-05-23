@@ -35,7 +35,7 @@
 .brand-img {
     max-width: 90%;
     max-height: 90%;
-    object-fit: contain;
+    object-fit: cover;
     transform: scale(1.1);
     transition: transform 0.3s ease;
 }

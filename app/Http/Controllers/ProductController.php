@@ -110,7 +110,7 @@ public function store(Request $request) {
             $img = $manager->read($uploadedImageFile);
 
             // Maintain aspect ratio with 250px width
-            $img->resize(800, 800);
+            $img->resize(310, 310);
 
 
             // Convert to WebP with 80% quality
@@ -440,7 +440,7 @@ public function CheckWishListStatus($product_id)
         return view('admin.products.edit', $data);
     }
 
-  
+
 
 public function update($id, Request $request)
 {
@@ -482,7 +482,7 @@ public function update($id, Request $request)
             $manager = new ImageManager(new Driver());
             $img = $manager->read($uploadedImageFile);
 
-            $img->resize(800, 800);
+            $img->resize(310, 310);
 
             Storage::disk('public')->put($path, (string) $img->toWebp(80));
 
