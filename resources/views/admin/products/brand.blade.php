@@ -23,7 +23,7 @@
                 <input type="text" class="form-control" id="brandAlt" placeholder="Describe the image">
             </div>
 
-          
+
         </div>
     </div>
 
@@ -58,7 +58,7 @@ document.getElementById('brandForm').addEventListener('submit', function (e) {
     axios.post('/Dashboard/brandStore', formData)
         .then(response => {
             document.getElementById('brandMsg').innerHTML =
-                `<div class="alert alert-success">${response.data.message}</div>`;
+                `<div class="alert alert-success">${response.data.data.message}</div>`;
             document.getElementById('brandForm').reset();
             document.getElementById('brandPreviewCard').classList.add('d-none');
         })

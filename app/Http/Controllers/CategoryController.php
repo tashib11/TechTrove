@@ -6,14 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
-// use Intervention\Image\Facades\Image;
 
-use Intervention\Image\ImageManagerStatic as Image; // Add this line
 use Illuminate\Support\Facades\Storage;
 // Use the new Intervention Image v3 classes
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver; // Make sure you have GD extension enabled in PHP
-// If you prefer Imagick and have it installed, use: use Intervention\Image\Drivers\Imagick\Driver;
 use Exception; // For better exception handling
 
 
@@ -29,7 +26,6 @@ class CategoryController extends Controller
     $request->validate([
         'catName' => 'required|string|max:255',
         'catFile' => 'required|image|max:5000', // Accepts all image types
-        'catAlt' => 'nullable|string|max:255',
     ]);
 
     if ($request->hasFile('catFile')) {
