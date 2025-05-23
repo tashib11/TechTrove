@@ -39,7 +39,7 @@ public function store(Request $request)
             $img = $manager->read($uploadedImageFile);
 
             // Maintain aspect ratio with 250px width
-            $img->resize(130, 130);
+            $img->resize(100, 100);
 
 
             // Convert to WebP with 80% quality
@@ -125,7 +125,7 @@ public function store(Request $request)
             $img = $manager->read($uploadedImageFile);
 
             // Resize to match frontend box (130x150) or your requirement
-            $img->resize(130, 130);
+            $img->resize(100, 100);
 
             // Save as WebP in public disk
             Storage::disk('public')->put($path, (string) $img->toWebp(80));

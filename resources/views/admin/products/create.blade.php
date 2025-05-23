@@ -173,7 +173,11 @@
         </div>
 
         <div class="pb-5 pt-3">
-            <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary">
+    Create
+    <span id="spinner" class="spinner-border spinner-border-sm d-none ml-2" role="status" aria-hidden="true"></span>
+</button>
+
             <a href="{{ asset('/Dashboard/ProductList') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
     </div>
@@ -182,64 +186,99 @@
 </section>
 @endsection
 
-
-
 @section('script')
 <script>
-        // CSRF Token Setup for Ajax
+    // CSRF Token Setup
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-//desc area
-    $('.summernote').summernote()
+    $('.summernote').summernote();
+    setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
 
-setupImagePreview('image', 'imagePreviewCard', 'imagePreview');
-$("#productForm").submit(function(event){
-    event.preventDefault();
+    $("#productForm").submit(function(event){
+        event.preventDefault();
 
-    var formData = new FormData(this);
+        const form = this;
+        const formData = new FormData(form);
+        const submitBtn = $('#submitBtn');
+        const spinner = $('#spinner');
 
-    $.ajax({
-        url:'{{ route("product.store") }}',
-        type:'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-     success:function(response){
-  if (response.status == true || response.status === "true") {
-    window.location.href = "/Dashboard/DetailsCreate";
-}
-else {
-    if (response.errors && response.errors.general) {
-        alert(response.errors.general);
-    } else {
-        alert("Product creation failed. Please check your inputs.");
-    }
-}
+        // Disable button and show spinner
+        submitBtn.prop('disabled', true);
+        spinner.removeClass('d-none');
 
-},
-       error:function(xhr){
-    let res = xhr.responseJSON;
-    if (res && res.errors) {
-        $(".error").removeClass('is-invalid').html("");
-        $("input, select").removeClass('is-invalid');
-        $.each(res.errors, function(key, value){
-            $('#' + key).addClass('is-invalid').siblings('p')
-                .addClass('invalid-feedback').html(value);
+        $.ajax({
+            url: '{{ route("product.store") }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    // alert(response.data.message || "Product created successfully.");
+                    // setTimeout(() => {
+                        window.location.href = "/Dashboard/DetailsCreate";
+                    // }, 100); // give browser a short pause
+                } else {
+                    alert(response.data?.message || "Product creation failed. Try again.");
+                    submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
+                }
+            },
+           error: function (xhr) {
+    const res = xhr.responseJSON;
+    let firstErrorField = null;
+
+    // Clear previous errors
+    $(".error").html("").removeClass('invalid-feedback');
+    $("input, select, textarea").removeClass('is-invalid');
+
+    if (res?.errors) {
+        $.each(res.errors, function (key, messages) {
+            const message = messages[0];
+
+            // Try to get the field by name or ID
+            const field = $(`[name="${key}"], #${key}`);
+
+            if (field.length > 0) {
+                field.addClass('is-invalid');
+
+                // If <p class="error"> exists next to this field, fill it
+                const errorElement = field.closest('.mb-3, .form-group').find('p.error');
+
+                if (errorElement.length > 0) {
+                    errorElement.addClass('invalid-feedback').html(message);
+                } else {
+                    field.after(`<p class="error invalid-feedback">${message}</p>`);
+                }
+
+                if (!firstErrorField) {
+                    firstErrorField = field;
+                }
+            }
         });
+
+        // Scroll to first error
+        if (firstErrorField) {
+            $('html, body').animate({
+                scrollTop: firstErrorField.offset().top - 100
+            }, 600);
+            firstErrorField.focus();
+        }
     } else {
-        alert("Fill up all fields. Please try again.");
+        alert(res?.data?.message || "An unexpected error occurred.");
     }
+
+    // Re-enable submit
+    $('#submitBtn').prop('disabled', false);
+    $('#spinner').addClass('d-none');
 }
 
+        });
     });
-});
-
-
-
 </script>
 @endsection

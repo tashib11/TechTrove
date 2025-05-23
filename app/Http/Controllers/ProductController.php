@@ -13,6 +13,11 @@ use App\Models\ProductSlider;
 use App\Models\ProductWish;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+// Use the new Intervention Image v3 classes
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver; // Make sure you have GD extension enabled in PHP
+use Exception; // For better exception handling
 
 class ProductController extends Controller
 {
@@ -82,6 +87,7 @@ public function store(Request $request) {
         'title' => 'required|string|max:255',
         'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         // add other validation rules
+
         'short_des'  => 'required',
          'price' => 'required',
         'discount' => 'required',
@@ -92,15 +98,26 @@ public function store(Request $request) {
         'brand_id' => 'required|exists:brands,id',
     ]);
 
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $path = $file->store('product-create', 'public'); // stored in storage/app/public/product-create
-        $relativePath  = '/storage/' . $path; // generates public URL like https://yourdomain.com/storage/product-create/filename.jpg
-    } else {
-        $relativePath  = null;
-    }
+ if ($request->hasFile('image')) {
+        $uploadedImageFile = $request->file('image');
 
- $product = Product::create([
+        // Force webp extension regardless of upload format
+        $filename = time() . '.webp'; // <-- Critical change
+        $path = 'product-create/' . $filename;
+
+        try {
+            $manager = new ImageManager(new Driver());
+            $img = $manager->read($uploadedImageFile);
+
+            // Maintain aspect ratio with 250px width
+            $img->resize(800, 800);
+
+
+            // Convert to WebP with 80% quality
+            Storage::disk('public')->put($path, (string) $img->toWebp(80));
+ $relativePath  = '/storage/' . $path;
+            // Store webp path in database
+          Product::create([
     'title' => $request->input('title'),
     'short_des' => $request->input('short_des'),
     'image' => $relativePath ,
@@ -112,13 +129,21 @@ public function store(Request $request) {
     'remark' => $request->input('remark'),
     'category_id' => $request->input('category_id'),
     'brand_id' => $request->input('brand_id'),
-]);
-    if($product) {
-        return response()->json(['status' => true, 'message' => 'Product created successfully']);
-    } else {
-        return response()->json(['status' => false, 'errors' => ['general' => 'Product creation failed']]);
+    ]);
+
+            return ResponseHelper::Out('success', ['message' => 'Product created successfully!'], 200);
+
+        } catch (Exception $e) {
+            return ResponseHelper::Out('error', ['message' => 'Image processing failed: ' . $e->getMessage()], 500);
+        }
     }
+
+
+
+    return ResponseHelper::Out('error', ['message' => 'No Product uploaded'], 400);
+
 }
+
 
     public function detailCreate(){
 
@@ -415,18 +440,62 @@ public function CheckWishListStatus($product_id)
         return view('admin.products.edit', $data);
     }
 
-     public function update($id, Request $request){
-        $detail = Product::findOrFail($id);
+  
 
-    $detail->fill($request->only('title','short_des','price','discount','discount_price','img_alt','stock','remark','category_id','brand_id'));
-          if ($request->hasFile("image")) {
-            $file = $request->file("image");
-            $path = $file->store('product-create', 'public');
-            $detail->{"image"} = '/storage/' . $path;
+public function update($id, Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'short_des' => 'required',
+        'price' => 'required',
+        'discount' => 'required',
+        'discount_price' => 'required',
+        'img_alt' => 'required|string|max:255',
+        'stock' => 'required',
+        'remark' => 'required',
+        'category_id' => 'required|exists:categories,id',
+        'brand_id' => 'required|exists:brands,id',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // optional on update
+    ]);
+
+    $product = Product::findOrFail($id);
+
+    $product->fill([
+        'title' => $request->input('title'),
+        'short_des' => $request->input('short_des'),
+        'img_alt' => $request->input('img_alt'),
+        'price' => $request->input('price'),
+        'discount' => $request->input('discount'),
+        'discount_price' => $request->input('discount_price'),
+        'stock' => $request->input('stock'),
+        'remark' => $request->input('remark'),
+        'category_id' => $request->input('category_id'),
+        'brand_id' => $request->input('brand_id'),
+    ]);
+
+    if ($request->hasFile('image')) {
+        try {
+            $uploadedImageFile = $request->file('image');
+            $filename = time() . '.webp';
+            $path = 'product-create/' . $filename;
+
+            $manager = new ImageManager(new Driver());
+            $img = $manager->read($uploadedImageFile);
+
+            $img->resize(800, 800);
+
+            Storage::disk('public')->put($path, (string) $img->toWebp(80));
+
+            $product->image = '/storage/' . $path;
+        } catch (Exception $e) {
+            return ResponseHelper::Out('error', ['message' => 'Image processing failed: ' . $e->getMessage()], 500);
         }
-  $detail->save();
-       return response()->json(['status' => true]);
-     }
+    }
+
+    $product->save();
+
+    return ResponseHelper::Out('success', ['message' => 'Product updated successfully!'], 200);
+}
 
      public function destroy($id)
     {
