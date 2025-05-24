@@ -192,7 +192,7 @@ del {
            <option value="latest">Latest</option>
             <option value="asc">Price: Low to High</option>
             <option value="desc">Price: High to Low</option>
-            <option value="reset">Reset</option>
+            <option value="reset" selected>Reset</option>
         </select>
     </div>
     <div class="col-6 col-md-3 col-lg-2">
@@ -302,7 +302,7 @@ del {
     document.getElementById('filter-price-min').value = '';
     document.getElementById('filter-price-max').value = '';
     document.getElementById('filter-brand').value = '';
-    document.getElementById('filter-category').value = '';
+    // document.getElementById('filter-category').value = '';
     document.getElementById('filter-star').value = '';
     document.getElementById('search-input').value = '';
     document.getElementById('sort-price').value = '';
@@ -323,17 +323,18 @@ del {
 
     const sortValue = document.getElementById('sort-price').value;
 
+    // Reset handling
     if (sortValue === 'reset') {
       document.getElementById('filter-price-min').value = '';
       document.getElementById('filter-price-max').value = '';
       document.getElementById('filter-brand').value = '';
-      document.getElementById('filter-category').value = '';
+    //   document.getElementById('filter-category').value = '';
       document.getElementById('filter-star').value = '';
       document.getElementById('search-input').value = '';
-      document.getElementById('sort-price').value = '';
-      fetchProducts(); return;
+      document.getElementById('sort-price').value = 'latest';
     }
 
+    // Extract current values
     const search = document.getElementById('search-input').value;
     const priceMin = document.getElementById('filter-price-min').value;
     const priceMax = document.getElementById('filter-price-max').value;
@@ -341,23 +342,27 @@ del {
     const category = document.getElementById('filter-category').value;
     const star = document.getElementById('filter-star').value;
 
+    // Send the request
     axios.get('/product-filter', {
       params: {
-        remark: currentCategory.toLowerCase(),
-        search,
+        sort: sortValue,
+        search: search,
         price_min: priceMin,
         price_max: priceMax,
-        brand,
-        star,
+        brand: brand,
         dynamic_category: category,
-        sort: sortValue
+        star: star,
+        remark: currentCategory
       }
     }).then(res => {
-      document.getElementById('product-content').innerHTML = res.data;
+        document.getElementById('product-content').innerHTML = res.data;
+    }).catch(err => {
+        console.error(err);
     }).finally(() => {
-      loading.classList.add('d-none');
+        loading.classList.add('d-none');
     });
-  }
+}
+
 
   // Load filter dropdowns
   function loadFilters() {
@@ -377,6 +382,17 @@ del {
   }
 
   // Initial run
-  loadFilters();
+//   loadFilters();
+window.addEventListener('DOMContentLoaded', function () {
+  // Set the preselected category filter value
+  const selectedCategory = document.querySelector('#filter-category option[selected]');
+  if (selectedCategory) {
+    document.getElementById('filter-category').value = selectedCategory.value;
+  }
+
+  fetchProducts(); // Now uses the selected category
+});
+
+
 //   fetchProducts();
 </script>

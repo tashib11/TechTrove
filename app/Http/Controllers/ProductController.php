@@ -299,29 +299,38 @@ if ($request->filled('star')) {
 if ($request->filled('dynamic_category')) {
     $query->where('category_id', $request->dynamic_category);
 }
+$priceMin = is_numeric($request->price_min) ? (float)$request->price_min : null;
+$priceMax = is_numeric($request->price_max) ? (float)$request->price_max : null;
 
-    // Dynamic price filtering based on each product's discount flag
-   if ($request->filled('price_min')) {
-    $query->whereRaw("IF(discount = 1, discount_price, price) >= ?", [$request->price_min]);
+if ($priceMin !== null) {
+    $query->whereRaw(
+        '(CASE WHEN discount = 1 THEN discount_price ELSE price END) >= ?',
+        [$priceMin]
+    );
 }
-if ($request->filled('price_max')) {
-    $query->whereRaw("IF(discount = 1, discount_price, price) <= ?", [$request->price_max]);
+
+if ($priceMax !== null) {
+    $query->whereRaw(
+        '(CASE WHEN discount = 1 THEN discount_price ELSE price END) <= ?',
+        [$priceMax]
+    );
 }
+
+
 
 // Sort by price (considering discount)
-switch ($request->sort) {
-    case 'asc':
-        $query->orderByRaw("IF(discount = 1, discount_price, price) ASC");
-        break;
-    case 'desc':
-        $query->orderByRaw("IF(discount = 1, discount_price, price) DESC");
-        break;
-    case 'latest':
-        $query->latest('id');
-        break;
-    default:
-        $query->latest('id');
-        break;
+if ($request->filled('sort')) {
+    switch ($request->sort) {
+        case 'asc':
+        case 'desc':
+            $query->orderByRaw("CASE WHEN discount = 1 THEN discount_price ELSE price END " . strtoupper($request->sort));
+            break;
+        case 'latest':
+            $query->latest('id');
+            break;
+    }
+} else {
+    $query->latest('id');
 }
 
 
