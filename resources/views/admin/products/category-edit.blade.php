@@ -32,7 +32,10 @@
                         </div>
 
 
-        <button type="submit" class="btn btn-primary">Update Category</button>
+         <button type="submit" id="submitBtn" class="btn btn-primary">
+    <span id="spinner" class="spinner-border spinner-border-sm d-none mr-1" role="status" aria-hidden="true"></span>
+    Update
+</button>
         <a href="/Dashboard/CategoryList" class="btn btn-secondary">Back</a>
     </form>
 </div>
@@ -48,12 +51,20 @@
 
         const formData = new FormData(form);
 
+        // Show spinner and disable button
+        $("#spinner").removeClass("d-none");
+        $("#submitBtn").attr("disabled", true);
+
         axios.post(`/Dashboard/CategoryUpdate/{{ $category->id }}`, formData)
             .then(res => {
+                   $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
                 alert(res.data.message);
                 window.location.href = "/Dashboard/CategoryList";
             })
             .catch(err => {
+                   $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
                 alert('Update failed!');
                 console.error(err);
             });

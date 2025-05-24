@@ -40,7 +40,7 @@
     <!-- JS Dependencies (head) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
     {{-- zoom feature script --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
@@ -52,12 +52,20 @@
     body {
         font-family: 'Poppins', sans-serif;
     }
-    .mobile-bottom-nav i {
-    line-height: 1;
-}
+
 .mobile-bottom-nav small {
     font-size: 12px;
 }
+.mobile-bottom-nav .nav-item {
+    width: 20%; /* distribute evenly */
+    font-size: 11px;
+}
+.mobile-bottom-nav i {
+    font-size: 18px;
+    line-height: 1;
+
+}
+
 
 </style>
 

@@ -91,7 +91,10 @@
 
 
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-success">Update</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary">
+    <span id="spinner" class="spinner-border spinner-border-sm d-none mr-1" role="status" aria-hidden="true"></span>
+    Update
+</button>
                 <a href="{{ asset('/Dashboard/ProductCreate') }}" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </div>
@@ -125,6 +128,9 @@ $(document).ready(function () {
     $("#productForm").submit(function(event){
         event.preventDefault();
         var formData = new FormData(this);
+  // Show spinner and disable button
+        $("#spinner").removeClass("d-none");
+        $("#submitBtn").attr("disabled", true);
 
         $.ajax({
             url: $(this).attr('action'),
@@ -134,6 +140,9 @@ $(document).ready(function () {
             contentType: false,
             dataType: 'json',
             success: function(response){
+                   $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
+
                 if (response.status == true || response.status === "true") {
                     window.location.href = "/Dashboard/DetailsSelect";
                 } else {
@@ -141,6 +150,8 @@ $(document).ready(function () {
                 }
             },
             error: function(xhr){
+                   $("#spinner").addClass("d-none");
+                $("#submitBtn").attr("disabled", false);
                 let res = xhr.responseJSON;
                 if (res && res.errors) {
                     $(".error").removeClass('is-invalid').html("");

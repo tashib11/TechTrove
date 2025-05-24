@@ -26,7 +26,10 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Create Category</button>
+    <button type="submit" id="submitBtn" class="btn btn-primary">
+    Create
+    <span id="spinner" class="spinner-border spinner-border-sm d-none ml-2" role="status" aria-hidden="true"></span>
+</button>
     <div id="catMsg" class="mt-2"></div>
 </form>
 
@@ -55,18 +58,29 @@ document.getElementById('catForm').addEventListener('submit', function (e) {
     formData.append('catFile', catFile);
     formData.append('catAlt', catAlt);
 
+     const submitBtn = $('#submitBtn');
+        const spinner = $('#spinner');
+
+        // Disable button and show spinner
+        submitBtn.prop('disabled', true);
+        spinner.removeClass('d-none');
+
     axios.post('/Dashboard/category', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     })
     .then(function (response) {
+        submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
         document.getElementById('catMsg').innerHTML =
             '<div class="alert alert-success">' + response.data.data.message + '</div>';
         document.getElementById('catForm').reset();
         document.getElementById('imagePreviewCard').classList.add('d-none');
     })
     .catch(function (error) {
+        submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
         document.getElementById('catMsg').innerHTML =
             '<div class="alert alert-danger">Error creating category.</div>';
     });
