@@ -7,9 +7,9 @@
     @include('component.Footer')
     <script>
         (async () => {
-            await productDetails();
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            await productReview();
+            // await productDetails();
+            // $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+            // await productReview();
 
         })()
     </script>

@@ -27,7 +27,10 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Create Brand</button>
+      <button type="submit" id="submitBtn" class="btn btn-primary">
+    Create
+    <span id="spinner" class="spinner-border spinner-border-sm d-none ml-2" role="status" aria-hidden="true"></span>
+</button>
     <div id="brandMsg" class="mt-2"></div>
 </form>
 
@@ -55,14 +58,26 @@ document.getElementById('brandForm').addEventListener('submit', function (e) {
     formData.append('brandFile', brandFile);
     formData.append('brandAlt', brandAlt);
 
+      const submitBtn = $('#submitBtn');
+        const spinner = $('#spinner');
+
+        // Disable button and show spinner
+        submitBtn.prop('disabled', true);
+        spinner.removeClass('d-none');
+
     axios.post('/Dashboard/brandStore', formData)
         .then(response => {
+             submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
+                    
             document.getElementById('brandMsg').innerHTML =
                 `<div class="alert alert-success">${response.data.data.message}</div>`;
             document.getElementById('brandForm').reset();
             document.getElementById('brandPreviewCard').classList.add('d-none');
         })
         .catch(() => {
+            submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
             document.getElementById('brandMsg').innerHTML =
                 `<div class="alert alert-danger">Error creating brand.</div>`;
         });

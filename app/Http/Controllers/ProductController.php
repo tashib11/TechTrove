@@ -14,6 +14,7 @@ use App\Models\ProductWish;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 // Use the new Intervention Image v3 classes
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver; // Make sure you have GD extension enabled in PHP
@@ -156,7 +157,8 @@ public function store(Request $request) {
     }
 
 
-  public function detailstore(Request $request) {
+public function detailstore(Request $request)
+{
     $request->validate([
         'des'  => 'required',
         'img1' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -166,50 +168,64 @@ public function store(Request $request) {
         'color' => 'required',
         'size' => 'required',
         'product_id' => 'required|exists:products,id',
-        // optional but recommended:
         'img1_alt' => 'nullable|string|max:255',
         'img2_alt' => 'nullable|string|max:255',
         'img3_alt' => 'nullable|string|max:255',
         'img4_alt' => 'nullable|string|max:255',
     ]);
 
-    // Upload logic for all images
-    $publicUrl1 = $request->hasFile('img1') ? '/storage/' . $request->file('img1')->store('product-details', 'public') : null;
-    $publicUrl2 = $request->hasFile('img2') ? '/storage/' . $request->file('img2')->store('product-details', 'public') : null;
-    $publicUrl3 = $request->hasFile('img3') ? '/storage/' . $request->file('img3')->store('product-details', 'public') : null;
-    $publicUrl4 = $request->hasFile('img4') ? '/storage/' . $request->file('img4')->store('product-details', 'public') : null;
+    $manager = new ImageManager(new Driver());
 
-    // Store into DB
-    $product = ProductDetails::create([
-        'img1' => $publicUrl1,
-        'img2' => $publicUrl2,
-        'img3' => $publicUrl3,
-        'img4' => $publicUrl4,
+    try {
+        $paths = [];
 
-        'img1_alt' => $request->input('img1_alt'),
-        'img2_alt' => $request->input('img2_alt'),
-        'img3_alt' => $request->input('img3_alt'),
-        'img4_alt' => $request->input('img4_alt'),
+        foreach (['img1', 'img2', 'img3', 'img4'] as $key) {
+            if ($request->hasFile($key)) {
+                $uploadedImage = $request->file($key);
+                $filename = Str::uuid()->toString() . '.webp';
+                $path = 'product-details/' . $filename;
 
-        'img1_width' => 600,
-        'img1_height' => 600,
-        'img2_width' => 600,
-        'img2_height' => 600,
-        'img3_width' => 600,
-        'img3_height' => 600,
-        'img4_width' => 600,
-        'img4_height' => 600,
+                $image = $manager->read($uploadedImage)->resize(400, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
 
-        'des' => $request->input('des'),
-        'color' => $request->input('color'),
-        'size' => $request->input('size'),
-        'product_id' => $request->input('product_id'),
-    ]);
+                Storage::disk('public')->put($path, (string) $image->toWebp(80));
+                $paths[$key] = '/storage/' . $path;
+            } else {
+                $paths[$key] = null;
+            }
+        }
 
-    if($product) {
+        $product = ProductDetails::create([
+            'img1' => $paths['img1'],
+            'img2' => $paths['img2'],
+            'img3' => $paths['img3'],
+            'img4' => $paths['img4'],
+
+            'img1_alt' => $request->input('img1_alt'),
+            'img2_alt' => $request->input('img2_alt'),
+            'img3_alt' => $request->input('img3_alt'),
+            'img4_alt' => $request->input('img4_alt'),
+
+            'img1_width' => 600,
+            'img1_height' => 600,
+            'img2_width' => 600,
+            'img2_height' => 600,
+            'img3_width' => 600,
+            'img3_height' => 600,
+            'img4_width' => 600,
+            'img4_height' => 600,
+
+            'des' => $request->input('des'),
+            'color' => $request->input('color'),
+            'size' => $request->input('size'),
+            'product_id' => $request->input('product_id'),
+        ]);
+
         return response()->json(['status' => true, 'message' => 'Product created successfully']);
-    } else {
-        return response()->json(['status' => false, 'errors' => ['general' => 'Product creation failed']]);
+    } catch (\Exception $e) {
+        return response()->json(['status' => false, 'errors' => ['image' => 'Processing failed: ' . $e->getMessage()]]);
     }
 }
 
@@ -285,45 +301,29 @@ if ($request->filled('dynamic_category')) {
 }
 
     // Dynamic price filtering based on each product's discount flag
-    if ($request->filled('price_min') || $request->filled('price_max')) {
-    $query->where(function ($q) use ($request) {
-        if ($request->filled('price_min')) {
-            $q->where(function ($q2) use ($request) {
-                $q2->where(function ($q3) use ($request) {
-                    $q3->where('discount', 0)->where('price', '>=', $request->price_min);
-                })->orWhere(function ($q4) use ($request) {
-                    $q4->where('discount', 1)->where('discount_price', '>=', $request->price_min);
-                });
-            });
-        }
+   if ($request->filled('price_min')) {
+    $query->whereRaw("IF(discount = 1, discount_price, price) >= ?", [$request->price_min]);
+}
+if ($request->filled('price_max')) {
+    $query->whereRaw("IF(discount = 1, discount_price, price) <= ?", [$request->price_max]);
+}
 
-        if ($request->filled('price_max')) {
-            $q->where(function ($q2) use ($request) {
-                $q2->where(function ($q3) use ($request) {
-                    $q3->where('discount', 0)->where('price', '<=', $request->price_max);
-                })->orWhere(function ($q4) use ($request) {
-                    $q4->where('discount', 1)->where('discount_price', '<=', $request->price_max);
-                });
-            });
-        }
-    });
-}
 // Sort by price (considering discount)
-if ($request->filled('sort')) {
-    switch ($request->sort) {
-        case 'asc':
-            $query->orderByRaw("IF(discount = '1', COALESCE(discount_price, price), price) ASC");
-            break;
-        case 'desc':
-            $query->orderByRaw("IF(discount = '1', COALESCE(discount_price, price), price) DESC");
-            break;
-        case 'latest':
-            $query->latest('id');
-            break;
-    }
-} else {
-    $query->latest('id'); // default fallback
+switch ($request->sort) {
+    case 'asc':
+        $query->orderByRaw("IF(discount = 1, discount_price, price) ASC");
+        break;
+    case 'desc':
+        $query->orderByRaw("IF(discount = 1, discount_price, price) DESC");
+        break;
+    case 'latest':
+        $query->latest('id');
+        break;
+    default:
+        $query->latest('id');
+        break;
 }
+
 
     $products = $query->get();
 
@@ -543,42 +543,68 @@ public function update($id, Request $request)
         return view('admin.products.detailedit', $data);
 
 }
+ public function detailUpdate(Request $request, $id)
+    {
+        $detail = ProductDetails::findOrFail($id);
 
-public function detailUpdate(Request $request, $id)
-{
-    $detail = ProductDetails::findOrFail($id);
+        $request->validate([
+            'des'        => 'required',
+            'color'      => 'required',
+            'size'       => 'required',
+            'product_id' => 'required|exists:products,id',
+            'img1'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'img2'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'img3'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'img4'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'img1_alt'   => 'nullable|string|max:255',
+            'img2_alt'   => 'nullable|string|max:255',
+            'img3_alt'   => 'nullable|string|max:255',
+            'img4_alt'   => 'nullable|string|max:255',
+        ]);
 
-    $request->validate([
-        'des' => 'required',
-        'color' => 'required',
-        'size' => 'required',
-        'product_id' => 'required|exists:products,id',
-        'img1' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'img2' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'img3' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        'img4' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-          'img1_alt' => 'nullable|string|max:255',
-        'img2_alt' => 'nullable|string|max:255',
-        'img3_alt' => 'nullable|string|max:255',
-        'img4_alt' => 'nullable|string|max:255',
-    ]);
+        $manager = new ImageManager(new Driver());
 
-    $detail->fill($request->only('des', 'color', 'size', 'product_id','img1_alt',   'img2_alt',   'img3_alt',   'img4_alt'));
+        try {
+            // Fill other details first
+            $detail->fill($request->only('des', 'color', 'size', 'product_id'));
 
-    for ($i = 1; $i <= 4; $i++) {
-        if ($request->hasFile("img$i")) {
-            $file = $request->file("img$i");
-            $path = $file->store('product-details', 'public');
-            $detail->{"img$i"} = '/storage/' . $path;
+            // Process and update images
+            foreach (['img1', 'img2', 'img3', 'img4'] as $key) {
+                if ($request->hasFile($key)) {
+                    // Delete old image if it exists
+                    if ($detail->{$key}) {
+                        Storage::disk('public')->delete(Str::after($detail->{$key}, '/storage/'));
+                    }
+
+                    $uploadedImage = $request->file($key);
+                    $filename = Str::uuid()->toString() . '.webp';
+                    $path = 'product-details/' . $filename;
+
+                    $image = $manager->read($uploadedImage)->resize(400, 400, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+
+                    Storage::disk('public')->put($path, (string) $image->toWebp(80));
+                    $detail->{$key} = '/storage/' . $path;
+
+                    // Update image dimensions (assuming they are fixed at 600x600 for consistency)
+                    $detail->{$key . '_width'} = 600;
+                    $detail->{$key . '_height'} = 600;
+                }
+
+                // Update alt tags regardless of whether a new image was uploaded
+                $altKey = $key . '_alt';
+                $detail->{$altKey} = $request->input($altKey);
+            }
+
+            $detail->save();
+
+            return response()->json(['status' => true, 'message' => 'Product details updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'errors' => ['image' => 'Processing failed: ' . $e->getMessage()]]);
         }
     }
-
-    $detail->save();
-
-    return response()->json(['status' => true]);
-}
-
-
 
     public function CreateCartList(Request $request):JsonResponse{
         $user_id=$request->header('id');

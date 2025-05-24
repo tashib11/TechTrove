@@ -210,7 +210,10 @@
             </div>
 
               <div class="pb-5 pt-3">
-            <button type="submit" class="btn btn-primary">Create</button>
+               <button type="submit" id="submitBtn" class="btn btn-primary">
+    Create
+    <span id="spinner" class="spinner-border spinner-border-sm d-none ml-2" role="status" aria-hidden="true"></span>
+</button>
             <a href="{{ asset('/Dashboard/DetailsCreate') }}" class="btn btn-outline-dark ml-3">Cancel</a>
         </div>
       </div>
@@ -252,6 +255,13 @@ $("#productForm").submit(function(event){
     event.preventDefault();
 
     var formData = new FormData(this);
+     const submitBtn = $('#submitBtn');
+        const spinner = $('#spinner');
+
+        // Disable button and show spinner
+        submitBtn.prop('disabled', true);
+        spinner.removeClass('d-none');
+
 
     $.ajax({
         url:'{{ route("product.detail.store") }}',
@@ -265,6 +275,8 @@ $("#productForm").submit(function(event){
     window.location.href = "/Dashboard/ProductCreate";
 }
 else {
+      submitBtn.prop('disabled', false);
+                    spinner.addClass('d-none');
     if (response.errors && response.errors.general) {
         alert(response.errors.general);
     } else {
@@ -285,6 +297,10 @@ else {
     } else {
         alert("Fill up all fields. Please try again.");
     }
+    
+  // Re-enable submit
+    $('#submitBtn').prop('disabled', false);
+    $('#spinner').addClass('d-none');
 }
 
     });
