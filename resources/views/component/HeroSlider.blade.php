@@ -207,7 +207,8 @@
                         <div class="row">
                             <div class="col-lg-7 col-10">
                                 <div class="banner_content text-start">
-                                    <h2 class="mb-3 offer-price">{{ $item->price }}Tk</h2>
+                                    <h3 class="mb-3 offer-price">{{ $item->price }}Tk</h3> <br>
+                                    <h2 class="mb-3 offer-price">{{ $item->short_des }}</h2>
                                     <h2 class="mb-3">{{ $item->title }}</h2>
                                     <a class="btn text-uppercase" href="/details?id={{ $item->product_id }}">Shop Now</a>
                                 </div>

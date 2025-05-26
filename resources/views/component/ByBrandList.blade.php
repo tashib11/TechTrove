@@ -234,6 +234,18 @@ del {
   }
 }
 
+
+/* Remove up/down arrows for number inputs in all browsers */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
 </style>
 
 
@@ -365,13 +377,13 @@ $("#filterForm").on("submit", async function (e) {
 
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    loadFilterDropdowns();
-    ByBrand(); // Load initial products
+// document.addEventListener("DOMContentLoaded", function () {
+//     loadFilterDropdowns();
+//     ByBrand(); // Load initial products
 
-    // Attach dynamic search input handler
-    $("#search").on("input", debounce(applyFilters, 500));
-});
+//     // Attach dynamic search input handler
+//     $("#search").on("input", debounce(applyFilters, 500));
+// });
 
 // Debounce to limit API calls
 function debounce(func, delay) {
@@ -439,3 +451,38 @@ $("#resetFilters").on("click", function () {
 
 
 
+<script>
+let searchTimeout = null;
+
+document.getElementById("search").addEventListener("input", function () {
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(function () {
+        applyFilters(); // Call filter with latest search input
+    }, 300); // debounce delay in ms
+});
+
+function applyFilters() {
+    let searchParams = new URLSearchParams(window.location.search);
+    let brandId = searchParams.get("id");
+
+    let params = {
+        brand: brandId,
+        search: $("#search").val(),
+        dynamic_category: $("#category").val(),
+        star: $("#star").val(),
+        price_min: $("#price_min").val(),
+        price_max: $("#price_max").val(),
+        remark: $("#remark").val(),
+        sort: $("#sort").val(),
+    };
+
+    axios.get("/product-filter", { params })
+        .then((res) => {
+            $("#byBrandList").html(res.data);
+        })
+        .catch((err) => {
+            console.error("Search/filter error", err);
+        });
+}
+</script>

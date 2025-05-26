@@ -148,6 +148,18 @@ del {
   }
 }
 
+/* Remove up/down arrows for number inputs in all browsers */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+
 </style>
 
 <!-- START SECTION BREADCRUMB -->
@@ -349,7 +361,7 @@ del {
         search: search,
         price_min: priceMin,
         price_max: priceMax,
-        brand: brand,
+         brand,
         dynamic_category: category,
         star: star,
         remark: currentCategory
@@ -382,7 +394,7 @@ del {
   }
 
   // Initial run
-//   loadFilters();
+ loadFilters();
 window.addEventListener('DOMContentLoaded', function () {
   // Set the preselected category filter value
   const selectedCategory = document.querySelector('#filter-category option[selected]');
