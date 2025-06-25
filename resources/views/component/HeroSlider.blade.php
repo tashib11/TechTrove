@@ -104,11 +104,11 @@
 
 @media (max-width: 576px) {
     .carousel-item {
-        height: 240px;
+        height: 290px;
     }
 
     .banner_content h2 {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .banner_content h5 {
@@ -118,6 +118,7 @@
     .banner_content a.btn {
         padding: 6px 14px;
         font-size: 13px;
+        margin-bottom: 50px;
     }
 }
 
@@ -195,14 +196,14 @@
 
 
 </div> --}}
-<div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow">
+<div id="carouselExampleControls" class="carousel slide carousel-fade ">
     <div id="carouselSection" class="carousel-inner">
         @foreach($sliders as $key => $item)
           <div class="carousel-item background_bg {{ $key === 0 ? 'active' : '' }}" style="background-image: url('{{ $item->image }}')">
-    <!-- PRELOAD hidden image -->
-    <img src="{{ $item->image }}" alt="Preload {{ $item->title }}" style="display:none;">
+     <!-- PRELOAD image -->
+     <img src="{{ $item->image }}" alt="Preload {{ $item->title }}" style="display:none;">
 
-    <div class="banner_slide_content">
+      <div class="banner_slide_content">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-7 col-10">
@@ -222,7 +223,7 @@
 
     <div id="carouselIndicators" class="carousel-indicators">
         @foreach($sliders as $key => $item)
-            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="{{ $key }}" class="{{ $key === 0 ? 'active' : '' }}" aria-current="{{ $key === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $key + 1 }}"></button>
+            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="{{ $key }}" class="{{ $key === 0 ? 'active' : '' }}"></button>
         @endforeach
     </div>
 </div>
@@ -291,8 +292,8 @@ document.addEventListener("DOMContentLoaded", Hero);
         const carousel = new bootstrap.Carousel(carouselElement, {
             interval: 5000,
             pause: 'hover',
-            ride: 'carousel',
-            wrap: true
+            ride: 'carousel',//Automatically starts with page load
+            wrap: true// Loop through slides
         });
     });
 </script>
