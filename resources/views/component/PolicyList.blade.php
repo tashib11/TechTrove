@@ -37,7 +37,7 @@
             <div class="col-lg-10 col-md-11">
                 <div class="card shadow-sm border-0 rounded-4">
                     <div class="card-body p-4" id="policy">
-                        <div class="text-center text-muted">Loading policy...</div>
+                        {{-- <div class="text-center text-muted">Loading policy...</div> --}}
                     </div>
                 </div>
             </div>
@@ -47,32 +47,33 @@
 <!-- END SECTION POLICY CONTENT -->
 
 <script>
-    async function Policy(){
-        const searchParams = new URLSearchParams(window.location.search);
+       const searchParams = new URLSearchParams(window.location.search);
         const type = searchParams.get('type');
 
         const policyTitles = {
-            "about": "About Us",
-            "refund": "Refund Policy",
-            "terms": "Terms & Conditions",
+            about: "About Us",
+            refund: "Refund Policy",
+            terms: "Terms & Conditions",
             "how to buy": "How to Buy",
-            "contact": "Contact Information",
-            "complain": "Customer Complaint Guide"
+            contact: "Contact Information",
+            complain: "Customer Complaint Guide"
         };
 
         const title = policyTitles[type] || "Policy";
+        // $("#policyName").text(type);
         $("#policyName").text(title);
         $("#breadcrumbLabel").text(title);
+    async function Policy(){
+
 
         try {
             const res = await axios.get("/PolicyByType/" + type);
-            const des = res.data['des'] || "<p class='text-danger'>No policy description available.</p>";
+            const des = res.data.data['des'] || "<p class='text-danger'>No  description available.</p>";
             $("#policy").html(des);
         } catch (err) {
-            $("#policy").html("<p class='text-danger'>Failed to load policy. Please try again later.</p>");
+            $("#policy").html("<p class='text-danger'>Failed to load . Please try again later.</p>");
             console.error(err);
         }
     }
 
-    Policy(); // Run on page load
 </script>
