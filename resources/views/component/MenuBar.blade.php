@@ -62,15 +62,15 @@
                         <li><a class="nav-link nav_item" id="wishLink" href="#"><i class="ti-heart"></i> Wish</a></li>
                         <li><a class="nav-link nav_item" id="cartLink" href="#"><i class="linearicons-cart"></i> Cart</a></li>
                         <li><a class="nav-link nav_item" id="orderLink" href="#"><i class="ti-archive fs-7"></i> Orders</a></li>
-                            <div class="search_wrap">
+                            {{-- <div class="search_wrap">
                                 <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                                 <form>
                                     <input type="text" placeholder="Search" class="form-control" id="search_input">
                                     <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
                                 </form>
                             </div>
-                            <div class="search_overlay"></div>
-                        </li>
+                            <div class="search_overlay"></div> --}}
+                        {{-- </li> --}}
                     </ul>
                 </div>
             </nav>
@@ -79,32 +79,46 @@
 </header>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        Category();
-    });
+
 
     async function Category() {
-        let res = await axios.get("/CategoryList");
-        $("#CategoryItem").empty();
-        res.data['data'].forEach((item, i) => {
-            let EachItem = `<li><a class="dropdown-item nav-link nav_item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`;
-            $("#CategoryItem").append(EachItem);
-        });
-    }
-</script>
-<script>
-    // Copy of existing category logic for mobile
-    async function loadMobileCategories() {
-        let res = await axios.get("/CategoryList");
-        $("#MobileCategoryList").empty();
-        res.data['data'].forEach((item) => {
-            let listItem = `<li><a class="dropdown-item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`;
-            $("#MobileCategoryList").append(listItem);
-        });
+        let cached= localStorage.getItem("categories");
+        let category_time=parseInt(localStorage.getItem("category_time"));
+        let nowDate= Date.now();
+
+        let expiryLimit=1800000;//30minutes =1800000ms
+
+        if(cached && nowDate-category_time<expiryLimit){
+            renderCategories(JSON.parse(cached));
+        }
+        else{
+            try{
+                 let res = await axios.get("/CategoryList");
+                let data= res.data['data'];
+                localStorage.setItem("categories", JSON.stringify(data));
+                localStorage.setItem("category_time", nowDate);// automatically numeric convert into string in localStorage
+                renderCategories(data);
+            }catch(err){
+                 console.error("Category menu fetch failed", err);
+             }
+        }
     }
 
+     const renderCategories=(data)=>{
+         $("#CategoryItem").empty();
+               let EachItem="";
+         data.forEach((item, i) => {
+                  EachItem += `<li><a class="dropdown-item nav-link nav_item" href="/by-category?id=${item['id']}">${item['categoryName']}</a></li>`;
+                 });
+        // $("#CategoryItem").html(EachItem);// html function checks unnecessarily everything like empty() or not etc so time consuming
+        document.querySelector("#CategoryItem").insertAdjacentHTML( 'beforeend', EachItem);// insertAdjacentHTML() is in native js not jquery, so
+       };
+</script>
+<script>
+
+
     document.addEventListener('DOMContentLoaded', function () {
-        loadMobileCategories();
+        // loadMobileCategories();
 
         const isLoggedIn = @json($token !== null && $user !== null);
 
