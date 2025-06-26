@@ -189,9 +189,9 @@
 
 </style>
 
-
-<div id="carouselExampleControls" class="carousel slide carousel-fade"> carousel slide is the sliding system
-    <div id="carouselSection" class="carousel-inner">//under this class u have to write carousel items(the slides)
+{{--  carousel slide is the sliding system --}}
+<div id="carouselExampleControls" class="carousel slide carousel-fade">
+    <div id="carouselSection" class="carousel-inner">{{--  under this class u have to write carousel items(the slides)--}}
         @if($firstSlider)
         <div class="carousel-item background_bg active" style="background-image: url('{{ $firstSlider->image }}')" data-bg="{{ $firstSlider->image }}">
             <img src="{{ $firstSlider->image }}" alt=" {{ $firstSlider->title }}" style="display:none;">
@@ -252,12 +252,24 @@
  }
 
     function renderSliders(sliders) {
+        /*
+        virtual Dom (document.createDocumentFragment()) is used to improve performance
+         as it is a temporary container and stored in Ram not in browser.
+         and finally only one time it is appended to the real DOM.
+         This is useful when you have to append multiple elements to the DOM.
+        */
+        const slideFrag = document.createDocumentFragment();
+        const indicatorFrag=document.createDocumentFragment();
+
         sliders.forEach((item, i) => {
             if (i === 0) return; // 1st slide already loaded in blade
 
+            const slide=document.createElement('div');
+            slide.className='carousel-item background_bg';
+            slide.setAttribute('data-bg', item.image);
             //data-name is the temporary storing memory system
-            let slide = `
-            <div class="carousel-item background_bg" data-bg="${item.image}">
+
+           slide.innerHTML=`
                 <div class="banner_slide_content">
                     <div class="container">
                         <div class="row">
@@ -273,11 +285,21 @@
                     </div>
                 </div>
             </div>`;
-            section.insertAdjacentHTML("beforeend", slide);
 
-            let indicator = `<button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="${i}" aria-label="Slide ${i + 1}"></button>`;
-            indicators.insertAdjacentHTML("beforeend", indicator);
+            slideFrag.appendChild(slide);
+
+            const indicator= document.createElement('button');
+            indicator.setAttribute('type', 'button');
+            indicator.setAttribute('data-bs-target', '#carouselExampleControls');
+            indicator.setAttribute('data-bs-slide-to', i.toString());
+            indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+
+            indicatorFrag.appendChild(indicator);
+
         });
+        //only once the main dom is touched
+            section.appendChild(slideFrag);
+            indicators.appendChild(indicatorFrag);
 
         // Initialize carousel
         const carouselElement = document.querySelector('#carouselExampleControls');
