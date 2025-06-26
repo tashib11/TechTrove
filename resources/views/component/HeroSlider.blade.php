@@ -228,23 +228,21 @@
         console.warn("carouselSection not ready yet");
         return;
     }
-    const cacheKey = "slider_data";
+
     const cacheTimeKey = "slider_cache_time";
     const expiryLimit = 30 * 60 * 1000; // 30 minutes
-
     const now = Date.now();
-    let cachedData = localStorage.getItem(cacheKey);
     let cacheTime = localStorage.getItem(cacheTimeKey);
-
-    if (cachedData && cacheTime && (now - parseInt(cacheTime)) < expiryLimit) {
-        renderSliders(JSON.parse(cachedData));
+    const cachedData = await getFromDB("hero");
+    if (cachedData.length>0 && cacheTime && (now - parseInt(cacheTime)) < expiryLimit) {
+        renderSliders(cachedData);
     } else {
         try {
             let res = await axios.get("/ListProductSlider");
             let sliders = res.data.data;
-            localStorage.setItem(cacheKey, JSON.stringify(sliders));
-            localStorage.setItem(cacheTimeKey, now.toString());
             renderSliders(sliders);
+            saveToDB("hero",sliders);
+            localStorage.setItem(cacheTimeKey, now.toString());
         } catch (err) {
             console.error("Slider API failed", err);
         }
