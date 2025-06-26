@@ -188,112 +188,115 @@
 }
 
 </style>
-{{--
-<div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow" data-bs-ride="carousel">
-    <div id="carouselSection" class="carousel-inner"></div>
-
-    <div id="carouselIndicators" class="carousel-indicators"></div>
 
 
-</div> --}}
-<div id="carouselExampleControls" class="carousel slide carousel-fade ">
-    <div id="carouselSection" class="carousel-inner">
-        @foreach($sliders as $key => $item)
-          <div class="carousel-item background_bg {{ $key === 0 ? 'active' : '' }}" style="background-image: url('{{ $item->image }}')">
-     <!-- PRELOAD image -->
-     <img src="{{ $item->image }}" alt="Preload {{ $item->title }}" style="display:none;">
-
-      <div class="banner_slide_content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-7 col-10">
-                                <div class="banner_content text-start">
-                                    <h3 class="mb-3 offer-price">{{ $item->price }}Tk</h3> <br>
-                                    <h2 class="mb-3 offer-price">{{ $item->short_des }}</h2>
-                                    <h2 class="mb-3">{{ $item->title }}</h2>
-                                    <a class="btn text-uppercase" href="/details?id={{ $item->product_id }}">Shop Now</a>
-                                </div>
+<div id="carouselExampleControls" class="carousel slide carousel-fade"> carousel slide is the sliding system
+    <div id="carouselSection" class="carousel-inner">//under this class u have to write carousel items(the slides)
+        @if($firstSlider)
+        <div class="carousel-item background_bg active" style="background-image: url('{{ $firstSlider->image }}')" data-bg="{{ $firstSlider->image }}">
+            <img src="{{ $firstSlider->image }}" alt=" {{ $firstSlider->title }}" style="display:none;">
+            <div class="banner_slide_content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-10">
+                            <div class="banner_content text-start">
+                                <h3 class="mb-3 offer-price">{{ $firstSlider->price }}Tk</h3>
+                                <h2 class="mb-3 offer-price">{{ $firstSlider->short_des }}</h2>
+                                <h2 class="mb-3">{{ $firstSlider->title }}</h2>
+                                <a class="btn text-uppercase" href="/details?id={{ $firstSlider->product_id }}">Shop Now</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+        </div>
+        @endif
     </div>
 
     <div id="carouselIndicators" class="carousel-indicators">
-        @foreach($sliders as $key => $item)
-            <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="{{ $key }}" class="{{ $key === 0 ? 'active' : '' }}"></button>
-        @endforeach
+        <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active"></button>
     </div>
 </div>
 
-{{-- <script>
-async function Hero() {
-    try {
-        let res = await axios.get("/ListProductSlider");
-        const section = $("#carouselSection");
-        const indicators = $("#carouselIndicators");
-        section.empty();
-        indicators.empty();
+<script>
+ async  function Hero() {
+    const section = document.querySelector("#carouselSection");
+    const indicators = document.querySelector("#carouselIndicators");
 
-        res.data['data'].forEach((item, i) => {
-            let activeClass = i === 0 ? 'active' : '';
-            let bgImage = i === 0 ? `background-image: url('${item['image']}')` : '';
-            let SliderItem = `
-                <div class="carousel-item background_bg ${activeClass}" style="${bgImage}" data-bg="${item['image']}">
-                    <div class="banner_slide_content">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-7 col-10">
-                                    <div class="banner_content text-start">
-                                        <h2 class="mb-3 offer-price">${item['price']}Tk</h2>
-                                        <h2 class="mb-3">${item['title']}</h2>
-                                        <a class="btn text-uppercase" href="/details?id=${item['product_id']}">Shop Now</a>
-                                    </div>
+    //to prevent hero() calling before dom loaded into browser
+   if (!section) {
+        console.warn("carouselSection not ready yet");
+        return;
+    }
+    const cacheKey = "slider_data";
+    const cacheTimeKey = "slider_cache_time";
+    const expiryLimit = 30 * 60 * 1000; // 30 minutes
+
+    const now = Date.now();
+    let cachedData = localStorage.getItem(cacheKey);
+    let cacheTime = localStorage.getItem(cacheTimeKey);
+
+    if (cachedData && cacheTime && (now - parseInt(cacheTime)) < expiryLimit) {
+        renderSliders(JSON.parse(cachedData));
+    } else {
+        try {
+            let res = await axios.get("/ListProductSlider");
+            let sliders = res.data.data;
+            localStorage.setItem(cacheKey, JSON.stringify(sliders));
+            localStorage.setItem(cacheTimeKey, now.toString());
+            renderSliders(sliders);
+        } catch (err) {
+            console.error("Slider API failed", err);
+        }
+    }
+ }
+
+    function renderSliders(sliders) {
+        sliders.forEach((item, i) => {
+            if (i === 0) return; // 1st slide already loaded in blade
+
+            //data-name is the temporary storing memory system
+            let slide = `
+            <div class="carousel-item background_bg" data-bg="${item.image}">
+                <div class="banner_slide_content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-7 col-10">
+                                <div class="banner_content text-start">
+                                    <h3 class="mb-3 offer-price">${item.price}Tk</h3>
+                                    <h2 class="mb-3 offer-price">${item.short_des}</h2>
+                                    <h2 class="mb-3">${item.title}</h2>
+                                    <a class="btn text-uppercase" href="/details?id=${item.product_id}">Shop Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>`;
-            section.append(SliderItem);
+                </div>
+            </div>`;
+            section.insertAdjacentHTML("beforeend", slide);
 
-            let indicatorItem = `
-                <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="${i}" class="${activeClass}" aria-current="${activeClass ? 'true' : 'false'}" aria-label="Slide ${i + 1}"></button>`;
-            indicators.append(indicatorItem);
+            let indicator = `<button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="${i}" aria-label="Slide ${i + 1}"></button>`;
+            indicators.insertAdjacentHTML("beforeend", indicator);
         });
 
-        let carousel = new bootstrap.Carousel(document.querySelector('#carouselExampleControls'), {
-            interval: 5000,
-            pause: 'hover',
-            ride: 'carousel',
-            wrap: true
-        });
-
-        // Lazy load other slides background images on demand
-        const carouselElement = document.querySelector('#carouselExampleControls');
-        carouselElement.addEventListener('slid.bs.carousel', function (event) {
-            let nextSlide = event.relatedTarget;
-            if (nextSlide.style.backgroundImage === '' && nextSlide.dataset.bg) {
-                nextSlide.style.backgroundImage = `url('${nextSlide.dataset.bg}')`;
-            }
-        });
-
-    } catch (error) {
-        console.error("Failed to load slider:", error);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", Hero);
-</script> --}}
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize carousel
         const carouselElement = document.querySelector('#carouselExampleControls');
         const carousel = new bootstrap.Carousel(carouselElement, {
             interval: 5000,
             pause: 'hover',
-            ride: 'carousel',//Automatically starts with page load
-            wrap: true// Loop through slides
+            ride: 'carousel',//  starts with page laod
+            wrap: true// cycling the slides
         });
-    });
+
+        // Lazy-load backgrounds (slid.bs.carousel means on change slide)
+        carouselElement.addEventListener('slid.bs.carousel', function (event) {
+            const items = carouselElement.querySelectorAll('.carousel-item');
+            const activeItem = items[event.to];
+            if (activeItem.style.backgroundImage === '' && activeItem.dataset.bg) {// element.dataset.name
+                activeItem.style.backgroundImage = `url('${activeItem.dataset.bg}')`;
+            }
+        });
+    }
+
 </script>
+
