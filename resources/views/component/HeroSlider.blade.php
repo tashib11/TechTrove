@@ -1,3 +1,7 @@
+@push('hero')
+<link rel="preload" as="image" href="{{ $first->image }}" fetchpriority="high">
+@endpush
+
 <style>
 .background_bg {
     background-size: cover;
@@ -18,12 +22,18 @@
     }
 }
 
+
 .carousel-item {
-    height: 500px;
-    position: relative;
+   min-height: 300px;
+    height: auto;
+    aspect-ratio: 3 / 1;
+      width: 100%;
+    /* height: auto; */
+    display: block;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    position: relative;
 }
 
 .carousel-item::before {
@@ -32,13 +42,12 @@
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
     z-index: 1;
-    transition: background 0.3s ease-in-out;
 }
 
 .banner_slide_content {
     position: relative;
     z-index: 2;
-    color: #f2f2f2;
+    color: #fff;
     display: flex;
     align-items: center;
     height: 100%;
@@ -46,6 +55,7 @@
 
 .banner_content {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+     min-height: 180px;
 }
 
 .banner_content h2 {
@@ -54,7 +64,7 @@
     margin-bottom: 10px;
     line-height: 1.2;
     color: #ffffff;
-    animation: fadeInUp 1s ease-out;
+    /* animation: fadeInUp 1s ease-out; */
 }
 
 .banner_content h5 {
@@ -62,7 +72,7 @@
     font-weight: 300;
     margin-bottom: 15px;
     color: #f8f9fa;
-    animation: fadeInDown 1s ease-out;
+    /* animation: fadeInDown 1s ease-out; */
 }
 
 .banner_content a.btn {
@@ -78,7 +88,7 @@
     box-shadow: 0 4px 12px rgba(255, 111, 97, 0.4);
     transition: all 0.3s ease;
     text-decoration: none;
-    animation: fadeIn 1.2s ease-in;
+    /* animation: fadeIn 1.2s ease-in; */
 }
 
 .banner_content a.btn:hover {
@@ -165,7 +175,7 @@
     padding: 10px 20px;
     border-radius: 8px;
     box-shadow: 0 6px 16px rgba(255, 221, 87, 0.5);
-    animation: pulse 1.5s infinite;
+    /* animation: pulse 1.5s infinite; */
     line-height: 1.3;
     text-transform: uppercase;
 }
@@ -190,20 +200,24 @@
 </style>
 
 {{--  carousel slide is the sliding system --}}
+
 <div id="carouselExampleControls" class="carousel slide carousel-fade">
-    <div id="carouselSection" class="carousel-inner">{{--  under this class u have to write carousel items(the slides)--}}
-        @if($firstSlider)
-        <div class="carousel-item background_bg active" style="background-image: url('{{ $firstSlider->image }}')" data-bg="{{ $firstSlider->image }}">
-            <img src="{{ $firstSlider->image }}" alt=" {{ $firstSlider->title }}" style="display:none;">
+    <div id="carouselSection" class="carousel-inner">
+        @if($first)
+        <div class="carousel-item background_bg active" style="background-image: url('{{ $first->image }}');">
+    <img src="{{ $first->image }}" alt="{{ $first->title }}"
+         style="width:100%; height:auto; position:absolute; inset:0; opacity:0;"
+         fetchpriority="high" decoding="async">
+
             <div class="banner_slide_content">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7 col-10">
                             <div class="banner_content text-start">
-                                <h3 class="mb-3 offer-price">{{ $firstSlider->price }}Tk</h3>
-                                <h2 class="mb-3 offer-price">{{ $firstSlider->short_des }}</h2>
-                                <h2 class="mb-3">{{ $firstSlider->title }}</h2>
-                                <a class="btn text-uppercase" href="/details?id={{ $firstSlider->product_id }}">Shop Now</a>
+                                <h3 class="mb-3 offer-price">{{ $first->price }}Tk</h3>
+                                <h2 class="mb-3 offer-price">{{ $first->short_des }}</h2>
+                                <h2 class="mb-3">{{ $first->title }}</h2>
+                                <a class="btn text-uppercase" href="/details?id={{ $first->product_id }}">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -219,104 +233,99 @@
 </div>
 
 <script>
- async  function Hero() {
+    const fetchSliders = async () => {
+    const res = await fetch("/ListProductSlider");
+    if (!res.ok) throw new Error("Network error");
+    const json = await res.json();
+    return json.data;
+};
+
+async function Hero() {
     const section = document.querySelector("#carouselSection");
     const indicators = document.querySelector("#carouselIndicators");
 
-    //to prevent hero() calling before dom loaded into browser
-   if (!section) {
-        console.warn("carouselSection not ready yet");
+    if (!section) {
+        console.warn("carouselSection not found");
         return;
     }
 
     const cacheTimeKey = "slider_cache_time";
     const expiryLimit = 30 * 60 * 1000; // 30 minutes
     const now = Date.now();
-    let cacheTime = localStorage.getItem(cacheTimeKey);
+    const cacheTime = localStorage.getItem(cacheTimeKey);
     const cachedData = await getFromDB("hero");
-    if (cachedData.length>0 && cacheTime && (now - parseInt(cacheTime)) < expiryLimit) {
-        renderSliders(cachedData);
+
+    if (cachedData.length > 0 && cacheTime && now - parseInt(cacheTime) < expiryLimit) {
+        renderSliders(cachedData, section, indicators);
     } else {
         try {
-            let res = await axios.get("/ListProductSlider");
-            let sliders = res.data.data;
-            renderSliders(sliders);
-            saveToDB("hero",sliders);
+            const sliders = await fetchSliders();
+            renderSliders(sliders, section, indicators);
+            saveToDB("hero", sliders);
             localStorage.setItem(cacheTimeKey, now.toString());
         } catch (err) {
-            console.error("Slider API failed", err);
+            console.error("Slider fetch failed:", err);
         }
     }
- }
+}
 
-    function renderSliders(sliders) {
-        /*
-        virtual Dom (document.createDocumentFragment()) is used to improve performance
-         as it is a temporary container and stored in Ram not in browser.
-         and finally only one time it is appended to the real DOM.
-         This is useful when you have to append multiple elements to the DOM.
-        */
-        const slideFrag = document.createDocumentFragment();
-        const indicatorFrag=document.createDocumentFragment();
+function renderSliders(sliders, section, indicators) {
+    const slideFrag = document.createDocumentFragment();
+    const indicatorFrag = document.createDocumentFragment();
 
-        sliders.forEach((item, i) => {
-            if (i === 0) return; // 1st slide already loaded in blade
+    sliders.forEach((item, i) => {
+        if (i === 0) return;
 
-            const slide=document.createElement('div');
-            slide.className='carousel-item background_bg';
-            slide.setAttribute('data-bg', item.image);
-            //data-name is the temporary storing memory system
+        const slide = document.createElement("div");
+        slide.className = "carousel-item background_bg";
+        slide.dataset.bg = item.image;
 
-           slide.innerHTML=`
-                <div class="banner_slide_content">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-7 col-10">
-                                <div class="banner_content text-start">
-                                    <h3 class="mb-3 offer-price">${item.price}Tk</h3>
-                                    <h2 class="mb-3 offer-price">${item.short_des}</h2>
-                                    <h2 class="mb-3">${item.title}</h2>
-                                    <a class="btn text-uppercase" href="/details?id=${item.product_id}">Shop Now</a>
-                                </div>
+        slide.innerHTML = `
+            <div class="banner_slide_content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-10">
+                            <div class="banner_content text-start">
+                                <h3 class="mb-3 offer-price">${item.price}Tk</h3>
+                                <h2 class="mb-3 offer-price">${item.short_des}</h2>
+                                <h2 class="mb-3">${item.title}</h2>
+                                <a class="btn text-uppercase" href="/details?id=${item.product_id}">Shop Now</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        `;
 
-            slideFrag.appendChild(slide);
+        slideFrag.appendChild(slide);
 
-            const indicator= document.createElement('button');
-            indicator.setAttribute('type', 'button');
-            indicator.setAttribute('data-bs-target', '#carouselExampleControls');
-            indicator.setAttribute('data-bs-slide-to', i.toString());
-            indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+        const indicator = document.createElement("button");
+        indicator.type = "button";
+        indicator.dataset.bsTarget = "#carouselExampleControls";
+        indicator.dataset.bsSlideTo = i.toString();
+        indicator.setAttribute("aria-label", `Slide ${i + 1}`);
+        indicatorFrag.appendChild(indicator);
+    });
 
-            indicatorFrag.appendChild(indicator);
+    section.appendChild(slideFrag);
+    indicators.appendChild(indicatorFrag);
 
-        });
-        //only once the main dom is touched
-            section.appendChild(slideFrag);
-            indicators.appendChild(indicatorFrag);
+    const carouselElement = document.querySelector("#carouselExampleControls");
+    const carousel = new bootstrap.Carousel(carouselElement, {
+        interval: 5000,
+        pause: 'hover',
+        ride: false,
+        wrap: true
+    });
 
-        // Initialize carousel
-        const carouselElement = document.querySelector('#carouselExampleControls');
-        const carousel = new bootstrap.Carousel(carouselElement, {
-            interval: 5000,
-            pause: 'hover',
-            ride: 'carousel',//  starts with page laod
-            wrap: true// cycling the slides
-        });
+    setTimeout(() => carousel.cycle(), 500);
 
-        // Lazy-load backgrounds (slid.bs.carousel means on change slide)
-        carouselElement.addEventListener('slid.bs.carousel', function (event) {
-            const items = carouselElement.querySelectorAll('.carousel-item');
-            const activeItem = items[event.to];
-            if (activeItem.style.backgroundImage === '' && activeItem.dataset.bg) {// element.dataset.name
-                activeItem.style.backgroundImage = `url('${activeItem.dataset.bg}')`;
-            }
-        });
-    }
-
+    carouselElement.addEventListener("slid.bs.carousel", function (event) {
+        const items = carouselElement.querySelectorAll(".carousel-item");
+        const activeItem = items[event.to];
+        if (!activeItem.style.backgroundImage && activeItem.dataset.bg) {
+            activeItem.style.backgroundImage = `url('${activeItem.dataset.bg}')`;
+        }
+    });
+}
 </script>
-

@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function HomePage()
     {
-          $sliders = ProductSlider::all(); // or ->latest()->get()
-    return view('pages.home-page', compact('sliders'));
+          $first = ProductSlider::latest()->first(); // or ->latest()->get()
+    return view('pages.home-page', compact('first'));
     }
 }
