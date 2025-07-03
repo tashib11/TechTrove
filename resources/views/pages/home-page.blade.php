@@ -1,24 +1,29 @@
 @extends('layout.app')
 @section('content')
     @include('component.MenuBar')
-       @include('component.HeroSlider', ['sliders' => $sliders])
+    @include('component.indexDB-helper')
 
+    @include('component.HeroSlider', ['first' => $first])
     @include('component.TopCategories')
     @include('component.ExclusiveProducts')
     @include('component.TopBrands')
     @include('component.Footer')
+
     <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            requestAnimationFrame(() => Category());
+        });
+        // IIFE to optimize FCP by deferring non-critical JS
         (async () => {
-            await Category();
-            // await Hero();
-            // await TopCategory();
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            // await Popular();
-            // await New();
-            // await Top();
-            // await Trending();
-            await TopBrands();
-        })()
+            requestIdleCallback(() => {
+                Hero(); // Load remaining HeroSlider functionality
+            });
+            requestIdleCallback(async () => {
+                await TopCategory(); // Lazy load top categories
+                await fetchProducts();
+                loadFilters();
+                await TopBrands(); // Then load top brands
+            });
+        })();
     </script>
 @endsection
-
