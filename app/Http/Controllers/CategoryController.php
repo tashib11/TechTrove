@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 // Use the new Intervention Image v3 classes
 use Intervention\Image\ImageManager;
@@ -52,6 +52,9 @@ class CategoryController extends Controller
                 'categoryImg' => '/storage/' . $path, // webp URL
                 'categoryAlt' => $request->catAlt,
             ]);
+            // Clear cache for category list
+            Cache::forget('category_list');
+
 
             return ResponseHelper::Out('success', ['message' => 'Category created successfully!'], 200);
 
@@ -120,7 +123,10 @@ class CategoryController extends Controller
 
     public function CategoryList(): JsonResponse
     {
-        $data = Category::all();
+           // Cache for 30 minutes (1800 seconds)
+    $data = Cache::remember('category_list', 1800, function () {
+        return Category::select('id', 'categoryName', 'categoryImg', 'categoryAlt')->get();
+    });
         return ResponseHelper::Out('success', $data, 200);
     }
 
@@ -133,6 +139,9 @@ class CategoryController extends Controller
         }
 
         $category->delete();
+
+        Cache::forget('category_list');
+
         return response()->json(['message' => 'Category deleted successfully']);
     }
 
@@ -178,6 +187,8 @@ public function update(Request $request, $id)
     }
 
     $category->save();
+    Cache::forget('category_list');
+
 
     return response()->json(['message' => 'Category updated successfully!']);
 }
