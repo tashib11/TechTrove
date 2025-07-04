@@ -16,6 +16,7 @@ use App\Http\Controllers\ProductSliderController;
 
 use App\Models\Category;
 
+
 // Home Page
 Route::get('/', [HomeController::class, 'HomePage']);
 Route::get('/by-category', [CategoryController::class, 'ByCategoryPage']);
@@ -31,6 +32,7 @@ Route::get('/profile', [ProfileController::class, 'ProfilePage']);
 
 
 
+
 // Brand List
 Route::get('/BrandList', [BrandController::class, 'BrandList']);
 // Category List
@@ -41,11 +43,8 @@ Route::get('/ListProductByBrand/{id}', [ProductController::class, 'ListProductBy
 Route::get('/GetBrandById/{id}', [ProductController::class, 'GetBrandById']);
 
 Route::get('/product-filter', [ProductController::class, 'ProductFilter']);
-Route::get('/api/product-filters', function () {
-    $brands = \App\Models\Brand::select('id', 'brandName')->get();
-    $categories = \App\Models\Category::select('id', 'categoryName')->get();
-    return response()->json(['brands' => $brands, 'categories' => $categories]);
-});
+Route::get('/api/product-filters', [ProductController::class, 'BrandCatFilter']);
+
 
 
 // Slider
@@ -73,14 +72,10 @@ Route::get('/CheckProfile', [ProfileController::class, 'CheckProfile'])->middlew
 // Product Review
 Route::post('/CreateProductReview', [ProductController::class, 'CreateProductReview'])->middleware([TokenAuthenticate::class]);
 
-
-Route::get('/CheckWishListStatus/{id}', [ProductController::class, 'CheckWishListStatus']);
 // Product Wish
 Route::get('/ProductWishList', [ProductController::class, 'ProductWishList'])->middleware([TokenAuthenticate::class]);
 Route::get('/CreateWishList/{product_id}', [ProductController::class, 'CreateWishList'])->middleware([TokenAuthenticate::class]);
 Route::get('/RemoveWishList/{product_id}', [ProductController::class, 'RemoveWishList'])->middleware([TokenAuthenticate::class]);
-
-
 
 // Product Cart
 Route::post('/CreateCartList', [ProductController::class, 'CreateCartList'])->middleware([TokenAuthenticate::class]);
@@ -120,7 +115,6 @@ Route::get('/dashboard/stats/invoices-by-date/{date}', [DashboardController::cla
 Route::post('/admin/invoices/update-order-status', [DashboardController::class, 'updateOrderStatus']);
 Route::post('/admin/invoices/update-payment-status', [DashboardController::class, 'updatePaymentStatus']);
 
-
 Route::get("/Dashboard/ProductCreate",[ProductController::class,'create'])->name('product.create');
 Route::post("/ProductStore",[ProductController::class,'store'])->name('product.store');
 Route::get("/Dashboard/DetailsCreate",[ProductController::class,'detailCreate'])->name('product.detail.create');
@@ -159,12 +153,7 @@ Route::post('/Dashboard/InvoiceList/UpdateStatus', [InvoiceController::class, 'u
 Route::get('/Dashboard/InvoiceList/{id}/Details', [InvoiceController::class, 'getInvoiceDetails']);
 Route::get('/Dashboard/InvoiceList/Search', [InvoiceController::class, 'search']);
 
-
 Route::get("/Dashboard/UserList",[UserController::class,'index'])->name('user.list');
-
-
-
-
 
 Route::get('/admin/product-slider', [ProductSliderController::class, 'index']);
 Route::get('/admin/product-slider/all', [ProductSliderController::class, 'all']);
