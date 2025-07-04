@@ -261,6 +261,7 @@ async function Hero() {
         try {
             const sliders = await fetchSliders();
             renderSliders(sliders, section, indicators);
+            await clearDB("hero");
             saveToDB("hero", sliders);
             localStorage.setItem(cacheTimeKey, now.toString());
         } catch (err) {

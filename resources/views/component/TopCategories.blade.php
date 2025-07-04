@@ -114,6 +114,7 @@
                 const categories = res.data;
                 renderTopCategories(categories.slice(0, 6), section, true);
                 requestIdleCallback(() => renderTopCategories(categories.slice(6), section));
+                await clearDB("category");
                 saveToDB("category", categories);
                 localStorage.setItem(cacheTimeKey, now.toString());
             } catch (err) {
