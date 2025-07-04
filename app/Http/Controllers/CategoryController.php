@@ -95,21 +95,25 @@ class CategoryController extends Controller
 //     return response()->json(['message' => 'Category created successfully!']);
 // }
 
-    public function ByCategoryPage(Request $request)
-  {
+// routes/web.php
+
+// app/Http/Controllers/CategoryController.php
+public function ByCategoryPage(Request $request)
+{
     $categoryId = $request->query('id');
+    $categoryName = Category::where('id',$categoryId)->value('categoryName');
 
-    $query = Product::with(['brand', 'category']);
+    $products = Product::query()
+        ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
+        ->where('remark', 'Popular') // default tab
+        ->latest()
+        ->limit(4)
+        ->get();
 
-    if ($categoryId) {
-        $query->where('category_id', $categoryId);
-    }
-
-    $products = $query->latest('id')->get();
-    $categories = Category::select('id', 'categoryName')->get();
-    $brands = Brand::select('id', 'brandName')->get();
-
-    return view('pages.product-by-category', compact('products', 'categories', 'brands', 'categoryId'));
+    return view('pages.product-by-category', [
+        'initialProducts' => $products,
+        'categoryName' => $categoryName,
+    ]);
 }
 
 
