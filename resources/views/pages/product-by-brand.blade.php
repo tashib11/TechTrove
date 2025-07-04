@@ -1,20 +1,18 @@
 @extends('layout.app')
 @section('content')
     @include('component.MenuBar')
-    @include('component.ByBrandList')
-    @include('component.TopBrands')
+    @include('component.ByBrandList', ['initialProducts' => $initialProducts, 'brandName'=> $brandName ])
     @include('component.Footer')
     <script>
+        requestIdleCallback(() => {
+            Category(); // Load remaining HeroSlider functionality
+        });
+
         (async () => {
-            // await Category();
-            await ByBrand();
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            await TopBrands();
+            await loadFilters();
+            if (id) {
+                document.getElementById('filter-brand').value = id;
+            }
         })()
     </script>
 @endsection
-
-
-
-
-

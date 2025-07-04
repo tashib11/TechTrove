@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Helper\ResponseHelper;
 use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -66,13 +67,23 @@ public function store(Request $request)
 }
 
 
+public function ByBrandPage(Request $request)
+{
+    $brandId = $request->query('id');
+    $brandName = Brand::where('id',$brandId)->value('brandName');
 
+    $products = Product::query()
+        ->when($brandId, fn($q) => $q->where('brand_id', $brandId))
+        ->where('remark', 'Popular') // default tab
+        ->latest()
+        ->limit(4)
+        ->get();
 
-    public function ByBrandPage()
-    {
-        return view('pages.product-by-brand');
-    }
-
+    return view('pages.product-by-brand', [
+        'initialProducts' => $products,
+        'brandName' => $brandName,
+    ]);
+}
 
   public function index()
     {
