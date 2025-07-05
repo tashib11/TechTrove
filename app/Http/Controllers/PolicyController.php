@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ResponseHelper;
 use App\Models\Policy;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,9 @@ class PolicyController extends Controller
     }
 
 
-    function PolicyByType(Request $request){
-      return Policy::where('type','=',$request->type)->first();
+    public function PolicyByType(Request $request){
+        $policy=Policy::where('type','=',$request->type)->first();
+      return ResponseHelper::Out("success", $policy, 200);
     }
 
       public function index()
