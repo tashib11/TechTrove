@@ -14,14 +14,19 @@ class TokenAuthenticate
         $result = JWTToken::ReadToken($token);
 
         if ($result === null) {
-            return ResponseHelper::Out('unauthorized', null, 401);
+            if ($request->expectsJson()) {
+        return ResponseHelper::Out('unauthorized', null, 401); // For fetch() requests -> expect json output
+    } else {
+        return redirect('/login'); // <a href="/xyz"> expects html page
+    }
         } else {
             $request->headers->set('email', $result->userEmail);
             $request->headers->set('id', $result->userID);
+            //controllers can access request()->header('id') or request()->header('role').-+'?
             if (isset($result->role)) {
                 $request->headers->set('role', $result->role);
             }
-            return $next($request);
+            return $next($request);//. Middleware allows request to go to controller:
         }
     }
 }
