@@ -8,15 +8,15 @@
                             {{-- <a href="#"><img src="assets/images/logo_light.png" alt="logo"/></a> --}}
                             <h2>TechTrove</h2>
                         </div>
-                        <p>If you are going to use of Lorem Ipsum need to be sure there isn't hidden of text</p>
+                        {{-- <p>If you are going to use of Lorem Ipsum need to be sure there isn't hidden of text</p> --}}
                     </div>
                     <div class="widget">
                         <ul class="social_icons social_white">
-                            <li><a href="https://www.facebook.com"><i class="ion-social-facebook"></i></a></li>
-                            <li><a href="https://www.facebook.com"><i class="ion-social-twitter"></i></a></li>
-                            <li><a href="https://www.facebook.com"><i class="ion-social-googleplus"></i></a></li>
-                            <li><a href="https://www.facebook.com"><i class="ion-social-youtube-outline"></i></a></li>
-                            <li><a href="https://www.facebook.com"><i class="ion-social-instagram-outline"></i></a></li>
+                            <li><a href="https://www.facebook.com"><i class="bi bi-facebook"></i></a></li>
+                            <li><a href="https://www.twitter.com"><i class="bi bi-twitter"></i></a></li>
+                            <li><a href="https://www.google.com"><i class="bi bi-google"></i></a></li>
+                            <li><a href="https://www.youtube.com"><i class="bi bi-youtube"></i></a></li>
+                            <li><a href="https://www.instagram.com"><i class="bi bi-instagram"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -56,15 +56,15 @@
                         <h6 class="widget_title">Contact Info</h6>
                         <ul class="contact_info contact_info_light">
                             <li>
-                                <i class="ti-location-pin"></i>
+                                <i class="bi bi-geo-alt"></i>
                                 <p>Teligati, Khulna, BD</p>
                             </li>
                             <li>
-                                <i class="ti-email"></i>
+                                <i class="bi bi-envelope"></i>
                                 <a href="mailto:info@sitename.com">info@TechTrove.com</a>
                             </li>
                             <li>
-                                <i class="ti-mobile"></i>
+                                <i class="bi bi-telephone"></i>
                                 <p>+ 457 789 789 65</p>
                             </li>
                         </ul>
