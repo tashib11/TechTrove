@@ -1,3 +1,18 @@
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini py-2">
+    <div class="container">
+        <div class="row align-items-center justify-content-center" style="min-height: 40px;">
+            <div class="col-md-6 text-center">
+                <ol class="breadcrumb m-0 p-0 justify-content-center">
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li class="mx-2">/</li>
+                    <li><a href="#">This Page</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="login_register_wrap section">
     <div class="container">
@@ -17,7 +32,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <button onclick="Login()" type="submit" class="btn btn-fill-out btn-block w-100">Next</button>
+                            <button id="loginBtn" type="submit" class="btn btn-fill-out btn-block w-100">Next</button>
                         </div>
                     </div>
                 </div>
@@ -43,32 +58,49 @@
         return regex.test(email);
     }
 
-    async function Login() {
-        const email = document.getElementById('email').value.trim();
-        const emailError = document.getElementById('emailError');
+  document.querySelector('#loginBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
 
-        // Reset error visibility
-        emailError.classList.add('d-none');
+    const btn = e.currentTarget;
+    setButtonLoading(btn, true);
 
-        if (email.length === 0 || !isValidEmail(email)) {
-            emailError.textContent = "Please enter a valid email.";
-            emailError.classList.remove('d-none');
-            return;
-        }
+    const email = document.getElementById('email').value.trim();
+    const emailError = document.getElementById('emailError');
+    emailError.classList.add('d-none');
 
-        try {
-            $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-            let res = await axios.get("/UserLogin/" + email);
-            if (res.status === 200) {
-                sessionStorage.setItem('email', email);
-                window.location.href = "/verify";
-            } else {
-                throw new Error("Login failed");
+    if (email.length === 0 || !isValidEmail(email)) {
+        emailError.classList.remove('d-none');
+        setButtonLoading(btn, false);
+        return;
+    }
+
+    // Optimistically store email and redirect BEFORE waiting
+    sessionStorage.setItem('email', email);
+    window.location.href = "/verify";
+
+    // Fire-and-forget request; user is already going to /verify
+    fetch(`/UserLogin/${email}`)
+        .then(res => {
+            if (!res.ok) {
+                console.error("Login initiation failed");
             }
-        } catch (error) {
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-            emailError.textContent = "Something went wrong. Please try again.";
-            emailError.classList.remove('d-none');
+        })
+        .catch(err => {
+            console.error("Login request failed", err);
+        });
+});
+
+
+
+     function setButtonLoading(button, isLoading) {
+        if (isLoading) {
+            const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            button.setAttribute("data-original-text", button.innerHTML);
+            button.innerHTML += spinner;
+            button.disabled = true;
+        } else {
+            button.innerHTML = button.getAttribute("data-original-text");
+            button.disabled = false;
         }
     }
 </script>
