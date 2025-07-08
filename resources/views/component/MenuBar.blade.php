@@ -20,10 +20,10 @@
                         <ul class="header_list">
 
                             @if ($token !== null && $user !== null)
-                                <li><a href="{{ url('/profile') }}"> <i class="bi bi-person"></i> Account</a></li>
-                                <li><a class="btn btn-danger btn-sm" href="{{ url('/logout') }}"> Logout</a></li>
+                                <li><a href="{{ url('/profile') }}"> <i class="bi bi-person fs-5"></i>Account</a></li>
+                                <li><a class="btn  btn-fill-out btn-sm" href="{{ url('/logout') }}"> Logout</a></li>
                                 @if (isset($user->role) && $user->role === 'admin')
-                                    <li><a class="btn btn-danger btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a>
+                                    <li><a class="btn  btn-fill-out btn-sm" href="{{ url('/Dashboard') }}"> Dashboard</a>
                                     </li>
                                 @endif
                             @else
@@ -64,12 +64,12 @@
                             </div>
                         </li>
 
-                        <li><a class="nav-link nav_item" id="wishLink" href="#"><i class="bi bi-heart fs-7"></i>
-                                Wish</a></li>
-                        <li><a class="nav-link nav_item" id="cartLink" href="#"><i class="bi bi-cart fs-7"></i>
-                                Cart</a></li>
-                        <li><a class="nav-link nav_item" id="orderLink" href="#"><i
-                                    class="bi bi-box-seam fs-7"></i> Orders</a></li>
+                        <li><button class="nav-link nav_item" id="wishLink" ><i class="bi bi-heart fs-7"></i>
+                                Wish</button></li>
+                        <li><button class="nav-link nav_item" id="cartLink" ><i class="bi bi-cart fs-7"></i>
+                                Cart</button></li>
+                        <li><button class="nav-link nav_item" id="orderLink"><i
+                                    class="bi bi-box-seam fs-7"></i> Orders</button></li>
                         {{-- <div class="search_wrap">
                                 <span class="close-search"><i class="ion-ios-close-empty"></i></span>
                                 <form>
@@ -126,55 +126,49 @@
         // document.querySelector("#CategoryItem").insertAdjacentHTML('beforeend',
         // EachItem); // insertAdjacentHTML() is in native js not jquery, so
     };
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // loadMobileCategories();
 
-        const isLoggedIn = @json($token !== null && $user !== null);
-
-        document.getElementById('mobileWish').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = isLoggedIn ? "/wish" : "/login";
-        });
-        document.getElementById('mobileCart').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = isLoggedIn ? "/cart" : "/login";
-        });
-        document.getElementById('mobileOrders').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = isLoggedIn ? "/track-order" : "/login";
-        });
-    });
-</script>
-
-<script>
-    const isLoggedIn = @json($token !== null && $user !== null);
-
-    document.getElementById('wishLink').addEventListener('click', function(e) {
+    document.querySelector('#wishLink').addEventListener('click',(e)=>{
         e.preventDefault();
-        if (!isLoggedIn) {
-            window.location.href = "/login";
-        } else {
-            window.location.href = "/wish";
-        }
+        fetch('/wish')// it expects json so in the controller return view is not triggered as html page
+            .then(res => {
+                if (res.status === 401) {
+                    sessionStorage.setItem("last_location", window.location.href);
+                    window.location.href = "/login";
+                } else {
+                    window.location.href = "/wish";
+                }
+            })
+            .catch(err => {
+                console.error("Wish fetch failed", err);
+            });
     });
 
-    document.getElementById('cartLink').addEventListener('click', function(e) {
+    document.querySelector('#cartLink').addEventListener('click',(e)=>{
         e.preventDefault();
-        if (!isLoggedIn) {
-            window.location.href = "/login";
-        } else {
-            window.location.href = "/cart";
-        }
+        fetch('/cart')// it expects json so in the controller return view is not triggered as html page
+            .then(res => {
+                if (res.status === 401) {
+                    sessionStorage.setItem("last_location", window.location.href);
+                    window.location.href = "/login";
+                } else {
+                    window.location.href = "/cart";
+                }
+            })
+            .catch(err => {
+                console.error("Cart fetch failed", err);
+            });
     });
 
-    document.getElementById('orderLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        if (!isLoggedIn) {
-            window.location.href = "/login";
-        } else {
-            window.location.href = "/track-order";
+    document.querySelector('#orderLink').addEventListener('click', async(e)=>{
+        let res = await fetch('/track-order');
+        if(res.status===401){
+            sessionStorage.setItem("last_location",window.location.href);
+            window.location.href="/login";
+        }else{
+            window.location.href="/track-order";
         }
     });
 </script>
+
+
+

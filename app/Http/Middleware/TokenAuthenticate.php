@@ -14,11 +14,11 @@ class TokenAuthenticate
         $result = JWTToken::ReadToken($token);
 
         if ($result === null) {
-            if ($request->expectsJson()) {
+            // if ($request->expectsJson()) {
         return ResponseHelper::Out('unauthorized', null, 401); // For fetch() requests -> expect json output
-    } else {
-        return redirect('/login'); // <a href="/xyz"> expects html page
-    }
+    // } else {
+    //     return redirect('/login'); // <a href="/xyz"> expects html page
+    // }
         } else {
             $request->headers->set('email', $result->userEmail);
             $request->headers->set('id', $result->userID);
