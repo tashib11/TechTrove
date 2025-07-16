@@ -11,19 +11,18 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            requestAnimationFrame(() => Category());
-        });
-        // IIFE to optimize FCP by deferring non-critical JS
-        (async () => {
+            requestAnimationFrame(async () => {
+                await Hero() //after DOM is ready, load HeroSlider immediately
+                await TopCategory(); // then top categories
+            });
             requestIdleCallback(() => {
-                Hero(); // Load remaining HeroSlider functionality
+                Category();
             });
             requestIdleCallback(async () => {
-                await TopCategory(); // Lazy load top categories
-                await fetchProducts();
+                await fetchProducts(); // Lazy  products
                 loadFilters();
                 await TopBrands(); // Then load top brands
             });
-        })();
+        });
     </script>
 @endsection

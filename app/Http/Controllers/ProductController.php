@@ -4,6 +4,7 @@ use App\Helper\ResponseHelper;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CustomerProfile;
+use App\Models\Invoice;
 use App\Models\InvoiceProduct;
 use App\Models\Product;
 use App\Models\ProductCart;
@@ -243,9 +244,11 @@ public function detailstore(Request $request)
     }
 
 
-    public function Details()
+    public function Details(Request $request)
     {
-        return view('pages.details-page');
+            $productId = $request->input('id');
+            $product =ProductDetails::where('product_id',$productId)->first();
+        return view('pages.details-page',compact('product'));
     }
 
 
@@ -272,12 +275,14 @@ public function ProductPage()
 
 public function ProductFilter(Request $request)
 {
-    $query = Product::with(['brand', 'category']);
+    // $query = Product::with(['brand', 'category']);
+    $query = Product::query();
+
 
     // Filter by remark (popular, new, top, trending)
   if ($request->filled('remark')) {
-  $query->whereRaw("TRIM(LOWER(remark)) = ?", [trim(strtolower($request->remark))]);
-}
+ $query->whereRaw('LOWER(remark) = ?', [strtolower(trim($request->remark))]);
+  }
 
 
     // Search by title
@@ -334,11 +339,42 @@ if ($request->filled('sort')) {
 }
 
 
-    $products = $query->get();
+//     $products = $query->get();
+//  return ResponseHelper::Out('success',$products,200);
+      $limit = $request->input('limit', 4);// by defause limit =5 if limit is not proided in the url parameter
+    $products = $query->paginate($limit);
+    /* , paginate() returns a special Pagination object:
 
-    return view('component.product-list', compact('products'))->render();
+{
+  "current_page": 1,
+  "data":   5 product items  ,
+  "last_page": 12,
+  "per_page": 5,
+  "total": 60
+  "hasMorePages": true // boolean flag
+}
+  so $products is a rich object now with methods like:
+    - currentPage()
+    - hasMorePages() //A boolean hasMorePages flag
+    - lastPage()
+    - total()
+    -items() // "Just give me the 'data' array (here 5 products)"
+
+*/
+
+    return ResponseHelper::Out('success', [
+        'products' => $products->items(),
+        'hasMorePages' => $products->hasMorePages() //A boolean hasMorePages flag
+    ], 200);
+
 }
 
+   public function BrandCatFilter(){
+      $brands = Brand::select('id', 'brandName')->get();
+    $categories = Category::select('id', 'categoryName')->get();
+    $data=['brands'=>$brands, 'categories'=> $categories];
+   return ResponseHelper::Out('success',$data,200);
+   }
     public function ListProductByBrand(Request $request):JsonResponse{
         $data=Product::where('brand_id',$request->id)->with('brand','category')->get();
         return ResponseHelper::Out('success',$data,200);
@@ -364,7 +400,7 @@ public function GetBrandById(Request $request): JsonResponse
 
     public function ProductDetailsById(Request $request):JsonResponse{
 
-        $data=ProductDetails::where('product_id',$request->id)->with('product','product.brand','product.category')->get();
+        $data=ProductDetails::where('product_id',$request->id)->with('product')->first();//,'product.brand','product.category'
 
         return ResponseHelper::Out('success',$data,200);
     }
@@ -378,31 +414,70 @@ public function GetBrandById(Request $request): JsonResponse
     }
 
 
+// public function CreateProductReview(Request $request): JsonResponse
+// {
+//     $user_id = $request->header('id');
+//     $profile = CustomerProfile::where('user_id', $user_id)->first();
+//     $status = Invoice::where('user_id',$user_id)->where('order_status','Delivered')->first();
+//     if ($profile && $status) {
+//         $request->merge(['customer_id' => $profile->id]);//in request object put 'customer_id'
+
+//         // Save or update the review
+//         $data = ProductReview::updateOrCreate(
+//             ['customer_id' => $profile->id, 'product_id' => $request->input('product_id')],  $request->input() );
+
+//         // Update the 'star' column in product with the rating from the review
+//         $avgRate  = ProductReview::where('product_id', $request->input('product_id'))->avg('rating');
+//         $finalRate = round($avgRate);
+//         Product::where('id', $request->input('product_id'))
+//             ->update(['star' => $finalRate]);
+
+//         return ResponseHelper::Out('success', $data, 200);
+//     } else {
+//         return ResponseHelper::Out('fail', 'Customer profile not exists',500);
+//     }
+// }
+
+
 public function CreateProductReview(Request $request): JsonResponse
 {
     $user_id = $request->header('id');
+    $product_id = $request->input('product_id');
+
+    // Step 1: Get Customer Profile
     $profile = CustomerProfile::where('user_id', $user_id)->first();
-
-    if ($profile) {
-        $request->merge(['customer_id' => $profile->id]);
-
-        // Save or update the review
-        $data = ProductReview::updateOrCreate(
-            ['customer_id' => $profile->id, 'product_id' => $request->input('product_id')],
-            $request->input()
-        );
-
-        // Update the 'star' column in product with the rating from the review
-        Product::where('id', $request->input('product_id'))
-            ->update(['star' => $request->input('rating')]);
-
-        return ResponseHelper::Out('success', $data, 200);
-    } else {
-        return ResponseHelper::Out('fail', 'Customer profile not exists', 200);
+    if (!$profile) {
+        return ResponseHelper::Out('fail', 'profile not exists', 500);
     }
+
+    // Step 2: Check if user received the specific product in a delivered invoice
+    $hasReceived = Invoice::where('user_id', $user_id)
+        ->where('order_status', 'Delivered')
+        ->whereHas('products', function ($query) use ($product_id) {
+            $query->where('product_id', $product_id);
+        })
+        ->exists();
+
+    if (!$hasReceived) {
+        return ResponseHelper::Out('fail', 'You can only review this product after delivery.', 403);
+    }
+
+    // Step 3: Merge customer_id into the request for saving
+    $request->merge(['customer_id' => $profile->id]);
+
+    // Step 4: Save or update the review
+    $data = ProductReview::updateOrCreate(
+        ['customer_id' => $profile->id, 'product_id' => $product_id],
+        $request->input()
+    );
+
+    // Step 5: Recalculate product average rating and update product table
+    $avgRating = ProductReview::where('product_id', $product_id)->avg('rating');
+    $finalRating = round($avgRating); // ceil() if you want upper round
+    Product::where('id', $product_id)->update(['star' => $finalRating]);
+
+    return ResponseHelper::Out('success', $data, 200);
 }
-
-
 
 public function CheckWishListStatus($product_id)
 {
@@ -423,11 +498,11 @@ public function CheckWishListStatus($product_id)
 
     public function CreateWishList(Request $request):JsonResponse{
         $user_id=$request->header('id');
-        $data=ProductWish::updateOrCreate(
+        ProductWish::updateOrCreate(
             ['user_id' => $user_id,'product_id'=>$request->product_id],
             ['user_id' => $user_id,'product_id'=>$request->product_id],
         );
-        return ResponseHelper::Out('success',$data,200);
+        return ResponseHelper::Out('success',"",200);
     }
 
 
