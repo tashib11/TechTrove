@@ -5,14 +5,13 @@
             <div class="col-md-6 text-center">
                 <ol class="breadcrumb m-0 p-0 justify-content-center">
                     <li><a href="{{ url('/') }}">Home</a></li>
-                    <li class="mx-2">/</li>
-                    <li><a href="#">This Page</a></li>
+                    <li class="mx-2">&gt;</li>
+                    <li>Verify page</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="login_register_wrap section">
     <div class="container">

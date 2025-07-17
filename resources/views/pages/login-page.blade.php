@@ -5,7 +5,10 @@
     @include('component.Footer')
     <script>
           window.addEventListener('DOMContentLoaded', () => {
-            requestAnimationFrame(() => Category());
+             requestIdleCallback(() => {
+                // Defer menubar fetch until browser is idle
+                Category();
+            });
         });
     </script>
 @endsection
