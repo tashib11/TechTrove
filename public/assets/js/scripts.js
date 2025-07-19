@@ -311,9 +311,9 @@ PAGE JS
 	/*===================================*
 	08. PARALLAX JS
 	*===================================*/
-	$(window).on('load', function() {
-        $('.parallax_bg').parallaxBackground();
-	});
+	// $(window).on('load', function() {
+    //     $('.parallax_bg').parallaxBackground();
+	// });
 
 	/*===================================*
 	09. MASONRY JS

@@ -13,6 +13,7 @@
   local('Linearicons'),
   url('../fonts/Linearicons.woff') format('woff'),
   url('../fonts/Linearicons.ttf') format('truetype');
+  font-display: swap;
 }
 
 .linearicons,

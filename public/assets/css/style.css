@@ -5080,7 +5080,7 @@ footer .widget_title {
     display: inline-block;
     vertical-align: middle;
 }
-.rating::before {
+/* .rating::before {
 	font-size: 12px;
 	content: "\f005\f005\f005\f005\f005";
 	top: 0;
@@ -5088,7 +5088,7 @@ footer .widget_title {
 	left: 0;
 	float: left;
 	color: #F6BC3E;
-}
+} */
 .product_rate {
 	overflow: hidden;
 	float: left;
@@ -5098,14 +5098,14 @@ footer .widget_title {
 	padding-top: 1.5em;
 	color: #F6BC3E;
 }
-.product_rate::before {
+/* .product_rate::before {
 	font-size: 12px;
 	content: "\f005\f005\f005\f005\f005";
 	top: 0;
 	position: absolute;
 	left: 0;
 	font-weight: 900;
-}
+} */
 .product_action_box {
 	position: absolute;
 	top: 50%;
