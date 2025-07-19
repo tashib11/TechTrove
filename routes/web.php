@@ -25,8 +25,9 @@ Route::get('/policy', [PolicyController::class, 'PolicyPage']);
 Route::get('/details', [ProductController::class, 'Details']);
 Route::get('/login', [UserController::class, 'LoginPage']);
 Route::get('/verify', [UserController::class, 'VerifyPage']);
-Route::get('/wish', [ProductController::class, 'WishList']);
-Route::get('/cart', [ProductController::class, 'CartListPage']);
+Route::get('/wish', [ProductController::class, 'WishList'])->middleware([TokenAuthenticate::class]);
+Route::get('/cart', [ProductController::class, 'CartListPage'])->middleware([TokenAuthenticate::class]);
+Route::get('/user-orders', [OrderController::class, 'UserOrders'])->middleware([TokenAuthenticate::class]);
 Route::get('/profile', [ProfileController::class, 'ProfilePage']);
 
 
@@ -89,15 +90,6 @@ Route::post('/place-order', [InvoiceController::class, 'placeOrder'])->middlewar
 
 //order trck
 Route::get('/track-order', [OrderController::class, 'TrackOrderPage'])->middleware([TokenAuthenticate::class]);;
-Route::get('/user-orders', [OrderController::class, 'UserOrders'])->middleware([TokenAuthenticate::class]);
-
-
-
-// // Invoice and payment
-// Route::get("/InvoiceCreate",[InvoiceController::class,'InvoiceCreate'])->middleware([TokenAuthenticate::class]);
-// Route::get("/InvoiceList",[InvoiceController::class,'InvoiceList'])->middleware([TokenAuthenticate::class]);
-// Route::get("/InvoiceProductList/{invoice_id}",[InvoiceController::class,'InvoiceProductList'])->middleware([TokenAuthenticate::class]);
-
 
 //payment
 Route::post("/PaymentSuccess",[InvoiceController::class,'PaymentSuccess']);
