@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
              $table->id();
-            $table->unsignedBigInteger('user_id');
 
             $table->string('shipping_name');
             $table->string('shipping_phone');
@@ -30,7 +29,7 @@ return new class extends Migration
             $table->enum('payment_status', ['Pending', 'Paid', 'Delivered'])->default('Pending');
             $table->timestamps();
 
-            // Foreign key
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

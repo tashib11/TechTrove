@@ -41,7 +41,7 @@ return new class extends Migration
     public function down(): void
     {
          Schema::table('customer_profiles', function (Blueprint $table) {
-            // Add back dropped columns (you can define default values or nullable as needed)
+            // Add back dropped columns
             $table->string('cus_postcode', 50)->nullable();
             $table->string('cus_fax', 50)->nullable();
             $table->string('ship_name', 100)->nullable();
@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string('ship_country', 50)->nullable();
             $table->string('ship_phone', 50)->nullable();
 
-        
+
             // Revert nullable changes
             $table->string('cus_add', 500)->change();
             $table->string('cus_city', 50)->change();

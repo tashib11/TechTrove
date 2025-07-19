@@ -25,10 +25,20 @@ class InvoiceProduct extends Model
         return $this->belongsTo(Invoice::class);
     }
 
- 
+
     public function product()
 {
-    return $this->belongsTo(Product::class, 'product_id');
+    return $this->belongsTo(Product::class);
+    /*
+    Model: Product
+Column: product_id ,then no need to explicitly show the foreign key
+,because laravel convantion is modelname_id
+
+if the column name was 'prod_id' then
+    return $this->belongsTo(Product::class, 'prod_id');
+    */
+
+
 }
 
 }

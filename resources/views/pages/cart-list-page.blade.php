@@ -1,15 +1,27 @@
 @extends('layout.app')
 @section('content')
     @include('component.MenuBar')
-    {{-- @include('component.PaymentMethodList') --}}
     @include('component.CartList')
-    @include('component.ExclusiveProducts')
     @include('component.Footer')
     <script>
-        (async () => {
-            await CartList();
-            $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-        })()
+  window.addEventListener('DOMContentLoaded', () => {
+            // Run critical fetchOrders right after DOM ready, before paint
+            requestAnimationFrame(() => {
+                CartList();
+            });
+
+            // Defer menubar fetch until browser is idle
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    Category();
+                });
+            } else {
+                // Fallback for browsers without requestIdleCallback
+                setTimeout(() => {
+                    Category();
+                }, 1000);
+            }
+        });
     </script>
 @endsection
 

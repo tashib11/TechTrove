@@ -35,7 +35,7 @@ class Invoice extends Model
 
     public function products()
 {
-    return $this->hasMany(InvoiceProduct::class, 'invoice_id')->with('product');
+    return $this->hasMany(InvoiceProduct::class)->with('product');// like a join table
 }
 
 

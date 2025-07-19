@@ -1,310 +1,377 @@
+<div class="container my-5">
+    <h2 class="text-center mb-4">Cart List</h2>
+    <nav class="mb-4 text-center text-md-start">
+        <a href="{{ url('/') }}">Home</a> &gt; <span>Cart List</span>
+    </nav>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center bg-white rounded shadow-sm overflow-hidden">
+            {{-- . Without overflow-hiddenA child image inside the table cell sticks out beyond the rounded corners of the table. --}}
+            <thead class="table-light  d-md-table-header-group">
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="byList" data-loaded="false">
+                <tr>
+                    <td colspan="5" class="text-center">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-4 g-3 align-items-center">
+        <div class="col-12 col-md-4 text-start fw-bold fs-5">
+            Total: Tk<span id="total">0.00</span>
+        </div>
+        <div class="col-12 col-md-4 text-center text-success fw-semibold" id="savings-text"></div>
+        <div class="col-12 col-md-4 text-end">
+            <button id="checkoutBtn" class="btn btn-success btn-fill-out btn-lg w-10 w-md-auto rounded-pill px-4">✅
+                Check Out</button>
+        </div>
+    </div>
+</div>
+
+
 <style>
-/* General improvements */
-.qty-control {
-    max-width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.qty-control .btn {
-    min-width: 30px;
-    padding: 0.25rem 0.5rem;
-}
-
-.qty-input {
-    width: 50px !important;
-    height: 34px;
-    padding: 0 5px;
-}
-
-/* Replace ti-close icon with button */
-.remove-btn {
-    border: none;
-    background-color: #ff4d4d;
-    color: white;
-    padding: 6px 12px;
-    font-size: 0.875rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-    background-color: #e60000;
-}
-
-/* Mobile Responsive Stack Layout */
-@media (max-width: 767.98px) {
-    #byList tr {
-        display: block;
-        margin-bottom: 1.5rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-    #byList tr td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: left;
-        font-size: 0.9rem;
-        padding: 6px 10px;
-        border: none;
-    }
-
-    #byList tr td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        text-transform: capitalize;
-    }
-
     .qty-control {
-        justify-content: flex-end;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .qty-control button {
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+        padding: 0.25rem 0.6rem;
+        font-weight: bold;
+        font-size: 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .qty-control input {
+        width: 50px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 0.25rem;
+        height: 34px;
     }
 
     .remove-btn {
-        width: 100%;
-        text-align: center;
-    }
-}
-</style>
-
-
-<!-- START SECTION BREADCRUMB -->
-<div class="breadcrumb_section bg_gray page-title-mini">
-    <div class="container">
-        <div class="row align-items-center text-center text-md-start">
-            <div class="col-12 col-md-6 mb-2 mb-md-0">
-                <div class="page-title">
-                    <h1>Cart List</h1>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <ol class="breadcrumb justify-content-center justify-content-md-end">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">This Page</a></li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END SECTION BREADCRUMB -->
-
-<!-- CART TABLE SECTION -->
-<div class="mt-4 mb-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <!-- Responsive Table Wrapper -->
-                <div class="table-responsive shop_cart_table">
-                    <table class="table align-middle text-center">
-                        <thead class="table-light d-none d-md-table-header-group">
-                            <tr>
-                                <th>#</th>
-                                <th class="product-thumbnail">&nbsp;</th>
-                                <th class="product-name">Product</th>
-                                <th class="product-quantity">Quantity</th>
-                                <th class="product-subtotal">Total</th>
-                                <th class="product-remove">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody id="byList"></tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6" class="p-0">
-                                    <div class="row g-3 align-items-center px-2 py-3">
-                                        <div class="col-12 col-md-4 text-start">
-                                            <strong>Total:</strong> $<span id="total"></span>
-                                        </div>
-                                        <div class="col-12 col-md-4 text-md-center text-success" id="savings-text" style="font-weight: 600;"></div>
-                                        <div class="col-12 col-md-4 text-end">
-                                            <!-- Change class on the button -->
-<button onclick="CheckOut()" class="btn btn-success btn-lg w-100 w-md-auto rounded-pill shadow">🛒 Check Out</button>
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-async function CartList() {
-    let res = await axios.get(`/CartList`);
-    $("#byList").empty();
-
-    res.data['data'].forEach((item, i) => {
-        let discounted = item['product']['discount'] == 1;
-        let currentPrice = discounted
-            ? parseFloat(item['product']['discount_price']).toFixed(2)
-            : parseFloat(item['product']['price']).toFixed(2);
-        let originalPrice = parseFloat(item['product']['price']).toFixed(2);
-        let productId = item['product']['id'];
-
-        let priceHTML = discounted
-            ? `<div>$${currentPrice}</div>
-               <div class="text-danger" style="text-decoration:line-through; font-size: 0.9rem;">$${originalPrice}</div>`
-            : `<div>$${currentPrice}</div>`;
-
-        let EachItem = `<tr
-            data-id="${productId}"
-            data-price="${currentPrice}"
-            data-original-price="${originalPrice}"
-            data-discount="${discounted ? 1 : 0}"
-            data-qty="${item['qty']}"
-            data-color="${item['color']}"
-            data-size="${item['size']}"
-        >
-            <td>${i + 1}</td>
-            <td class="product-thumbnail">
-                <a href="/details?id=${productId}">
-                    <img src="${item['product']['image']}" alt="${item['product']['img_alt']}" style="max-width: 80px;">
-                </a>
-            </td>
-            <td class="product-name">
-                <a href="/details?id=${productId}">${item['product']['title']}</a>
-            </td>
-          <td class="product-quantity">
-    <div class="qty-control">
-        <button class="btn btn-outline-secondary btn-sm qty-decrease" type="button">−</button>
-        <input type="text" class="form-control text-center qty-input" value="${item['qty']}" readonly>
-        <button class="btn btn-outline-secondary btn-sm qty-increase" type="button">+</button>
-    </div>
-</td>
-
-            <td class="product-subtotal">${priceHTML}</td>
-<td class="product-remove">
-    <button class="remove-btn" data-id="${productId}">Remove</button>
-</td>
-
-        </tr>`;
-
-        $("#byList").append(EachItem);
-    });
-
-    UpdateTotal();
-
-    $(".remove-btn").on('click', function () {
-        let id = $(this).data('id');
-        RemoveCartList(id);
-    });
-
-    $(".qty-increase, .qty-decrease").on('click', function () {
-        let row = $(this).closest("tr");
-        let qtyInput = row.find(".qty-input");
-        let currentQty = parseInt(qtyInput.val());
-        let isIncrease = $(this).hasClass("qty-increase");
-
-        let newQty = isIncrease ? currentQty + 1 : Math.max(currentQty - 1, 1);
-        qtyInput.val(newQty);
-        row.attr("data-qty", newQty);
-        UpdateTotal();
-    });
-}
-
-function UpdateTotal() {
-    let total = 0;
-    let originalTotal = 0;
-
-    $("#byList tr").each(function () {
-        let price = parseFloat($(this).data("price"));
-        let originalPrice = parseFloat($(this).data("original-price"));
-        let discount = $(this).data("discount") == 1;
-        let qty = parseInt($(this).attr("data-qty"));
-
-        total += price * qty;
-        originalTotal += originalPrice * qty;
-
-        let priceHTML = discount
-            ? `<div>$${(price * qty).toFixed(2)}</div>
-               <div class="text-danger" style="text-decoration:line-through; font-size: 0.9rem;">$${(originalPrice * qty).toFixed(2)}</div>`
-            : `<div>$${(originalPrice * qty).toFixed(2)}</div>`;
-
-        $(this).find(".product-subtotal").html(priceHTML);
-    });
-
-    $("#total").text(total.toFixed(2));
-
-    let savings = originalTotal - total;
-    if (savings > 0.009) {
-        $("#savings-text").html(`You save ${savings.toFixed(2)} Tk`);
-    } else {
-        $("#savings-text").empty();
-    }
-}
-
-async function RemoveCartList(id) {
-    $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-    let res = await axios.get("/DeleteCartList/" + id);
-    $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-
-    if (res.status === 200) {
-        $(`#byList tr[data-id='${id}']`).remove();  // Remove just the row
-        UpdateTotal();  // Recalculate total
-    } else {
-        alert("Request Fail");
-    }
-}
-
-
-async function CheckOut() {
-    $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-
-    let selectedItems = [];
-    $("#byList tr").each(function () {
-        selectedItems.push({
-            id: $(this).data("id"),
-            qty: $(this).attr("data-qty"),
-            color: $(this).data("color"),
-            size: $(this).data("size")
-        });
-    });
-
-    if (selectedItems.length === 0) {
-        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
-        alert("Your cart is empty.");
-        return;
+        background-color: #ff4d4d;
+        color: white;
+        padding: 6px 12px;
+        font-size: 0.875rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
     }
 
-    try {
-        for (const item of selectedItems) {
-            await axios.post('/CreateCartList', {
-                product_id: item.id,
-                qty: item.qty,
-                color: item.color,
-                size: item.size
-            }, {
-                headers: {
-                    token: localStorage.getItem('token')
-                }
-            });
+    .remove-btn:hover {
+        background-color: #e60000;
+    }
+
+    .cart-img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    /* Mobile Layout */
+    @media (max-width: 768px) {
+        .cart-img {
+            width: 150px;
+            height: 150px;
         }
 
-        localStorage.setItem("checkoutItems", JSON.stringify(selectedItems));
-        window.location.href = "/payment-page";
+        .table-responsive {
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
+        }
 
-    } catch (error) {
-        console.error(error);
-        alert("Checkout failed. Try again.");
-        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
+        table {
+            width: 100%;
+        }
+
+        table thead {
+            display: none;
+        }
+
+        table tbody tr {
+            display: block;
+            margin-bottom: 1.2rem;
+            border: 1px solid #eee;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.92rem;
+            border: none !important;
+            width: 100%;
+        }
+
+        table tbody td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #555;
+            flex-basis: 40%;
+            text-align: left;
+        }
+
+
+        /* Nested content reset */
+        .product-thumbnail img {
+            width: 60px;
+            height: auto;
+        }
+
+        .qty-control {
+            justify-content: flex-end;
+        }
+
+        .remove-btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Adjust product cell for stacked content */
+        .product-name-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-name-content a {
+            font-weight: 500;
+            text-decoration: none;
+        }
     }
-}
+</style>
 
-$(document).ready(function () {
-    CartList();
-});
-    // Always reload if user comes back from back/forward navigation
-    window.addEventListener("pageshow", function (event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            location.reload();
+<script>
+    async function CartList() {
+        const res = await fetch(`/CartList`);
+        const data = await res.json();
+
+        const byList = document.getElementById("byList");
+        byList.innerHTML = "";
+
+
+        // Check if cart is empty
+        if (data['data'].length === 0) {
+            byList.innerHTML = `<tr><td colspan="5" class="text-center">Your cart is empty</td></tr>`;
+            document.getElementById("checkoutBtn").disabled = true;
+            byList.dataset.loaded = "true";
+            return;
+        }
+
+        // If items found, enable button
+        document.getElementById("checkoutBtn").disabled = false;
+        byList.dataset.loaded = "true";
+
+        data['data'].forEach((item, i) => {
+            const product = item['product'];
+            const discounted = product['discount'] == 1;
+            const currentPrice = parseFloat(discounted ? product['discount_price'] : product['price'])
+                .toFixed(2);
+            const originalPrice = parseFloat(product['price']).toFixed(2);
+            const productId = product['id'];
+
+            const priceHTML = discounted ?
+                `<div>Tk${currentPrice}</div>
+               <div class="text-danger" style="text-decoration:line-through; font-size: 0.9rem;">Tk${originalPrice}</div>` :
+                `<div>Tk${currentPrice}</div>`;
+
+            const row = document.createElement("tr");
+            row.dataset.id = productId;
+            row.dataset.price = currentPrice;
+            row.dataset.originalPrice = originalPrice;
+            row.dataset.discount = discounted ? 1 : 0;
+            row.dataset.qty = item['qty'];
+            row.dataset.color = item['color'];
+            row.dataset.size = item['size'];
+
+            row.innerHTML = `
+    <td data-label="#">${i + 1}</td>
+    <td data-label="Product">
+        <div class="product-name-content">
+          <a href="/details?id=${productId}">
+          <img src="${product['image']}" alt="${product['img_alt']}" class="cart-img">
+          ${product['title']}</a>
+        </div>
+    </td>
+    <td data-label="Quantity">
+        <div class="qty-control">
+            <button type="button" class="qty-decrease">−</button>
+            <input type="text" value="${item['qty']}" class="qty-input">
+            <button type="button" class="qty-increase">+</button>
+        </div>
+    </td>
+    <td data-label="Total" class="product-subtotal">${priceHTML}</td>
+    <td data-label="Remove">
+        <button type="button" class="remove-btn" data-id="${productId}">Remove</button>
+    </td>
+`;
+
+
+            byList.appendChild(row);
+        });
+
+        bindEvents();
+        UpdateTotal();
+    }
+
+    function bindEvents() {
+        document.querySelectorAll(".remove-btn").forEach(btn => {
+            btn.addEventListener('click', () => {
+                RemoveCartList(btn.dataset.id);
+            });
+        });
+
+        document.querySelectorAll(".qty-increase, .qty-decrease").forEach(btn => {
+            btn.addEventListener('click', () => {
+                const row = btn.closest("tr"); //Finds the closest parent <tr> of the clicked button.
+                const qtyInput = row.querySelector(".qty-input");
+                const currentQty = parseInt(qtyInput.value);
+                const isIncrease = btn.classList.contains("qty-increase");
+                const newQty = isIncrease ? currentQty + 1 : Math.max(currentQty - 1, 1);
+                qtyInput.value = newQty;
+                row.dataset.qty = newQty;
+                UpdateTotal();
+            });
+        });
+
+    }
+
+    function UpdateTotal() {
+        let total = 0;
+        let originalTotal = 0;
+
+        document.querySelectorAll("#byList tr").forEach(row => {
+            const price = parseFloat(row.dataset.price);
+            const originalPrice = parseFloat(row.dataset.originalPrice);
+            const discount = parseInt(row.dataset.discount) === 1;
+            const qty = parseInt(row.dataset.qty);
+
+            total += price * qty;
+            originalTotal += originalPrice * qty;
+
+            const priceHTML = discount ?
+                `<div>Tk${total.toFixed(2)}</div>
+               <div class="text-danger" style="text-decoration:line-through; font-size: 0.9rem;">Tk${originalTotal.toFixed(2)}</div>` :
+                `<div>Tk${originalTotal.toFixed(2)}</div>`;
+
+            row.querySelector(".product-subtotal").innerHTML = priceHTML;
+        });
+
+        document.getElementById("total").textContent = total.toFixed(2);
+
+        const savings = originalTotal - total;
+        const savingsText = document.getElementById("savings-text");
+        if (savings > 0.009) {
+            savingsText.innerHTML = `You save ${savings.toFixed(2)} Tk`;
+        } else {
+            savingsText.innerHTML = "";
+        }
+    }
+
+    async function RemoveCartList(id) {
+        const res = await fetch("/DeleteCartList/" + id);
+
+        if (res.status === 200) {
+            const row = document.querySelector(`#byList tr[data-id='${id}']`);
+            if (row) row.remove();
+            UpdateTotal();
+        } else {
+            showToast("Try again later","error");
+        }
+    }
+
+    document.getElementById('checkoutBtn').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        setButtonLoading(btn, true);
+
+        const cartTable = document.getElementById("byList");
+        const rows = cartTable.querySelectorAll("tr[data-id]");
+
+        if (rows.length === 0 || cartTable.dataset.loaded !== "true") {
+            showToast("Your cart is empty.", "error");
+            setButtonLoading(btn, false);
+            return;
+        }
+
+        const selectedItems = Array.from(rows).map(row => ({
+            id: row.dataset.id,
+            qty: row.dataset.qty,
+            color: row.dataset.color,
+            size: row.dataset.size
+        }));
+
+        // proceed with fetch
+        try {
+            for (const item of selectedItems) {
+                await fetch('/CreateCartList', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        product_id: item.id,
+                        qty: item.qty,
+                        color: item.color,
+                        size: item.size
+                    })
+                });
+            }
+
+            localStorage.setItem("checkoutItems", JSON.stringify(selectedItems));
+            window.location.href = "/payment-page";
+        } catch (err) {
+            console.error(err);
+            showToast("Checkout failed. Try again.", "error");
+        }
+
+        setButtonLoading(btn, false);
+    });
+
+
+
+    function setButtonLoading(button, isLoading) {
+        if (isLoading) {
+            const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            button.setAttribute("data-original-text", button.innerHTML);
+            button.innerHTML += spinner;
+            button.disabled = true;
+        } else {
+            button.innerHTML = button.getAttribute("data-original-text");
+            button.disabled = false;
+        }
+    }
+
+    // to show updated cart list when the page is shown again
+    //"pageshow"	Runs code whenever the page is shown
+    window.addEventListener("pageshow", async function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type ===
+            2)) { //window.performance.navigation.type -> means the page was opened via back/forward navigation.
+            await CartList(); //Call CartList() to refresh the cart list
+            //  location.reload();//location.reload()	Force a full reload of the page
         }
     });
 </script>
