@@ -24,7 +24,7 @@
     <!-- Recent Orders -->
     <div class="d-flex align-items-center justify-content-between flex-wrap mt-5">
         <h4 class="mb-2 mb-sm-0">Recent Orders</h4>
-        <select id="orderFilter" class="form-select form-select-sm w-auto">
+        <select id="orderFilter" class="form-select form-select-sm w-auto">{{--form-select:It styles the <select> element to have Bootstrap’s default look — padding, border, background, etc. w-auto->The width will adjust just enough to fit the content  --}}
             <option value="7" selected>Last 7 days</option>
             <option value="30">Last 30 days</option>
             <option value="90">Last 90 days</option>
@@ -53,33 +53,42 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderFilter = document.getElementById('orderFilter');
 
     function loadStats(days = 7) {
-        axios.get('/admin/dashboard-stats', { params: { days } })
-            .then(response => {
-                const stats = response.data;
-
+        fetch(`/admin/dashboard-stats?days=${days}`)
+            .then(response => response.json())
+            .then(stats => {
                 const cards = `
                     <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-success"><div class="card-body">Revenue: Tk${stats.totalRevenue}</div></div>
+                        <div class="card text-white bg-success">
+                            <div class="card-body">Revenue: Tk${stats.totalRevenue}</div>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-primary"><div class="card-body">
-                             <a href="{{ asset('/Dashboard/InvoiceList') }}" class="nav-link"> Orders: ${stats.totalOrders}</a>
-                             </div></div>
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <a href="/Dashboard/InvoiceList" class="nav-link"> Orders: ${stats.totalOrders}</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-info"><div class="card-body">
-                               <a href="{{ asset('/Dashboard/ProductList') }}" class="nav-link">Products: ${stats.totalProducts}</a>
-                               </div></div>
+                        <div class="card text-white bg-info">
+                            <div class="card-body">
+                                <a href="/Dashboard/ProductList" class="nav-link">Products: ${stats.totalProducts}</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-dark"><div class="card-body">
-                               <a href="{{ asset('/Dashboard/BrandList') }}" class="nav-link">Brands: ${stats.totalBrands}</a>
-                               </div></div>
+                        <div class="card text-white bg-dark">
+                            <div class="card-body">
+                                <a href="/Dashboard/BrandList" class="nav-link">Brands: ${stats.totalBrands}</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-secondary"><div class="card-body">
-                               <a href="{{ asset('/Dashboard/CategoryList') }}" class="nav-link">Categories: ${stats.totalCategories}</a>
-                               </div></div>
+                        <div class="card text-white bg-secondary">
+                            <div class="card-body">
+                                <a href="/Dashboard/CategoryList" class="nav-link">Categories: ${stats.totalCategories}</a>
+                            </div>
+                        </div>
                     </div>
                 `;
                 document.getElementById('stats-cards').innerHTML = cards;
@@ -87,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const bestSellingTbody = document.getElementById('best-selling');
                 bestSellingTbody.innerHTML = '';
                 stats.bestSelling.forEach(item => {
-                    const product = item.product?.title || 'Unknown';
+                    const product = item.product.title || 'Unknown';
                     bestSellingTbody.innerHTML += `
                         <tr>
                             <td>${product}</td>
@@ -102,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         <tr>
                             <td>${order.tran_id}</td>
                             <td>Tk${order.total}</td>
-                            <td>${order.user?.email || 'Guest'}</td>
-                              <td>${order.shipping_phone || 'N/A'}</td>
+                            <td>${order.user.email || 'Guest'}</td>
+                            <td>${order.shipping_phone || 'N/A'}</td>
                         </tr>`;
                 });
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error('Failed to load stats:', err));
     }
 
     // Initial load
@@ -119,4 +128,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
 @endsection

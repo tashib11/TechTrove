@@ -11,18 +11,15 @@
 </style>
 
 <!-- START SECTION BREADCRUMB -->
-<div class="breadcrumb_section bg_gray page-title-mini">
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini py-2">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="page-title">
-                    <h1><span id="policyName"></span></h1>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <ol class="breadcrumb justify-content-md-end">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item active" id="breadcrumbLabel">Policy</li>
+        <div class="row align-items-center justify-content-center" style="min-height: 40px;">
+            <div class="col-md-6 text-center">
+                <ol class="breadcrumb m-0 p-0 justify-content-center">
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li class="mx-2">&gt;</li>
+                    <li>Policy</li>
                 </ol>
             </div>
         </div>

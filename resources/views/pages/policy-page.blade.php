@@ -6,12 +6,18 @@
     @include('component.TopBrands')
     @include('component.Footer')
     <script>
-        (async () => {
-            // await Category();
-            await Policy();
-            $(".preloader").fadeOut(800).addClass('loaded');
-             await TopBrands();
-        })()
+         window.addEventListener('DOMContentLoaded', () => {
+            requestAnimationFrame(() => Policy());
+            // Defer  fetch until browser is idle
+            requestIdleCallback(() => {
+                Category();
+            });
+        });
+        // (async () => {
+            // // await Category();
+            // await Policy();
+            //  await TopBrands();
+        // })()
     </script>
 @endsection
 

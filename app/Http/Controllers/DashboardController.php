@@ -40,7 +40,7 @@ public function statistics(Request $request)
         // Date filter param, default to 7 days
         $filterDays = $request->query('days', 7);
 
-        $dateLimit = now()->subDays($filterDays);
+        $dateLimit = now()->subDays($filterDays);//now() returns the current date and time.
 
         $recentOrders = Invoice::where('created_at', '>=', $dateLimit)
             ->orderByDesc('total') // most expensive first

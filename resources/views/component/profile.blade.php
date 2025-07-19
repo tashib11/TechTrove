@@ -1,3 +1,17 @@
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini py-2">
+    <div class="container">
+        <div class="row align-items-center justify-content-center" style="min-height: 40px;">
+            <div class="col-md-6 text-center">
+                <ol class="breadcrumb m-0 p-0 justify-content-center">
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li class="mx-2">&gt;</li>
+                    <li>Profile</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container mt-4">
     <div class="card p-4 shadow rounded">
         <h4>User Profile</h4>
