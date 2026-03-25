@@ -150,7 +150,6 @@
 </script>
 
 
-<!-- Add before the closing </body> tag or in @section('script') -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @yield('script')
 

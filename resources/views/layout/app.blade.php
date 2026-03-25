@@ -33,19 +33,27 @@
 
     <style>
         /* Inside <style> tag in layout.app */
-
-        .mobile-bottom-nav small {
-            font-size: 12px;
+        .mobile-bottom-nav {
+            height: 60px;
+            font-size: 13px;
         }
 
         .mobile-bottom-nav .nav-item {
-            width: 20%;
-            font-size: 11px;
+            padding: 4px 0;
+            flex: 1;
+            text-align: center;
         }
 
         .mobile-bottom-nav i {
             font-size: 18px;
-            line-height: 1;
+            display: block;
+        }
+
+        .mobile-bottom-nav small {
+            display: block;
+            font-size: 11px;
+            line-height: 1.2;
+            margin-top: 2px;
         }
     </style>
     <!-- Inside <head> in layout.app -->
@@ -67,8 +75,19 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     </noscript>
 
-    <!-- Always load -->
+    <!-- Load style.css: deferred on homepage, normal on other pages -->
+@if (request()->is('/'))
+    <!-- Homepage: defer for faster FCP -->
+    <link rel="preload" as="style" href="{{ asset('assets/css/style.css') }}" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"></noscript>
+@else
+    <!-- Other pages: load normally -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+@endif
+
+{{-- <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" media="print" onload="this.media='all'"> --}}
+    <!-- Always load -->
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> --}}
     {{-- <link rel="preload" as="style" href="{{ asset('assets/css/style.css') }}" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"></noscript> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" media="print" onload="this.media='all'">
@@ -81,7 +100,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/slick-theme.css') }}" media="print"
             onload="this.media='all'">
     @endif --}}
-{{--
+    {{--
 <script  src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script  src="{{ asset('assets/js/axios.min.js') }}"></script> --}}
 
@@ -101,31 +120,106 @@
         <!-- Main Content -->
         @yield('content')
 
+        <!-- Mobile Bottom Navigation (optional) -->
+
+        <nav class="mobile-bottom-nav d-md-none bg-white shadow-lg border-top fixed-bottom">
+            <div class="d-flex justify-content-around text-center py-1">
+                <a href="/" class="nav-item flex-fill text-dark">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="bi bi-house fs-5"></i>
+                        <small>Home</small>
+                    </div>
+                </a>
+                <button id="wishLink" class="nav-item flex-fill text-dark bg-transparent border-0">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="bi bi-heart fs-5"></i>
+                        <small>Wish</small>
+                    </div>
+                </button>
+                <button id="cartLink" class="nav-item flex-fill text-dark bg-transparent border-0">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="bi bi-cart fs-5"></i>
+                        <small>Cart</small>
+                    </div>
+                </button>
+                <button id="orderLink" class="nav-item flex-fill text-dark bg-transparent border-0">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="bi bi-box-seam fs-5"></i>
+                        <small>Orders</small>
+                    </div>
+                </button>
+            </div>
+        </nav>
+
     </div>
-<script>
-function showToast(message, type = 'success') {
-        // Create toast container if it doesn't exist
-        let toastContainer = document.getElementById('toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toast-container';
-            toastContainer.setAttribute('aria-live', 'polite');
-            toastContainer.setAttribute('aria-atomic', 'true');
-            toastContainer.style.position = 'fixed';
-            toastContainer.style.top = '20px';
-            toastContainer.style.right = '20px';
-            toastContainer.style.zIndex = '9999';
-            document.body.appendChild(toastContainer);
-        }
+    <script>
+        document.querySelector('#wishLink').addEventListener('click', (e) => {
+            console.log("Wish link clicked");
 
-        // Create toast element
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'assertive');
-        toast.setAttribute('aria-atomic', 'true');
+            e.preventDefault();
+            fetch('/wish') // it expects json so in the controller return view is not triggered as html page
+                .then(res => {
+                    if (res.status === 401) {
+                        sessionStorage.setItem("last_location", window.location.href);
+                        window.location.href = "/login";
+                    } else {
+                        window.location.href = "/wish";
+                    }
+                })
+                .catch(err => {
+                    console.error("Wish fetch failed", err);
+                });
+        });
 
-        toast.innerHTML = `
+        document.querySelector('#cartLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            fetch('/cart') // it expects json so in the controller return view is not triggered as html page
+                .then(res => {
+                    if (res.status === 401) {
+                        sessionStorage.setItem("last_location", window.location.href);
+                        window.location.href = "/login";
+                    } else {
+                        window.location.href = "/cart";
+                    }
+                })
+                .catch(err => {
+                    console.error("Cart fetch failed", err);
+                });
+        });
+
+        document.querySelector('#orderLink').addEventListener('click', async (e) => {
+            let res = await fetch('/track-order');
+            if (res.status === 401) {
+                sessionStorage.setItem("last_location", window.location.href);
+                window.location.href = "/login";
+            } else {
+                window.location.href = "/track-order";
+            }
+        });
+
+        function showToast(message, type = 'success') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.setAttribute('aria-live', 'polite');
+                toastContainer.setAttribute('aria-atomic', 'true');
+                toastContainer.style.position = 'fixed';
+                toastContainer.style.top = '20px';
+                toastContainer.style.right = '20px';
+                toastContainer.style.zIndex = '9999';
+                document.body.appendChild(toastContainer);
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            toast.innerHTML = `
         <div class="toast-header ${type === 'success' ? 'bg-success text-white' : 'bg-danger text-white'}">
             <strong class="me-auto">${type === 'success' ? 'Success' : 'Error'}</strong>
             <small class="text-light">Just now</small>
@@ -136,47 +230,21 @@ function showToast(message, type = 'success') {
         </div>
      `;
 
-        // Append and show
-        toastContainer.appendChild(toast);
+            // Append and show
+            toastContainer.appendChild(toast);
 
-        // Initialize and show the toast using Bootstrap's native API
-        const bsToast = new bootstrap.Toast(toast, {
-            delay: 2000
-        });
-        bsToast.show();
+            // Initialize and show the toast using Bootstrap's native API
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 2000
+            });
+            bsToast.show();
 
-        // Remove the toast from DOM after hidden
-        toast.addEventListener('hidden.bs.toast', () => {
-            toast.remove();
-        });
-    }
-</script>
-
-    <!-- Mobile Bottom Navigation (optional) -->
-    {{--
-    <nav class="mobile-bottom-nav d-md-none bg-white shadow-lg border-top fixed-bottom">
-        <div class="d-flex justify-content-around text-center py-2">
-            <a href="/" class="nav-item text-dark">
-                <i class="ti-home fs-5"></i><br><small>Home</small>
-            </a>
-            <a href="/wish" id="mobileWish" class="nav-item text-dark">
-                <i class="ti-heart fs-5"></i><br><small>Wish</small>
-            </a>
-            <a href="/cart" id="mobileCart" class="nav-item text-dark">
-                <i class="linearicons-cart fs-5"></i><br><small>Cart</small>
-            </a>
-            <a href="/user-orders" id="mobileOrders" class="nav-item text-dark">
-                <i class="ti-archive fs-5"></i><br><small>Orders</small>
-            </a>
-            <div class="dropup">
-                <a class="nav-item text-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="ti-menu fs-5"></i><br><small>Categories</small>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end text-start" id="MobileCategoryList"></ul>
-            </div>
-        </div>
-    </nav>
-    --}}
+            // Remove the toast from DOM after hidden
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+    </script>
     <!-- Scripts (All Deferred) -->
 
     <script defer src="{{ asset('assets/js/magnific-popup.min.js') }}"></script>

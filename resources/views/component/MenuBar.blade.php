@@ -3,7 +3,7 @@
     $token = Cookie::get('token');
     $user = JWTToken::ReadToken($token);
 @endphp
-<header class="header_wrap fixed-top "> {{--  header_with_topbar --}}
+<header class="header_wrap sticky-top"> {{--  header_with_topbar --}}
     <div class="top-header">
         <div class="container">
             <div class="row align-items-center">
@@ -126,48 +126,6 @@
         // document.querySelector("#CategoryItem").insertAdjacentHTML('beforeend',
         // EachItem); // insertAdjacentHTML() is in native js not jquery, so
     };
-
-    document.querySelector('#wishLink').addEventListener('click',(e)=>{
-        e.preventDefault();
-        fetch('/wish')// it expects json so in the controller return view is not triggered as html page
-            .then(res => {
-                if (res.status === 401) {
-                    sessionStorage.setItem("last_location", window.location.href);
-                    window.location.href = "/login";
-                } else {
-                    window.location.href = "/wish";
-                }
-            })
-            .catch(err => {
-                console.error("Wish fetch failed", err);
-            });
-    });
-
-    document.querySelector('#cartLink').addEventListener('click',(e)=>{
-        e.preventDefault();
-        fetch('/cart')// it expects json so in the controller return view is not triggered as html page
-            .then(res => {
-                if (res.status === 401) {
-                    sessionStorage.setItem("last_location", window.location.href);
-                    window.location.href = "/login";
-                } else {
-                    window.location.href = "/cart";
-                }
-            })
-            .catch(err => {
-                console.error("Cart fetch failed", err);
-            });
-    });
-
-    document.querySelector('#orderLink').addEventListener('click', async(e)=>{
-        let res = await fetch('/track-order');
-        if(res.status===401){
-            sessionStorage.setItem("last_location",window.location.href);
-            window.location.href="/login";
-        }else{
-            window.location.href="/track-order";
-        }
-    });
 </script>
 
 

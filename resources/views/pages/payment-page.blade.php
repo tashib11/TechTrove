@@ -4,9 +4,11 @@
     @include('component.Payment')
     @include('component.Footer')
     <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            // Defer menubar fetch until browser is idle
-            Category();
+     window.addEventListener('DOMContentLoaded', () => {
+             requestIdleCallback(() => {
+                // Defer menubar fetch until browser is idle
+                Category();
+            });
         });
     </script>
 @endsection
