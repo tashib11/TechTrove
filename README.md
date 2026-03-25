@@ -1,6 +1,6 @@
 # 🚀 TechTrove - Premium eCommerce Platform
 
-> **A full-featured, production-ready eCommerce solution** designed for scalability, performance, and exceptional user experience.
+> **A full-featured, production-ready responsive ecommerce solution** designed for scalability, performance, and exceptional user experience.
 
 TechTrove is a modern, sophisticated eCommerce platform that empowers businesses to sell tech products, electronics, and more with advanced features like real-time inventory management, secure payment processing, and a comprehensive admin dashboard.
 
@@ -27,19 +27,30 @@ The homepage delivers an engaging shopping experience with dynamic hero sliders,
 
 ![Home Page - Hero Section](demo/demohome1.png)
 
-#### Featured Products
-
-![Home Page - Featured Products](demo/home2.png)
+##### In Mobile screen
+![ Hero Section](demo/home_m.png)
 
 #### Categories Overview
 
-![Categories & Brands](demo/home3.png)
+![Home Page - Categories & Brands](demo/home2.png)
 
-#### Top Categories Grid
+#### Featured Products
 
-![Top Categories Grid](demo/home4.png)
+![Home Page - Featured Products](demo/home3.png)
+
+
+##### In Mobile screen
+![ Featured Products](demo/products_m.png)
 
 #### Exclusive Products
+
+![Home Page - Exclusive Products](demo/home4.png)
+
+
+##### In Mobile screen
+![Exclusive Products](demo/card_m.png)
+
+#### Brands Overview
 
 ![Exclusive Products Showcase](demo/home5.png)
 
@@ -425,10 +436,10 @@ TechTrove is production-ready and can be deployed to:
 
 **Looking to hire skilled developers** experienced with this platform?
 
-✉️ **Email**: contact@techtove.local  
+✉️ **Email**: tashibul.is@gmail.com
 🌐 **Website**: www.techtove.local  
 💼 **LinkedIn**: [Your LinkedIn Profile]  
-📱 **Phone**: +1-XXX-XXX-XXXX
+📱 **Phone**: 01643600620
 
 **Services Available:**
 
@@ -452,7 +463,7 @@ This project is licensed under the MIT License - see the license file for detail
 **Md Tashibul Islam**
 
 - Portfolio: [ \[Portfolio URL\]](https://tashib11.github.io/portfolio-website/)
-- GitHub: tashib11
+- GitHub: [ \[tashib11\]](https://github.com/tashib11/)
 - Email: tashibul.is@gmail.com
 
 ---
