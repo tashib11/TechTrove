@@ -9,7 +9,6 @@ TechTrove is a modern, sophisticated eCommerce platform that empowers businesses
 ## ✨ Key Highlights
 
 🔥 **High Performance**: Optimized FCP (First Contentful Paint) delivers blazing-fast load times  
-💳 **Secure Payments**: SSLCommerz integration for safe, encrypted transactions  
 📱 **Mobile-First**: Fully responsive design optimized for all devices  
 👤 **User Management**: Complete authentication, profiles, and order history  
 📊 **Analytics Dashboard**: Real-time statistics and business insights  
